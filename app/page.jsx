@@ -44,7 +44,6 @@ const process = [
 ];
 
 export default function HomePage() {
-	const heroRef = useRef(null);
 	const dotRef = useRef(null);
 	const labelRef = useRef(null);
 	const [activePanel, setActivePanel] = useState(null);
@@ -61,8 +60,6 @@ export default function HomePage() {
 	}, [activePanel]);
 
 	useEffect(() => {
-		requestAnimationFrame(() => setTimeout(() => heroRef.current?.classList.add('loaded'), 100));
-
 		const io = new IntersectionObserver((entries) => {
 			entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
 		}, { threshold: 0.12 });
@@ -130,20 +127,31 @@ export default function HomePage() {
 
 			<Header active="Home" />
 
-			<section className="hero" id="home" ref={heroRef}>
-				<div className="mesh"><div className="blob blob-a"></div><div className="blob blob-b"></div></div>
-				<div className="hero-stamp">EST. STUDIO — VISUAL IDENTITY / WEB / PRINT — SINCE DAY ONE</div>
-				<div className="hero-bigtype">
-					<h1>
-						<span className="hero-line"><span>we turn <span className="script">ideas</span></span></span><br />
-						<span className="hero-line"><span>into visually</span></span><br />
-						<span className="hero-line"><span>stunning <span className="script">designs</span></span></span>
-					</h1>
+			<section className="hero" id="home">
+				<div className="hero-shapes" aria-hidden="true">
+					<div className="hero-shape hero-shape-triangle"></div>
+					<div className="hero-shape hero-shape-circle-outline"></div>
+					<div className="hero-shape hero-shape-ring"></div>
+					<div className="hero-shape hero-shape-circle-fill"></div>
+					<div className="hero-swatch swatch-coral"><span className="swatch-dot"></span>Coral</div>
+					<span className="hero-tag-pill tag-1">01 — Brand</span>
+
+					<div className="hero-shape hero-shape-plus">+</div>
+					<div className="hero-shape hero-shape-square-fill"></div>
+					<div className="hero-swatch swatch-indigo"><span className="swatch-dot"></span>Indigo</div>
+					<div className="hero-shape hero-shape-dash"></div>
+					<div className="hero-shape hero-shape-square-outline"></div>
+					<span className="hero-tag-pill tag-2">05 — Motion</span>
 				</div>
-				<div className="hero-foot">
-					<p className="hero-sub reveal">Whether you&rsquo;re looking for a creative partner to build your brand or you&rsquo;re excited about the design products we&rsquo;re developing, alldystars is here to help shape the future of your ideas.</p>
-					<div></div>
-					<span className="hero-tag reveal">Brand · Web · Print · Motion</span>
+
+				<div className="hero-content">
+					<div className="hero-eyebrow reveal"><span>Brand · Web · Print · Motion</span></div>
+					<h1 className="hero-headline reveal">We turn ideas into <span className="hero-script">visually stunning</span> designs.</h1>
+					<p className="hero-subtext reveal">A creative studio that turns ambitious ideas into brands, sites, and campaigns people actually remember.</p>
+					<div className="hero-cta-row reveal">
+						<Link href="/#contact" className="hero-btn-primary">Start a project →</Link>
+						<Link href="/projects" className="hero-btn-secondary">View our work</Link>
+					</div>
 				</div>
 			</section>
 
@@ -265,7 +273,7 @@ export default function HomePage() {
 			<section className="testimonials">
 				<div className="section-head"><div><div className="eyebrow reveal">Testimonials</div><h2 className="reveal">What clients say</h2></div></div>
 				<div className="t-track">
-					<div className="t-card reveal">
+					<div className="t-card glass-dark reveal">
 						<p className="t-quote">&ldquo;We shape memorable brands with thoughtful visual systems — logos, color languages, type hierarchy, brand voices that connect emotionally.&rdquo;</p>
 						<div><div className="t-name">Tom James</div><div className="t-role">Founder &amp; CEO, FreshFoods</div></div>
 					</div>

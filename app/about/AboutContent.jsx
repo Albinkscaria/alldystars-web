@@ -60,6 +60,15 @@ export default function AboutContent() {
 			<section className="page-hero">
 				<div className="eyebrow reveal">About Us</div>
 				<h1 className="reveal">We are <span className="script">alldystars</span></h1>
+				<div className="studio-badge-row reveal reveal-delay-1">
+					<div className="studio-glow" aria-hidden="true"></div>
+					<div className="studio-frame glass">Studio — Kottayam, Kerala</div>
+					<div className="info-badges">
+						<span className="info-badge glass">5+ Years</span>
+						<span className="info-badge glass">10+ Clients</span>
+						<span className="info-badge glass">20+ Projects</span>
+					</div>
+				</div>
 			</section>
 
 			<section className="statement">
