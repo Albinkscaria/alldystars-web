@@ -103,11 +103,19 @@ a{ color:inherit; }
 .site-header{
   position:fixed; top:0; left:0; right:0; z-index:100; padding:22px 5vw;
   display:flex; align-items:center; justify-content:space-between;
-  transition:background .4s ease, backdrop-filter .4s ease, border-color .4s ease;
+  /* background is intentionally NOT in this transition list — see .scrolled below */
+  transition:backdrop-filter .4s ease, border-color .4s ease;
   border-bottom:1px solid transparent;
 }
 .site-header.scrolled{
-  background:rgba(245,239,230,0.6);
+  /* solid, not the ~60% translucent glass this used to be — the hero
+     headline runs up to 108px per line, and a merely-blurred backdrop let
+     it show through as a distracting smear once it scrolled underneath.
+     background has no transition (see .site-header above): fading it in
+     over .4s left a real, screenshottable window where the header sat at
+     ~30% opacity and the headline ghosted straight through it. It has to
+     snap instantly the moment .scrolled is toggled. */
+  background:rgb(245,239,230);
   backdrop-filter:blur(20px);
   -webkit-backdrop-filter:blur(20px);
   border-bottom:1px solid rgba(255,255,255,0.3);
@@ -118,7 +126,6 @@ a{ color:inherit; }
    light (not flipped to dark glass) because the logo is a fixed black-ink
    wordmark image with no recolor path — a dark chip would erase it. */
 .site-header .logo,
-.site-header nav.links,
 .menu-btn{
   background:rgba(196, 148, 74, 0.5);
   backdrop-filter:blur(20px) saturate(180%);
@@ -128,27 +135,45 @@ a{ color:inherit; }
 }
 .site-header .logo{
   display:flex; align-items:center; line-height:0; text-decoration:none;
-  padding:8px 16px;
+  padding:13px 26px;
   border-radius:999px;
 }
 /* height is the one thing worth tuning by eye once the real file is in place —
    the source image has a lot of empty space above the wordmark for the script
    flourish, so fitting purely by width can end up tiny/cramped */
-.site-header .logo img{ height:34px; width:auto; display:block; }
+.site-header .logo img{ height:46px; width:auto; display:block; }
+
+/* smaller neumorphic pill buttons nested inside one big pill of the same
+   color/shadow recipe — design from Uiverse.io by barisdogansutcu, recolored
+   to the logo chip's warm gold (flat equivalent of its rgba(196,148,74,.5)
+   glass over the --paper cream background) */
 .site-header nav.links{
-  display:flex; gap:32px;
-  padding:12px 24px;
-  border-radius:999px;
+  display:flex; align-items:center; gap:4px;
+  background-color:#ddc298;
+  border:2px solid rgba(255,214,150,.5);
+  border-radius:999px; padding:6px;
+  box-shadow:-4px -2px 16px 0 #fff8ec, 4px 2px 16px 0 rgb(196 148 74 / 45%);
 }
 .site-header nav.links a{
-  color:var(--ink) !important;
-  font-family:'IBM Plex Mono',monospace; font-size:var(--fs-eyebrow); letter-spacing:.08em; text-transform:uppercase;
-  text-decoration:none; position:relative; padding-bottom:4px; display:inline-block;
-  transition:transform .3s cubic-bezier(.2,.8,.2,1);
+  display:flex; align-items:center; justify-content:center;
+  font-family:'IBM Plex Mono',monospace; font-size:10.5px; font-weight:500;
+  text-transform:uppercase; letter-spacing:.05em;
+  color:#7a5c2e; background-color:#ddc298;
+  border:1.5px solid rgba(255,214,150,.5);
+  border-radius:999px; padding:8px 14px;
+  text-decoration:none;
+  transition:.2s;
+  box-shadow:-2px -1px 8px 0 #fff8ec, 2px 1px 8px 0 rgb(196 148 74 / 38%);
 }
-.site-header nav.links a::after{ content:''; position:absolute; left:0; bottom:0; width:0; height:1px; background:currentColor; transition:width .3s cubic-bezier(.2,.7,.2,1); }
-.site-header nav.links a:hover::after{ width:100%; }
-.site-header nav.links a.active{ opacity:.5; }
+.site-header nav.links a:hover{
+  color:#5c4520; background-color:#fcdfb2;
+  box-shadow:-1px -1px 4px 0 #fff8ec, 1px 1px 4px 0 rgb(196 148 74 / 48%);
+}
+.site-header nav.links a:active{ box-shadow:none; }
+.site-header nav.links a.active{
+  color:#5c4520; background-color:#fcdfb2;
+  box-shadow:-1px -1px 4px 0 #fff8ec, 1px 1px 4px 0 rgb(196 148 74 / 48%);
+}
 .menu-btn{
   display:none; border:none; cursor:pointer;
   padding:14px 16px;
@@ -195,8 +220,7 @@ a{ color:inherit; }
 .footer-links{ display:flex; flex-direction:column; gap:12px; }
 .footer-links a{ color:rgba(250,250,247,0.75); text-decoration:none; font-size:var(--fs-body); }
 .footer-links a:hover{ color:#fff; }
-.footer-social{ display:flex; flex-direction:column; gap:12px; align-items:flex-end; }
-.footer-social a{ color:rgba(250,250,247,0.75); text-decoration:none; font-family:'IBM Plex Mono',monospace; font-size:var(--fs-eyebrow); }
+.footer-social{ display:flex; align-items:flex-end; }
 .footer-quote{ font-family:'Petit Formal Script',cursive; font-size:var(--fs-body-lg); color:rgba(250,250,247,0.7); margin-top:80px; }
 .footer-word{ font-family:'Fraunces',serif; font-size:var(--fs-mega); font-weight:400; margin:10px 0 0; letter-spacing:-0.02em; line-height:0.86; }
 .footer-bottom{ display:flex; justify-content:space-between; margin-top:40px; padding-top:24px; border-top:1px solid rgba(250,250,247,0.15); font-family:'IBM Plex Mono',monospace; font-size:var(--fs-eyebrow); color:rgba(250,250,247,0.55); flex-wrap:wrap; gap:10px; }

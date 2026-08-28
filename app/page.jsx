@@ -18,18 +18,25 @@ const icon = {
 
 const bentoData = [
 	{ c: 'p1 ink',     n: '01', id: 'brand', t: 'Brand Identity & Design', d: 'Logo, brand strategy, visual identity systems and rebranding.', i: icon.brand,
+		img: '/images/services/brand_design.png',
 		subs: ['Logo Design', 'Brand Strategy', 'Visual Identity Design', 'Rebranding'] },
 	{ c: 'p2 coral',   n: '02', id: 'web', t: 'Web Design', d: 'Custom sites, landing pages, e-commerce and dashboard design.', i: icon.web,
+		img: '/images/services/website_design.png',
 		subs: ['Custom Website Design', 'Landing Page Design', 'E-commerce Design', 'Dashboard Design'] },
 	{ c: 'p3 paper',   n: '03', id: 'graphic', t: 'Graphic Design', d: 'Brochures, posters, menus, presentations, event branding.', i: icon.graphic,
+		img: '/images/services/graphic_design.png',
 		subs: ['Brochures & Flyers', 'Posters & Banners', 'Menus & Catalogs', 'Business Presentations', 'Marketing Materials', 'Event Branding'] },
 	{ c: 'p4 indigo',  n: '04', id: 'product', t: 'Product & Packaging', d: 'Packaging, labels, cartons, mockups, retail design.', i: icon.product,
+		img: '/images/services/product_and_packaging_design.png',
 		subs: ['Product Packaging', 'Label Design', 'Box & Carton Design', 'Product Mockups', 'Retail Packaging'] },
 	{ c: 'p5 outline', n: '05', id: 'illustration', t: 'Illustration & Visual Assets', d: 'Custom artwork, character design, vector & digital art.', i: icon.illus,
+		img: '/images/services/illustation_and_visual_effects.png',
 		subs: ['Custom Artwork', 'Character Design', 'Vector Artwork', 'Digital Artwork'] },
 	{ c: 'p6 paper',   n: '06', id: 'motion', t: 'Motion & Interactive', d: 'Motion graphics, video editing, logo animation.', i: icon.motion,
+		img: '/images/services/motion_graphics_and_interactive_design.png',
 		subs: ['Motion Graphics', 'Video Editing', 'Logo Animation', 'Animated Presentations'] },
 	{ c: 'p7 ink',     n: '07', id: 'consulting', t: 'Creative Consulting', d: 'Design audits, brand workshops, UX reviews, visual direction.', i: icon.consult,
+		img: '/images/services/creative_consulting.png',
 		subs: ['Design Audits', 'Brand Workshops', 'UX Reviews', 'Competitor Analysis', 'Visual Direction'] },
 ];
 
@@ -183,16 +190,15 @@ export default function HomePage() {
 								role="button"
 								tabIndex={0}
 								aria-haspopup="dialog"
+								aria-label={item.t}
 								onClick={() => setActivePanel(item)}
 								onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setActivePanel(item); } }}
 							>
+								{item.img && <div className="panel-bg" style={{ backgroundImage: `url(${item.img})` }} />}
+								<div className="panel-scrim" aria-hidden="true" />
 								<div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
 									<div className="p-num">{item.n}</div>
 									<div className="p-icon" dangerouslySetInnerHTML={{ __html: item.i }} />
-								</div>
-								<div>
-									<div className="p-title">{item.t}</div>
-									<div className="p-desc">{item.d}</div>
 								</div>
 								<span className="p-toggle" aria-hidden="true">+</span>
 							</div>
