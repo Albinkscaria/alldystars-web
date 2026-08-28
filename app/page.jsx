@@ -87,11 +87,12 @@ export default function HomePage() {
 					counted.add(e.target);
 					const target = parseInt(e.target.dataset.target, 10);
 					const dur = 1400, start = performance.now();
-					function tick(now) {
+					e.target.classList.add('counting');
+						function tick(now) {
 						const p = Math.min(1, (now - start) / dur);
 						const eased = 1 - Math.pow(1 - p, 3);
 						e.target.textContent = Math.floor(eased * target);
-						if (p < 1) requestAnimationFrame(tick); else e.target.textContent = target;
+						if (p < 1) requestAnimationFrame(tick); else { e.target.textContent = target; e.target.classList.remove('counting'); }
 					}
 					requestAnimationFrame(tick);
 				}
@@ -116,11 +117,9 @@ export default function HomePage() {
 		}
 		loop();
 
-		const hoverTargets = document.querySelectorAll('.home-page .work-teaser, .home-page .cta-block, .home-page .panel');
+		const hoverTargets = document.querySelectorAll('.home-page .panel');
 		function onEnter(el) {
-			if (el.classList.contains('work-teaser')) { label.textContent = 'VIEW'; label.classList.add('show'); dot.style.opacity = 0; }
-			else if (el.classList.contains('cta-block')) { label.textContent = 'SEND'; label.classList.add('show'); dot.style.opacity = 0; }
-			else { dot.style.width = '34px'; dot.style.height = '34px'; dot.style.background = 'var(--coral)'; }
+			dot.style.width = '34px'; dot.style.height = '34px'; dot.style.background = 'var(--coral)';
 		}
 		function onLeave() { label.classList.remove('show'); dot.style.opacity = 1; dot.style.width = '10px'; dot.style.height = '10px'; dot.style.background = 'var(--ink)'; }
 		hoverTargets.forEach(el => { el.addEventListener('mouseenter', () => onEnter(el)); el.addEventListener('mouseleave', onLeave); });
@@ -265,45 +264,6 @@ export default function HomePage() {
 					</div>
 				))}
 			</section>
-
-			<section className="industries">
-				<div className="industries-inner">
-					<div className="eyebrow on-dark" style={{ padding: '0 5vw', marginBottom: 24 }}>Industries We Work For</div>
-					<div className="marquee-wrap">
-						<div className="marquee reverse">
-							{Array(2).fill(0).map((_, i) => (
-								<span key={i}>Startups<span className="dash">/</span>SaaS<span className="dash">/</span>Technology<span className="dash">/</span>Healthcare<span className="dash">/</span>Education<span className="dash">/</span>Real Estate<span className="dash">/</span>Hospitality<span className="dash">/</span>Retail<span className="dash">/</span>ECommerce<span className="dash">/</span>Finance<span className="dash">/</span>Manufacturing<span className="dash">/</span>Professional Services<span className="dash">/</span></span>
-							))}
-						</div>
-					</div>
-				</div>
-			</section>
-
-			<section id="work">
-				<div className="work-teaser reveal">
-					<div className="slash"></div>
-					<div className="eyebrow on-dark" style={{ marginBottom: 20 }}>Selected Work</div>
-					<h2>See the full<br />portfolio.</h2>
-					<p>Case studies land on their own page — real project work as it ships, not invented client stories.</p>
-					<Link href="/projects">View Projects →</Link>
-				</div>
-			</section>
-
-			<section className="testimonials">
-				<div className="section-head"><div><div className="eyebrow reveal">Testimonials</div><h2 className="reveal">What clients say</h2></div></div>
-				<div className="t-track">
-					<div className="t-card glass-dark reveal">
-						<p className="t-quote">&ldquo;We shape memorable brands with thoughtful visual systems — logos, color languages, type hierarchy, brand voices that connect emotionally.&rdquo;</p>
-						<div><div className="t-name">Tom James</div><div className="t-role">Founder &amp; CEO, FreshFoods</div></div>
-					</div>
-				</div>
-			</section>
-
-			<div className="cta-block reveal" id="contact">
-				<h2>Begin your ALLDYSTARS<br />Experience Now</h2>
-				<div className="quote">Ideas become impact when shaped with purpose.</div>
-				<a href="mailto:hello@alldystars.com" className="cta-btn">Email Us →</a>
-			</div>
 
 			<Footer />
 		</div>

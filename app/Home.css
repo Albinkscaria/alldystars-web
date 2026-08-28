@@ -299,8 +299,18 @@
 .home-page .metrics-grid{ display:grid; grid-template-columns:repeat(4,1fr); margin-top:40px; }
 .home-page .metric{ position:relative; padding:20px 14px 0 0; border-left:1px solid var(--line); }
 .home-page .metric:first-child{ border-left:none; padding-left:0; }
-.home-page .metric-num{ font-family:'Fraunces',serif; font-size:var(--text-hero); font-weight:400; line-height:.92; letter-spacing:-0.02em; }
+.home-page .metric-num{ font-family:'Fraunces',serif; font-size:var(--text-hero); font-weight:400; line-height:.92; letter-spacing:-0.02em; perspective:300px; }
 .home-page .metric-num .plus{ color:var(--coral); }
+/* the "loading" number spins on its own X axis while it counts up, then
+   snaps flat the instant it lands on the final value (class removed in
+   the same tick .textContent is set to the target, in page.jsx) */
+.home-page .count{ display:inline-block; }
+.home-page .count.counting{ animation:count-spin .22s linear infinite; filter:blur(1.5px); }
+@keyframes count-spin{
+  from{ transform:rotateX(0deg); }
+  to{ transform:rotateX(360deg); }
+}
+@media (prefers-reduced-motion: reduce){ .home-page .count.counting{ animation:none; filter:none; } }
 .home-page .metric-label{ font-family:'IBM Plex Mono',monospace; font-size:var(--text-caption); letter-spacing:.1em; text-transform:uppercase; color:var(--muted); margin-top:10px; }
 .home-page .metric:nth-child(2){ transform:translateY(24px); }
 .home-page .metric:nth-child(4){ transform:translateY(-14px); }
@@ -314,42 +324,6 @@
 .home-page .process-title{ font-family:'Fraunces',serif; font-size:var(--text-h3); font-weight:400; margin:0; }
 .home-page .process-desc{ font-size:var(--text-body); color:var(--ink-soft); margin-top:8px; max-width:560px; line-height:1.6; }
 
-.home-page .industries{ padding:70px 0; background:var(--ink); overflow:hidden; transform:rotate(-1deg); margin:40px 0; }
-.home-page .industries-inner{ transform:rotate(1deg); }
-.home-page .industries .marquee span{ color:var(--paper); }
-
-/* the whole section rides up to overlap the work-teaser gradient block
-   above it — the heading moves with it and is recolored on-dark, since
-   it now sits over the tail of that gradient instead of plain paper.
-   The shift is capped just short of work-teaser's own "View Projects"
-   link — verified in-browser, since that ceiling isn't derivable from
-   the CSS alone (real glyph metrics decide it, not the box model). */
-.home-page .testimonials{ padding:60px 0 160px; position:relative; z-index:2; margin-top:-246px; }
-.home-page .testimonials .section-head{ padding:0 5vw; margin-bottom:20px; }
-.home-page .testimonials .section-head .eyebrow{ color:rgba(250,250,247,0.6); }
-.home-page .testimonials .section-head h2{ color:var(--paper); }
-.home-page .t-track{ display:flex; gap:22px; overflow-x:auto; padding:6px 5vw 20px; scroll-snap-type:x mandatory; scrollbar-width:none; }
-.home-page .t-track::-webkit-scrollbar{ display:none; }
-.home-page .t-card{ flex:0 0 min(600px,88vw); scroll-snap-align:start; border-radius:8px; padding:50px; color:var(--paper); }
-.home-page .t-quote{ font-family:'Fraunces',serif; font-size:var(--text-h3); line-height:1.5; font-weight:400; }
-.home-page .t-name{ font-size:var(--text-body); font-weight:600; margin-top:28px; }
-.home-page .t-role{ color:rgba(250,250,247,0.65); font-size:var(--text-body); }
-
-.home-page .work-teaser{ margin:80px 5vw 60px; background:linear-gradient(115deg,var(--indigo-1) 0%, var(--indigo-1) 28%, var(--indigo-3) 100%); border-radius:8px; padding:130px 6vw; position:relative; overflow:hidden; }
-/* permanent frosted layer on top of the gradient — the coral .slash glow
-   sits beneath it (z-index:0) so it reads as part of what's being
-   blurred; real content is raised above both */
-.home-page .work-teaser::before{
-  content:''; position:absolute; inset:0; z-index:1;
-  background:rgba(11, 11, 12, 0.22);
-  backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px);
-  border:1px solid rgba(255, 255, 255, 0.12);
-}
-.home-page .work-teaser h2{ position:relative; z-index:2; font-family:'Fraunces',serif; color:#fff; font-size:var(--text-hero); font-weight:400; margin:0; line-height:.95; }
-.home-page .work-teaser p{ position:relative; z-index:2; color:rgba(255,255,255,0.7); font-family:'IBM Plex Mono',monospace; font-size:var(--text-caption); max-width:460px; line-height:1.7; margin-top:26px; }
-.home-page .work-teaser a{ position:relative; z-index:2; display:inline-flex; margin-top:34px; align-items:center; gap:10px; color:#fff; font-family:'IBM Plex Mono',monospace; font-size:var(--text-caption); letter-spacing:.08em; text-transform:uppercase; border-bottom:1px solid rgba(255,255,255,.4); padding-bottom:4px; text-decoration:none; }
-.home-page .work-teaser > .eyebrow{ position:relative; z-index:2; }
-.home-page .work-teaser .slash{ position:absolute; right:-5%; top:-30%; width:60%; height:220%; background:linear-gradient(120deg,#ffffff,transparent 60%); opacity:.1; transform:rotate(18deg); z-index:0; }
 
 .home-page .view-all{ margin-top:36px; text-align:right; }
 .home-page .view-all a{ font-family:'IBM Plex Mono',monospace; font-size:var(--text-caption); letter-spacing:.08em; text-transform:uppercase; color:var(--ink); text-decoration:none; border-bottom:1px solid var(--ink); padding-bottom:3px; }
