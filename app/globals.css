@@ -1,16 +1,23 @@
-/* ==================== ALLDYSTARS — GLOBAL DESIGN TOKENS ==================== */
+/* ==================== ALLDYSTARS — GLOBAL DESIGN TOKENS ====================
+   Premium black/white/gray palette. Token NAMES are kept as-is (--paper,
+   --coral, --indigo-*) since hundreds of usages across every CSS file in
+   the project reference them by name — renaming would mean re-touching
+   every file for a cosmetic win with real risk of missing a reference.
+   Only the VALUES changed: --coral is now the strongest black accent
+   (was the red highlight), --indigo-1/2/3 form a black-to-charcoal
+   gradient ramp (was the navy-to-blue gradient), darkest to lightest. ---- */
 :root{
-  --paper:#F5EFE6;
-  --paper-dim:#EDE3D4;
-  --ink:#0B0B0C;
-  --ink-soft:#3A3A3D;
-  --muted:#6E6E72;
-  --line:rgba(11,11,12,0.14);
-  --coral:#FF4433;
-  --coral-soft:#FF6B5C;
-  --indigo-1:#0A0730;
-  --indigo-2:#211AE0;
-  --indigo-3:#4338FF;
+  --paper:#FFFFFF;
+  --paper-dim:#F0F0F0;
+  --ink:#0A0A0A;
+  --ink-soft:#454545;
+  --muted:#7A7A7A;
+  --line:rgba(0,0,0,0.12);
+  --coral:#000000;
+  --coral-soft:#2E2E2E;
+  --indigo-1:#000000;
+  --indigo-2:#1A1A1A;
+  --indigo-3:#333333;
 
   /* ---- type scale — every font-size in the codebase pulls from one of these.
      Six steps, small to large. --fs-mega is the single named exception: one
@@ -115,23 +122,23 @@ a{ color:inherit; }
      over .4s left a real, screenshottable window where the header sat at
      ~30% opacity and the headline ghosted straight through it. It has to
      snap instantly the moment .scrolled is toggled. */
-  background:rgb(245,239,230);
+  background:var(--paper);
   backdrop-filter:blur(20px);
   -webkit-backdrop-filter:blur(20px);
-  border-bottom:1px solid rgba(255,255,255,0.3);
+  border-bottom:1px solid rgba(0,0,0,0.08);
 }
 /* premium frosted-glass chips — real backdrop-filter (not a flat swatch),
-   a warm champagne/gold tint kept semi-translucent so blur is actually
-   visible, plus a glossy inset highlight + saturate() for richness. Stays
-   light (not flipped to dark glass) because the logo is a fixed black-ink
-   wordmark image with no recolor path — a dark chip would erase it. */
+   a soft light-gray tint kept semi-translucent so blur is actually
+   visible, plus a glossy inset highlight for richness. Stays light (not
+   flipped to dark glass) because the logo is a fixed black-ink wordmark
+   image with no recolor path — a dark chip would erase it. */
 .site-header .logo,
 .menu-btn{
-  background:rgba(196, 148, 74, 0.5);
+  background:rgba(240,240,240,0.7);
   backdrop-filter:blur(20px) saturate(180%);
   -webkit-backdrop-filter:blur(20px) saturate(180%);
-  border:1px solid rgba(255, 214, 150, 0.65);
-  box-shadow:0 8px 28px rgba(90,60,10,0.28), inset 0 1px 0 rgba(255,240,210,0.7);
+  border:1px solid rgba(0,0,0,0.1);
+  box-shadow:0 8px 28px rgba(0,0,0,0.12), inset 0 1px 0 rgba(255,255,255,0.85);
 }
 .site-header .logo{
   display:flex; align-items:center; line-height:0; text-decoration:none;
@@ -141,38 +148,39 @@ a{ color:inherit; }
 /* height is the one thing worth tuning by eye once the real file is in place —
    the source image has a lot of empty space above the wordmark for the script
    flourish, so fitting purely by width can end up tiny/cramped */
-.site-header .logo img{ height:46px; width:auto; display:block; }
+.site-header .logo img{ height:46px; width:auto; display:block; filter:grayscale(1); }
 
 /* smaller neumorphic pill buttons nested inside one big pill of the same
-   color/shadow recipe — design from Uiverse.io by barisdogansutcu, recolored
-   to the logo chip's warm gold (flat equivalent of its rgba(196,148,74,.5)
-   glass over the --paper cream background) */
+   color/shadow recipe — design from Uiverse.io by barisdogansutcu, in a
+   light-gray neumorphic finish (needs a mid-light base, not pure white,
+   so both the light highlight and dark shadow read) matching the logo
+   chip's glass tone */
 .site-header nav.links{
   display:flex; align-items:center; gap:4px;
-  background-color:#ddc298;
-  border:2px solid rgba(255,214,150,.5);
+  background-color:#ececec;
+  border:2px solid rgba(255,255,255,.7);
   border-radius:999px; padding:6px;
-  box-shadow:-4px -2px 16px 0 #fff8ec, 4px 2px 16px 0 rgb(196 148 74 / 45%);
+  box-shadow:-4px -2px 16px 0 #ffffff, 4px 2px 16px 0 rgba(0,0,0,0.18);
 }
 .site-header nav.links a{
   display:flex; align-items:center; justify-content:center;
   font-family:'IBM Plex Mono',monospace; font-size:10.5px; font-weight:500;
   text-transform:uppercase; letter-spacing:.05em;
-  color:#7a5c2e; background-color:#ddc298;
-  border:1.5px solid rgba(255,214,150,.5);
+  color:#333333; background-color:#ececec;
+  border:1.5px solid rgba(255,255,255,.7);
   border-radius:999px; padding:8px 14px;
   text-decoration:none;
   transition:.2s;
-  box-shadow:-2px -1px 8px 0 #fff8ec, 2px 1px 8px 0 rgb(196 148 74 / 38%);
+  box-shadow:-2px -1px 8px 0 #ffffff, 2px 1px 8px 0 rgba(0,0,0,0.14);
 }
 .site-header nav.links a:hover{
-  color:#5c4520; background-color:#fcdfb2;
-  box-shadow:-1px -1px 4px 0 #fff8ec, 1px 1px 4px 0 rgb(196 148 74 / 48%);
+  color:#000000; background-color:#f5f5f5;
+  box-shadow:-1px -1px 4px 0 #ffffff, 1px 1px 4px 0 rgba(0,0,0,0.2);
 }
 .site-header nav.links a:active{ box-shadow:none; }
 .site-header nav.links a.active{
-  color:#5c4520; background-color:#fcdfb2;
-  box-shadow:-1px -1px 4px 0 #fff8ec, 1px 1px 4px 0 rgb(196 148 74 / 48%);
+  color:#000000; background-color:#f5f5f5;
+  box-shadow:-1px -1px 4px 0 #ffffff, 1px 1px 4px 0 rgba(0,0,0,0.2);
 }
 .menu-btn{
   display:none; border:none; cursor:pointer;
@@ -186,9 +194,11 @@ a{ color:inherit; }
   position:fixed; inset:0; z-index:99; display:flex; flex-direction:column;
   justify-content:center; gap:22px; padding:8vw; transform:translateY(-100%);
   transition:transform .55s cubic-bezier(.2,.8,.2,1);
-  background:rgba(11, 11, 12, 0.45);
-  backdrop-filter:blur(16px);
-  -webkit-backdrop-filter:blur(16px);
+  /* solid, not the ~45% translucent blur this used to be — against the
+     white/black homepage the hero text bled straight through and
+     overlapped the menu links, unreadable. A full takeover reads as
+     premium; a see-through one just read as broken. */
+  background:rgb(10,10,10);
   border-bottom:1px solid rgba(255, 255, 255, 0.12);
 }
 .mobile-menu.open{ transform:translateY(0); }
@@ -206,13 +216,13 @@ a{ color:inherit; }
   margin-top:44px; display:inline-flex; align-items:center; gap:14px; color:#fff;
   font-family:'IBM Plex Mono',monospace; font-size:var(--fs-eyebrow); letter-spacing:.08em; text-transform:uppercase;
   padding:20px 34px; border-radius:999px; text-decoration:none;
-  background:rgba(255, 68, 51, 0.4);
+  background:rgba(255, 255, 255, 0.12);
   backdrop-filter:blur(16px) saturate(180%); -webkit-backdrop-filter:blur(16px) saturate(180%);
-  border:1px solid rgba(255, 160, 140, 0.55);
-  box-shadow:0 8px 32px rgba(255,68,51,0.28), inset 0 1px 0 rgba(255,255,255,0.25);
+  border:1px solid rgba(255, 255, 255, 0.35);
+  box-shadow:0 8px 32px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.25);
   transition:transform .35s cubic-bezier(.2,.8,.2,1), background .35s ease, box-shadow .35s ease;
 }
-.cta-btn:hover{ background:rgba(255, 68, 51, 0.6); box-shadow:0 12px 40px rgba(255,68,51,0.42); }
+.cta-btn:hover{ background:rgba(255, 255, 255, 0.22); box-shadow:0 12px 40px rgba(0,0,0,0.45); }
 
 /* ==================== SHARED FOOTER ==================== */
 .site-footer{ background:var(--ink); color:var(--paper); padding:90px 5vw 30px; margin-top:60px; }
@@ -232,7 +242,7 @@ a{ color:inherit; }
 .marquee.reverse{ animation-direction:reverse; animation-duration:40s; }
 .marquee-wrap:hover .marquee{ animation-play-state:paused; }
 .marquee span{ font-family:'Fraunces',serif; font-size:var(--fs-heading); white-space:nowrap; padding:0 28px; font-weight:400; }
-.marquee span.x{ color:var(--coral); font-family:'Inter',sans-serif; }
-.marquee span.dash{ color:var(--coral); }
+.marquee span.x{ color:rgba(255,255,255,0.55); font-family:'Inter',sans-serif; }
+.marquee span.dash{ color:rgba(255,255,255,0.55); }
 @keyframes marquee{ from{ transform:translateX(0); } to{ transform:translateX(-50%); } }
 .marquee-strip{ background:var(--ink); color:var(--paper); transform:rotate(-1.2deg); margin:60px -3vw; box-shadow:0 20px 60px rgba(0,0,0,0.15); }

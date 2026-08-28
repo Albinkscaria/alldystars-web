@@ -40,7 +40,15 @@ const bentoData = [
 		subs: ['Design Audits', 'Brand Workshops', 'UX Reviews', 'Competitor Analysis', 'Visual Direction'] },
 ];
 
-const techList = ['Python', 'PHP', 'WordPress', 'Flutter', 'Figma', 'Photoshop', 'Canva'];
+const techList = [
+	{ name: 'Python', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2c-1.5 0-3 .3-3 2v2.5h6V7H7.5C5.5 7 4 8.2 4 10.5v3C4 15.8 5.5 17 7.5 17H9v-2.3c0-2 1.7-3.7 3.7-3.7H17c1.8 0 3-1.2 3-3v-2C20 3.2 18.5 2 16.5 2H12z"/><path d="M12 22c1.5 0 3-.3 3-2v-2.5H9V17h4.5c2 0 3.5-1.2 3.5-3.5v-3c0-2.3-1.5-3.5-3.5-3.5H15v2.3c0 2-1.7 3.7-3.7 3.7H7c-1.8 0-3 1.2-3 3v2c0 1.8 1.5 3 3.5 3H12z"/><circle cx="8.5" cy="5" r=".6" fill="currentColor" stroke="none"/><circle cx="15.5" cy="19" r=".6" fill="currentColor" stroke="none"/></svg>' },
+	{ name: 'PHP', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="12" rx="9" ry="5.5"/><path d="M9 15V9h2.3c1.4 0 2.2.8 2.2 2s-.8 2-2.2 2H9"/></svg>' },
+	{ name: 'WordPress', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M4.6 10l3 8.5M8.7 9.3L12 18.5m3.3-9.2l-2.2 6.2M19.4 10l-3.4 8.7M6 9h2.2M14 9h2.4"/></svg>' },
+	{ name: 'Flutter', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"><path d="M14.5 3L5 12.5 8.5 16 19 5.5h-7L14.5 3z"/><path d="M8.5 16L12 19.5h7l-6-6-4.5 4.5z"/></svg>' },
+	{ name: 'Figma', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M9 3h3.5a2.5 2.5 0 010 5H9V3z"/><path d="M9 8h3.5a2.5 2.5 0 010 5H9V8z"/><path d="M9 13a2.5 2.5 0 100 5 2.5 2.5 0 000-5z"/><circle cx="14.5" cy="15.5" r="2.5"/></svg>' },
+	{ name: 'Photoshop', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="4"/><path d="M7 16V8h2.3c1.5 0 2.4.9 2.4 2.2S10.8 12.4 9.3 12.4H7"/><path d="M13.5 16c1 .5 3 .5 3-1s-3-1-3-2.5 2-1.5 3-1"/></svg>' },
+	{ name: 'Canva', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="12" cy="12" r="9"/><circle cx="15" cy="12" r="4"/></svg>' },
+];
 const metrics = [ { v: 20, l: 'Projects' }, { v: 10, l: 'Clients' }, { v: 2700, l: 'Designs Delivered' }, { v: 5, l: 'Years' } ];
 const process = [
 	{ n: '01', t: 'Discover', d: 'Understanding your business, audience and goals.' },
@@ -227,7 +235,12 @@ export default function HomePage() {
 			<section className="tech">
 				<div className="eyebrow reveal">Technology, Perfectly Executed</div>
 				<div className="tech-row">
-					{techList.map(t => <div key={t} className="tech-pill">{t}</div>)}
+					{techList.map((t, i) => (
+						<div key={t.name} className="tech-pill" style={{ animationDelay: `${i * 0.15}s` }}>
+							<span className="tech-icon" dangerouslySetInnerHTML={{ __html: t.icon }} />
+							<span className="tech-name">{t.name}</span>
+						</div>
+					))}
 				</div>
 			</section>
 

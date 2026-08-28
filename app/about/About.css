@@ -10,8 +10,8 @@
   position:absolute; z-index:0; pointer-events:none;
   inset:-70px -50px;
   background:
-    radial-gradient(circle at 18% 35%, rgba(67,56,255,0.4), transparent 60%),
-    radial-gradient(circle at 82% 65%, rgba(255,68,51,0.32), transparent 55%);
+    radial-gradient(circle at 18% 35%, rgba(0,0,0,0.14), transparent 60%),
+    radial-gradient(circle at 82% 65%, rgba(0,0,0,0.1), transparent 55%);
   filter:blur(46px);
 }
 .about-page .studio-frame{
@@ -46,7 +46,7 @@
 .about-page .founder-grid{ display:grid; grid-template-columns:1fr 1fr; gap:50px; margin-top:44px; }
 .about-page .founder-portrait{ aspect-ratio:4/5; border-radius:4px; position:relative; overflow:hidden; display:flex; align-items:flex-end; }
 .about-page .founder-card:nth-child(1) .founder-portrait{ background:linear-gradient(150deg,var(--indigo-1),var(--indigo-3)); }
-.about-page .founder-card:nth-child(2) .founder-portrait{ background:linear-gradient(150deg,#6b140d,var(--coral)); }
+.about-page .founder-card:nth-child(2) .founder-portrait{ background:linear-gradient(150deg,#1a1a1a,var(--coral)); }
 .about-page .founder-portrait .init{ font-family:'Fraunces',serif; font-size:var(--fs-mega); color:rgba(255,255,255,.12); position:absolute; top:0; left:16px; line-height:1; }
 .about-page .founder-name{ font-family:'Fraunces',serif; font-size:var(--fs-heading-sm); margin:20px 0 4px; }
 .about-page .founder-role{ font-family:'IBM Plex Mono',monospace; font-size:var(--fs-eyebrow); letter-spacing:.08em; text-transform:uppercase; color:var(--coral); }

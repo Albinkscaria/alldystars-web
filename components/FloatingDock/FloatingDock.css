@@ -30,12 +30,12 @@
   background:rgba(255,255,255,0.16);
   border-color:rgba(255,255,255,0.26);
 }
-.dock-item:focus-visible{ outline:2px solid var(--coral); outline-offset:3px; border-radius:50%; }
+.dock-item:focus-visible{ outline:2px solid #fff; outline-offset:3px; border-radius:50%; }
 
 .dock-icon{ width:20px; height:20px; color:rgba(250,250,247,0.85); transition:color .25s ease; display:block; }
 .dock-icon svg{ width:100%; height:100%; display:block; }
 .dock-item:hover .dock-icon,
-.dock-item:focus-visible .dock-icon{ color:var(--coral); }
+.dock-item:focus-visible .dock-icon{ color:#ffffff; }
 
 .dock-tooltip{
   position:absolute; bottom:calc(100% + 10px); left:50%;

@@ -52,10 +52,10 @@
   background:linear-gradient(120deg,var(--indigo-1),var(--indigo-3)); color:#fff;
   font-family:'IBM Plex Mono',monospace; font-size:var(--text-caption); letter-spacing:.06em; text-transform:uppercase;
   padding:19px 32px; border-radius:999px; text-decoration:none; white-space:nowrap;
-  box-shadow:0 18px 40px rgba(33,26,224,0.28);
+  box-shadow:0 18px 40px rgba(0,0,0,0.28);
   transition:transform .35s cubic-bezier(.2,.8,.2,1), box-shadow .35s ease;
 }
-.home-page .hero-btn-primary:hover{ transform:translateY(-3px); box-shadow:0 22px 48px rgba(33,26,224,0.36); }
+.home-page .hero-btn-primary:hover{ transform:translateY(-3px); box-shadow:0 22px 48px rgba(0,0,0,0.36); }
 .home-page .hero-btn-secondary{
   font-family:'IBM Plex Mono',monospace; font-size:var(--text-caption); letter-spacing:.06em; text-transform:uppercase;
   color:var(--ink); text-decoration:none; white-space:nowrap; padding:19px 2px;
@@ -116,11 +116,25 @@
   .home-page .hero{ padding:130px 6vw 70px; }
 }
 
-.home-page .statement{ padding:140px 5vw 90px; display:grid; grid-template-columns:0.55fr 1fr; gap:40px; align-items:start; }
+.home-page .statement{
+  padding:90px 5vw 70px; display:grid; grid-template-columns:0.55fr 1fr; gap:40px; align-items:center;
+  position:relative; overflow:hidden;
+  background-image:url('/images/services/page_two.png');
+  background-size:cover; background-position:center; background-repeat:no-repeat;
+}
+/* the source image clusters its black shapes in the corners — a plain
+   cover fit puts one of them directly behind the headline, killing
+   contrast. This scrim washes the text column back toward white while
+   tapering off before the paper's interesting details (sphere, glass
+   ridges) on the right, which sit clear of any text anyway. */
+.home-page .statement::before{
+  content:''; position:absolute; inset:0; z-index:0;
+  background:linear-gradient(90deg, rgba(255,255,255,0.92) 0%, rgba(255,255,255,0.88) 40%, rgba(255,255,255,0.35) 65%, rgba(255,255,255,0) 85%);
+}
+.home-page .statement > *{ position:relative; z-index:1; }
 .home-page .statement .big-num{ font-family:'IBM Plex Mono',monospace; font-size:var(--text-caption); color:var(--coral); letter-spacing:.1em; }
-.home-page .statement h2{ font-family:'Fraunces',serif; font-size:var(--text-h2); line-height:1.15; margin:14px 0 0; font-weight:400; }
-.home-page .statement .copy{ padding-top:14px; }
-.home-page .statement p{ font-size:var(--text-body); line-height:1.7; color:var(--ink-soft); margin:0; max-width:520px; }
+.home-page .statement h2{ font-family:'Fraunces',serif; font-size:var(--text-hero); line-height:1.05; letter-spacing:-0.01em; margin:14px 0 0; font-weight:400; }
+.home-page .statement p{ font-size:var(--text-body); line-height:1.7; color:var(--ink-soft); margin:0; max-width:480px; }
 @media (max-width:860px){ .home-page .statement{ grid-template-columns:1fr; padding:90px 6vw 50px; } }
 
 .home-page .wall{ padding:100px 5vw 60px; }
@@ -153,15 +167,15 @@
 /* fallback color, only ever visible if a panel has no photo */
 .home-page .panel.paper{
   background:
-    radial-gradient(circle at 25% 15%, rgba(255,68,51,0.16), transparent 55%),
-    radial-gradient(circle at 85% 85%, rgba(255,68,51,0.1), transparent 55%),
+    radial-gradient(circle at 25% 15%, rgba(0,0,0,0.1), transparent 55%),
+    radial-gradient(circle at 85% 85%, rgba(0,0,0,0.06), transparent 55%),
     var(--paper-dim);
 }
 .home-page .panel.ink{ background:linear-gradient(135deg, var(--ink) 0%, var(--indigo-1) 100%); }
-.home-page .panel.coral{ background:linear-gradient(135deg, #6b140d 0%, var(--coral) 100%); }
+.home-page .panel.coral{ background:linear-gradient(135deg, #1a1a1a 0%, var(--coral) 100%); }
 .home-page .panel.indigo{ background:linear-gradient(135deg,var(--indigo-1),var(--indigo-3)); }
 .home-page .panel.outline{
-  background:radial-gradient(circle at 70% 20%, rgba(67,56,255,0.16), transparent 60%), var(--ink);
+  background:radial-gradient(circle at 70% 20%, rgba(255,255,255,0.1), transparent 60%), var(--ink);
 }
 
 /* plain photo layer, no blur — just the image, easing in on hover */
@@ -169,6 +183,7 @@
 .home-page .panel-bg{
   position:absolute; inset:0; z-index:0;
   background-size:cover; background-position:center; background-repeat:no-repeat;
+  filter:grayscale(1) contrast(1.08);
   transition:transform .7s cubic-bezier(.2,.8,.2,1);
 }
 .home-page .panel:hover .panel-bg{ transform:scale(1.08); }
@@ -214,12 +229,73 @@
   .home-page .wall-note{ display:none; }
 }
 
-.home-page .tech{ padding:100px 5vw; }
-.home-page .tech-row{ display:flex; flex-wrap:wrap; gap:14px; margin-top:32px; }
-.home-page .tech-pill{ font-family:'IBM Plex Mono',monospace; font-size:var(--text-caption); letter-spacing:.04em; padding:12px 20px; border:1px solid var(--line); border-radius:999px; color:var(--ink-soft); transition:all .35s ease; }
-.home-page .tech-pill:hover{ border-color:var(--ink); color:#fff; background:var(--ink); transform:translateY(-3px) rotate(-1deg); }
+.home-page .tech{ padding:100px 5vw 30px; }
+.home-page .tech-row{ display:flex; flex-wrap:wrap; gap:15px; margin-top:32px; perspective:900px; }
+.home-page .tech-pill{
+  position:relative;
+  display:flex; flex-direction:column; align-items:center; justify-content:center; gap:13px;
+  width:128px; min-height:162px;
+  font-family:'IBM Plex Mono',monospace; font-size:13px; letter-spacing:.04em; text-align:center;
+  padding:20px; border:none; border-radius:28px; color:#fff;
+  /* dark, near-black center dissolving out to a near-transparent edge — this
+     IS the "glow": on the reference's dark page a light halo can bleed
+     outward and read as glowing, but that same light glow would be
+     invisible against our white page, so the glow has to live inside the
+     card's own surface instead, as this center-to-edge fade. */
+  background:radial-gradient(circle at 50% 42%,
+    rgba(18,18,18,0.95) 0%, rgba(15,15,15,0.88) 38%,
+    rgba(90,90,90,0.4) 72%, rgba(160,160,160,0.06) 100%);
+  backdrop-filter:blur(2px); -webkit-backdrop-filter:blur(2px);
+  box-shadow:
+    0 30px 60px -18px rgba(0,0,0,0.4),
+    0 0 40px 4px rgba(0,0,0,0.1),
+    inset 0 0 50px rgba(255,255,255,0.16),
+    inset 0 1px 0 rgba(255,255,255,0.28);
+  transform-style:preserve-3d;
+  /* the idle float — a clean vertical bob is the whole effect now; the
+     constant rotateX tilt from the original snippet was competing with it
+     visually (read as "tilted" more than "floating"), so it's dropped in
+     favor of a bigger, unambiguous up/down drift. Staggered per-card via
+     animation-delay (set inline) so the row breathes instead of every
+     card bobbing in lockstep. */
+  animation:tech-bob 2.8s ease-in-out infinite;
+  transition:box-shadow .4s ease, transform .35s ease;
+}
+/* the dramatic spotlight moment from the original snippet's
+   `0 0 30px 1000px black` hover — that literally blacks out the whole
+   viewport around the card, which would swallow the header/nav/rest of
+   the page here, so the spread is scaled down to stay local to this card,
+   but it's the same trick: a big, near-opaque, big-spread shadow that
+   dims the immediate area and makes the card read as lit up by contrast. */
+.home-page .tech-pill:hover{
+  animation:none;
+  transform:translateY(-6px);
+  box-shadow:
+    0 0 55px 35px rgba(0,0,0,0.5),
+    0 0 110px 55px rgba(0,0,0,0.28),
+    inset 0 0 65px rgba(255,255,255,0.22),
+    inset 0 1px 0 rgba(255,255,255,0.35);
+}
+@keyframes tech-bob{
+  0%, 100%{ transform:translateY(0); }
+  50%{ transform:translateY(-20px); }
+}
+@media (prefers-reduced-motion: reduce){ .home-page .tech-pill{ animation:none; } }
 
-.home-page .metrics{ padding:100px 5vw 160px; position:relative; }
+.home-page .tech-icon{ width:36px; height:36px; flex:0 0 auto; display:flex; position:relative; z-index:1; }
+.home-page .tech-icon svg{ width:100%; height:100%; display:block; }
+
+/* logo stays put and stays visible at rest; the name fades/slides up
+   into view on hover, working with the card's own vertical stack instead
+   of unfurling a horizontal pill */
+.home-page .tech-name{
+  position:relative; z-index:1;
+  opacity:0; transform:translateY(8px);
+  transition:opacity .35s ease, transform .35s ease;
+}
+.home-page .tech-pill:hover .tech-name{ opacity:1; transform:translateY(0); transition:opacity .4s ease .08s, transform .4s cubic-bezier(.2,.8,.2,1) .08s; }
+
+.home-page .metrics{ padding:40px 5vw 160px; position:relative; }
 .home-page .metrics-grid{ display:grid; grid-template-columns:repeat(4,1fr); margin-top:40px; }
 .home-page .metric{ position:relative; padding:20px 14px 0 0; border-left:1px solid var(--line); }
 .home-page .metric:first-child{ border-left:none; padding-left:0; }
@@ -273,7 +349,7 @@
 .home-page .work-teaser p{ position:relative; z-index:2; color:rgba(255,255,255,0.7); font-family:'IBM Plex Mono',monospace; font-size:var(--text-caption); max-width:460px; line-height:1.7; margin-top:26px; }
 .home-page .work-teaser a{ position:relative; z-index:2; display:inline-flex; margin-top:34px; align-items:center; gap:10px; color:#fff; font-family:'IBM Plex Mono',monospace; font-size:var(--text-caption); letter-spacing:.08em; text-transform:uppercase; border-bottom:1px solid rgba(255,255,255,.4); padding-bottom:4px; text-decoration:none; }
 .home-page .work-teaser > .eyebrow{ position:relative; z-index:2; }
-.home-page .work-teaser .slash{ position:absolute; right:-5%; top:-30%; width:60%; height:220%; background:linear-gradient(120deg,var(--coral),transparent 60%); opacity:.18; transform:rotate(18deg); z-index:0; }
+.home-page .work-teaser .slash{ position:absolute; right:-5%; top:-30%; width:60%; height:220%; background:linear-gradient(120deg,#ffffff,transparent 60%); opacity:.1; transform:rotate(18deg); z-index:0; }
 
 .home-page .view-all{ margin-top:36px; text-align:right; }
 .home-page .view-all a{ font-family:'IBM Plex Mono',monospace; font-size:var(--text-caption); letter-spacing:.08em; text-transform:uppercase; color:var(--ink); text-decoration:none; border-bottom:1px solid var(--ink); padding-bottom:3px; }
