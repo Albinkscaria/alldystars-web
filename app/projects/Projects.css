@@ -1,5 +1,5 @@
 .projects-page .page-hero{ padding:180px 5vw 70px; }
-.projects-page .page-hero h1{ font-family:'Fraunces',serif; font-weight:400; letter-spacing:-0.02em; font-size:var(--fs-display); line-height:1.02; margin:14px 0 0; max-width:min(760px,44vw); }
+.projects-page .page-hero h1{ font-family:'Open Sauce Sans',sans-serif; font-weight:400; letter-spacing:-0.02em; font-size:var(--fs-display); line-height:1.02; margin:14px 0 0; max-width:min(760px,44vw); }
 .projects-page .page-hero p{ margin-top:34px; max-width:520px; font-size:var(--fs-body); line-height:1.7; color:var(--ink-soft); }
 @media (max-width:860px){ .projects-page .page-hero h1{ max-width:100%; } }
 
@@ -10,10 +10,10 @@
   background:var(--paper-dim); transition:border-color .3s ease;
 }
 .projects-page .slot:hover{ border-color:var(--ink); }
-.projects-page .slot .num{ font-family:'IBM Plex Mono',monospace; font-size:var(--fs-eyebrow); color:var(--coral); }
-.projects-page .slot .label{ font-family:'Fraunces',serif; font-size:var(--fs-heading-sm); color:var(--ink-soft); }
-.projects-page .slot .tag{ font-family:'IBM Plex Mono',monospace; font-size:var(--fs-eyebrow); letter-spacing:.08em; text-transform:uppercase; color:var(--muted); }
+.projects-page .slot .num{ font-family:'Open Sauce Sans',sans-serif; font-size:var(--fs-eyebrow); color:var(--coral-text); }
+.projects-page .slot .label{ font-family:'Open Sauce Sans',sans-serif; font-size:var(--fs-heading-sm); color:var(--ink-soft); }
+.projects-page .slot .tag{ font-family:'Open Sauce Sans',sans-serif; font-size:var(--fs-eyebrow); letter-spacing:.08em; text-transform:uppercase; color:var(--muted); }
 @media (max-width:760px){ .projects-page .slot-grid{ grid-template-columns:1fr; } }
 
 .projects-page .note{ padding:0 5vw 120px; }
-.projects-page .note p{ font-family:'IBM Plex Mono',monospace; font-size:var(--fs-eyebrow); color:var(--muted); max-width:520px; line-height:1.8; }
+.projects-page .note p{ font-family:'Open Sauce Sans',sans-serif; font-size:var(--fs-eyebrow); color:var(--muted); max-width:520px; line-height:1.8; }

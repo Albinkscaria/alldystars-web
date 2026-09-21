@@ -9,10 +9,8 @@ const icon = {
 	brand: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="2.6"/></svg>',
 	web: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3"><rect x="3" y="5" width="18" height="14" rx="1.5"/><path d="M3 9h18M6.5 7h.01M9.5 7h.01"/></svg>',
 	graphic: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M4 20l4-1 11-11-3-3L5 16l-1 4z"/></svg>',
-	product: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M21 8l-9-5-9 5 9 5 9-5z"/><path d="M3 8v8l9 5 9-5V8M12 13v8"/></svg>',
-	motion: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3"><circle cx="12" cy="12" r="9"/><path d="M10 8l6 4-6 4V8z" fill="currentColor" stroke="none"/></svg>',
-	illus: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3"><circle cx="8" cy="8" r="3"/><path d="M2 20l6-8 4 5 3-4 7 7"/></svg>',
-	consult: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg>',
+	data: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M3 20h18"/><path d="M7 20v-6M12 20V8M17 20v-10"/></svg>',
+	business: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 3v9h9"/></svg>',
 };
 
 const categories = [
@@ -25,18 +23,12 @@ const categories = [
 	{ id: 'graphic', n: '03', t: 'Graphic Design', icon: icon.graphic,
 		d: 'Design that speaks before words do. Visual storytelling that strengthens marketing and communication.',
 		subs: ['Brochures & Flyers', 'Posters & Banners', 'Menus & Catalogs', 'Business Presentations', 'Marketing Materials', 'Event Branding'] },
-	{ id: 'product', n: '04', t: 'Product & Packaging Design', icon: icon.product,
-		d: 'Design that wins attention on every shelf. Helping products create unforgettable first impressions.',
-		subs: ['Product Packaging', 'Label Design', 'Box & Carton Design', 'Product Mockups', 'Retail Packaging'] },
-	{ id: 'motion', n: '05', t: 'Motion Graphics & Interactive Design', icon: icon.motion,
-		d: 'Bringing ideas to life through motion. Dynamic visuals that capture attention and improve engagement.',
-		subs: ['Motion Graphics', 'Video Editing', 'Logo Animation', 'Animated Presentations'] },
-	{ id: 'illustration', n: '06', t: 'Illustration & Visual Assets', icon: icon.illus,
-		d: 'Custom artwork that makes your brand unmistakable. Unique visuals designed exclusively for your business.',
-		subs: ['Custom Artwork', 'Character Design', 'Vector Artwork', 'Digital Artwork'] },
-	{ id: 'consulting', n: '07', t: 'Creative Consulting', icon: icon.consult,
-		d: 'Outside perspective when you need it. Structured feedback and direction that sharpens decisions before you commit budget.',
-		subs: ['Design Audits', 'Brand Workshops', 'UX Reviews', 'Competitor Analysis', 'Visual Direction'] },
+	{ id: 'data', n: '04', t: 'Data Analytics', icon: icon.data,
+		d: 'Turn raw numbers into direction. Dashboards and reporting that show you what’s working and what to fix next.',
+		subs: ['Data Dashboards', 'Reporting Automation', 'Performance Tracking', 'Data Visualization'] },
+	{ id: 'business', n: '05', t: 'Business Analytics', icon: icon.business,
+		d: 'Decisions backed by evidence, not guesswork. Market and performance insight that sharpens strategy before you spend.',
+		subs: ['Market Research', 'KPI Frameworks', 'Growth Strategy', 'Competitor Insights'] },
 ];
 
 export default function ServicesPage() {
@@ -44,6 +36,19 @@ export default function ServicesPage() {
 	const labelRef = useRef(null);
 
 	useEffect(() => {
+		const video = document.querySelector('.page-hero-video');
+		if (video) {
+			if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+				video.pause();
+				video.removeAttribute('autoplay');
+			} else {
+				const p = video.play();
+				if (p && typeof p.catch === 'function') {
+					p.catch((err) => console.warn('services hero video autoplay was blocked:', err));
+				}
+			}
+		}
+
 		const io = new IntersectionObserver((entries) => {
 			entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
 		}, { threshold: 0.12 });
@@ -84,9 +89,28 @@ export default function ServicesPage() {
 			<Header active="Services" />
 
 			<section className="page-hero">
+				<div className="page-hero-video-wrap" aria-hidden="true">
+					<video
+						className="page-hero-video"
+						autoPlay
+						muted
+						loop
+						playsInline
+						preload="auto"
+						onError={(e) => console.error('services hero video failed to load/decode:', e.currentTarget.error)}
+					>
+						<source src="/video/service_page.mp4" type="video/mp4" />
+					</video>
+					<div className="page-hero-video-scrim" />
+				</div>
+
 				<div className="eyebrow reveal">Services — Full Index</div>
-				<h1 className="reveal">Every way we turn <span className="script">ideas</span> into work you can ship.</h1>
-				<p className="reveal">Seven disciplines, each broken down into the exact deliverables you can brief us on. No package tiers, no guesswork — pick a category, see what&rsquo;s inside.</p>
+				<h1>
+					<span className="write-line" style={{ animationDelay: '0s' }}>Every way we turn</span>
+					<span className="write-line" style={{ animationDelay: '.55s' }}><span className="script">ideas</span> into work</span>
+					<span className="write-line" style={{ animationDelay: '1.1s' }}>you can ship.</span>
+				</h1>
+				<p className="reveal">Five disciplines, each broken down into the exact deliverables you can brief us on. No package tiers, no guesswork — pick a category, see what&rsquo;s inside.</p>
 				<div className="index-nav reveal">
 					{categories.map(c => <a key={c.id} href={`#${c.id}`}>{c.n} {c.t}</a>)}
 				</div>

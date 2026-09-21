@@ -4,16 +4,15 @@ import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import Header from '@/components/Header/Header';
 import Footer from '@/components/Footer/Footer';
+import Preloader from '@/components/Preloader/Preloader';
 import './Home.css';
 
 const icon = {
 	brand: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="2.6"/></svg>',
 	web: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="3" y="5" width="18" height="14" rx="1.5"/><path d="M3 9h18M6.5 7h.01M9.5 7h.01"/></svg>',
 	graphic: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M4 20l4-1 11-11-3-3L5 16l-1 4z"/></svg>',
-	product: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M21 8l-9-5-9 5 9 5 9-5z"/><path d="M3 8v8l9 5 9-5V8M12 13v8"/></svg>',
-	illus: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="8" cy="8" r="3"/><path d="M2 20l6-8 4 5 3-4 7 7"/></svg>',
-	motion: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="12" cy="12" r="9"/><path d="M10 8l6 4-6 4V8z" fill="currentColor" stroke="none"/></svg>',
-	consult: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg>',
+	data: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 20h18"/><path d="M7 20v-6M12 20V8M17 20v-10"/></svg>',
+	business: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 3v9h9"/></svg>',
 };
 
 const bentoData = [
@@ -26,18 +25,10 @@ const bentoData = [
 	{ c: 'p3 paper',   n: '03', id: 'graphic', t: 'Graphic Design', d: 'Brochures, posters, menus, presentations, event branding.', i: icon.graphic,
 		img: '/images/services/graphic_design.png',
 		subs: ['Brochures & Flyers', 'Posters & Banners', 'Menus & Catalogs', 'Business Presentations', 'Marketing Materials', 'Event Branding'] },
-	{ c: 'p4 indigo',  n: '04', id: 'product', t: 'Product & Packaging', d: 'Packaging, labels, cartons, mockups, retail design.', i: icon.product,
-		img: '/images/services/product_and_packaging_design.png',
-		subs: ['Product Packaging', 'Label Design', 'Box & Carton Design', 'Product Mockups', 'Retail Packaging'] },
-	{ c: 'p5 outline', n: '05', id: 'illustration', t: 'Illustration & Visual Assets', d: 'Custom artwork, character design, vector & digital art.', i: icon.illus,
-		img: '/images/services/illustation_and_visual_effects.png',
-		subs: ['Custom Artwork', 'Character Design', 'Vector Artwork', 'Digital Artwork'] },
-	{ c: 'p6 paper',   n: '06', id: 'motion', t: 'Motion & Interactive', d: 'Motion graphics, video editing, logo animation.', i: icon.motion,
-		img: '/images/services/motion_graphics_and_interactive_design.png',
-		subs: ['Motion Graphics', 'Video Editing', 'Logo Animation', 'Animated Presentations'] },
-	{ c: 'p7 ink',     n: '07', id: 'consulting', t: 'Creative Consulting', d: 'Design audits, brand workshops, UX reviews, visual direction.', i: icon.consult,
-		img: '/images/services/creative_consulting.png',
-		subs: ['Design Audits', 'Brand Workshops', 'UX Reviews', 'Competitor Analysis', 'Visual Direction'] },
+	{ c: 'p4 indigo',  n: '04', id: 'data', t: 'Data Analytics', d: 'Data pipelines, dashboards, reporting and performance tracking.', i: icon.data,
+		subs: ['Data Dashboards', 'Reporting Automation', 'Performance Tracking', 'Data Visualization'] },
+	{ c: 'p5 outline', n: '05', id: 'business', t: 'Business Analytics', d: 'Market research, KPI frameworks, and growth strategy insights.', i: icon.business,
+		subs: ['Market Research', 'KPI Frameworks', 'Growth Strategy', 'Competitor Insights'] },
 ];
 
 const techList = [
@@ -51,17 +42,40 @@ const techList = [
 ];
 const metrics = [ { v: 20, l: 'Projects' }, { v: 10, l: 'Clients' }, { v: 2700, l: 'Designs Delivered' }, { v: 5, l: 'Years' } ];
 const process = [
-	{ n: '01', t: 'Discover', d: 'Understanding your business, audience and goals.' },
-	{ n: '02', t: 'Define', d: 'Research, strategy and creative direction.' },
-	{ n: '03', t: 'Design', d: 'Turning ideas into impactful visual solutions.' },
-	{ n: '04', t: 'Refine', d: 'Collaborating through feedback and iterations.' },
-	{ n: '05', t: 'Grow', d: 'Ongoing creative support as your business evolves.' },
+	{ n: '01', t: 'Discover', d: 'Understanding your business, audience and goals.',
+		icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M20 20l-5.6-5.6"/></svg>' },
+	{ n: '02', t: 'Define', d: 'Research, strategy and creative direction.',
+		icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3h7l4 4v14H7z"/><path d="M14 3v4h4"/><path d="M9.3 12h5.4M9.3 15.5h5.4M9.3 8.5h3"/></svg>' },
+	{ n: '03', t: 'Design', d: 'Turning ideas into impactful visual solutions.',
+		icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M14.3 3.7l6 6L9.7 20.3l-6.3.7.7-6.3 10.2-11z"/><path d="M12.7 5.3l6 6"/></svg>' },
+	{ n: '04', t: 'Refine', d: 'Collaborating through feedback and iterations.',
+		icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12a8 8 0 0113.9-5.4M20 4v5h-5"/><path d="M20 12a8 8 0 01-13.9 5.4M4 20v-5h5"/></svg>' },
+	{ n: '05', t: 'Grow', d: 'Ongoing creative support as your business evolves.',
+		icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l6-6 4 4 8-9"/><path d="M15 6h6v6"/></svg>' },
 ];
 
 export default function HomePage() {
 	const dotRef = useRef(null);
 	const labelRef = useRef(null);
 	const [activePanel, setActivePanel] = useState(null);
+	const [heroReady, setHeroReady] = useState(false);
+
+	useEffect(() => {
+		const video = document.querySelector('.hero-video');
+		if (!video) return;
+		if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+			video.pause();
+			video.removeAttribute('autoplay');
+			return;
+		}
+		// some browsers ignore the autoplay attribute on hydration —
+		// explicitly kick playback and surface autoplay-policy rejections
+		// instead of silently leaving the hero blank.
+		const p = video.play();
+		if (p && typeof p.catch === 'function') {
+			p.catch((err) => console.warn('hero video autoplay was blocked:', err));
+		}
+	}, []);
 
 	useEffect(() => {
 		if (!activePanel) return;
@@ -85,20 +99,13 @@ export default function HomePage() {
 			entries.forEach(e => {
 				if (e.isIntersecting && !counted.has(e.target)) {
 					counted.add(e.target);
-					const target = parseInt(e.target.dataset.target, 10);
-					const dur = 1400, start = performance.now();
-					e.target.classList.add('counting');
-						function tick(now) {
-						const p = Math.min(1, (now - start) / dur);
-						const eased = 1 - Math.pow(1 - p, 3);
-						e.target.textContent = Math.floor(eased * target);
-						if (p < 1) requestAnimationFrame(tick); else { e.target.textContent = target; e.target.classList.remove('counting'); }
-					}
-					requestAnimationFrame(tick);
+					e.target.querySelectorAll('.digit-strip').forEach(strip => {
+						strip.style.transform = `translateY(-${strip.dataset.digit}em)`;
+					});
 				}
 			});
 		}, { threshold: 0.5 });
-		document.querySelectorAll('.home-page .count').forEach(el => cio.observe(el));
+		document.querySelectorAll('.home-page .metric-num .digits').forEach(el => cio.observe(el));
 
 		const pio = new IntersectionObserver((entries) => {
 			entries.forEach(e => e.target.classList.toggle('active', e.isIntersecting));
@@ -132,6 +139,7 @@ export default function HomePage() {
 
 	return (
 		<div className="home-page">
+			<Preloader onExitStart={() => setHeroReady(true)} />
 			<div className="cursor-dot" ref={dotRef}></div>
 			<div className="cursor-label" ref={labelRef}></div>
 			<svg className="grain" width="100%" height="100%">
@@ -142,6 +150,21 @@ export default function HomePage() {
 			<Header active="Home" />
 
 			<section className="hero" id="home">
+				<div className="hero-video-wrap" aria-hidden="true">
+					<video
+						className="hero-video"
+						autoPlay
+						muted
+						loop
+						playsInline
+						preload="auto"
+						onError={(e) => console.error('hero video failed to load/decode:', e.currentTarget.error)}
+					>
+						<source src="/video/landing_page.mp4" type="video/mp4" />
+					</video>
+					<div className="hero-video-scrim" />
+				</div>
+
 				<div className="hero-shapes" aria-hidden="true">
 					<div className="hero-shape hero-shape-triangle"></div>
 					<div className="hero-shape hero-shape-circle-outline"></div>
@@ -160,7 +183,11 @@ export default function HomePage() {
 
 				<div className="hero-content">
 					<div className="hero-eyebrow reveal"><span>Brand · Web · Print · Motion</span></div>
-					<h1 className="hero-headline reveal">We turn ideas into <span className="hero-script">visually stunning</span> designs.</h1>
+					<h1 className={`hero-headline${heroReady ? ' hero-ready' : ''}`}>
+						<span className="write-line" style={{ animationDelay: '0s' }}>We turn ideas into</span>
+						<span className="write-line" style={{ animationDelay: '.55s' }}><span className="hero-script">visually stunning</span></span>
+						<span className="write-line" style={{ animationDelay: '1.1s' }}>designs.</span>
+					</h1>
 					<p className="hero-subtext reveal">A creative studio that turns ambitious ideas into brands, sites, and campaigns people actually remember.</p>
 					<div className="hero-cta-row reveal">
 						<Link href="/#contact" className="hero-btn-primary">Start a project →</Link>
@@ -184,7 +211,7 @@ export default function HomePage() {
 
 			<section className="wall" id="services">
 				<div className="section-head">
-					<div><div className="eyebrow reveal">What We Do</div><h2 className="reveal">Seven disciplines. One studio.</h2></div>
+					<div><div className="eyebrow reveal">What We Do</div><h2 className="reveal">Five disciplines. One studio.</h2></div>
 					<div className="wall-note reveal">This wall is arranged the way we&rsquo;d arrange a client&rsquo;s — hierarchy, contrast, and restraint doing the talking.</div>
 				</div>
 				<div className="bento">
@@ -203,6 +230,12 @@ export default function HomePage() {
 							>
 								{item.img && <div className="panel-bg" style={{ backgroundImage: `url(${item.img})` }} />}
 								<div className="panel-scrim" aria-hidden="true" />
+								{!item.img && (
+									<div className="panel-solid-content" aria-hidden="true">
+										<div className="panel-solid-icon" dangerouslySetInnerHTML={{ __html: item.i }} />
+										<div className="panel-solid-title">{item.t}</div>
+									</div>
+								)}
 								<div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
 									<div className="p-num">{item.n}</div>
 									<div className="p-icon" dangerouslySetInnerHTML={{ __html: item.i }} />
@@ -220,7 +253,7 @@ export default function HomePage() {
 					<div className="panel-modal-card" onClick={(e) => e.stopPropagation()}>
 						<button className="panel-modal-close" aria-label="Close" onClick={() => setActivePanel(null)}>×</button>
 						<div className="panel-modal-icon" dangerouslySetInnerHTML={{ __html: activePanel.i }} />
-						<div className="panel-modal-num">{activePanel.n} / 07</div>
+						<div className="panel-modal-num">{activePanel.n} / 05</div>
 						<h3 id="panel-modal-title" className="panel-modal-title">{activePanel.t}</h3>
 						<p className="panel-modal-desc">{activePanel.d}</p>
 						<div className="panel-modal-subs">
@@ -248,7 +281,18 @@ export default function HomePage() {
 				<div className="metrics-grid">
 					{metrics.map(m => (
 						<div key={m.l} className="metric reveal">
-							<div className="metric-num"><span className="count" data-target={m.v}>0</span><span className="plus">+</span></div>
+							<div className="metric-num">
+								<span className="digits">
+									{String(m.v).split('').map((d, i) => (
+										<span key={i} className="digit-reel">
+											<span className="digit-strip" data-digit={d}>
+												{[0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map(n => <span key={n}>{n}</span>)}
+											</span>
+										</span>
+									))}
+								</span>
+								<span className="plus">+</span>
+							</div>
 							<div className="metric-label">{m.l}</div>
 						</div>
 					))}
@@ -256,13 +300,30 @@ export default function HomePage() {
 			</section>
 
 			<section className="process">
-				<div className="section-head"><div><div className="eyebrow reveal">How We Work</div><h2 className="reveal">Our Design Process</h2></div></div>
-				{process.map(p => (
-					<div key={p.n} className="process-row reveal">
-						<div className="process-num">{p.n}</div>
-						<div><h3 className="process-title">{p.t}</h3><p className="process-desc">{p.d}</p></div>
+				<div className="process-wrap">
+					<div className="process-intro">
+						<div className="eyebrow reveal">How We Work</div>
+						<h2 className="reveal">Our Design Process</h2>
+						<p className="process-lead reveal">A clear, collaborative path from first conversation to finished work — five steps, no guesswork.</p>
+						<div className="process-dots reveal" aria-hidden="true" />
+						<div className="process-ring" aria-hidden="true" />
 					</div>
-				))}
+					<div className="process-list">
+						{process.map((p, i) => (
+							<div key={p.n} className="process-row reveal" style={{ transitionDelay: `${i * 0.08}s` }}>
+								<div className="process-badge">{p.n}</div>
+								<div className="process-icon" dangerouslySetInnerHTML={{ __html: p.icon }} />
+								<div className="process-body">
+									<h3 className="process-title">{p.t}</h3>
+									<p className="process-desc">{p.d}</p>
+								</div>
+								<span className="process-arrow" aria-hidden="true">
+									<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h13M13 6l6 6-6 6" /></svg>
+								</span>
+							</div>
+						))}
+					</div>
+				</div>
 			</section>
 
 			<Footer />

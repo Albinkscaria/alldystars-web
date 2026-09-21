@@ -1,29 +1,89 @@
-.services-page .page-hero{ padding:180px 5vw 90px; }
+/* centered like the landing-page hero, instead of left-aligned */
+.services-page .page-hero{
+  position:relative; overflow:hidden;
+  padding:180px 5vw 90px;
+  display:flex; flex-direction:column; align-items:center; text-align:center;
+}
+/* full-bleed background video, same recipe as the homepage hero —
+   object-fit:cover fills and crops to any viewport size responsively */
+.services-page .page-hero-video-wrap{ position:absolute; inset:0; z-index:0; overflow:hidden; }
+.services-page .page-hero-video{
+  position:absolute; inset:0; width:100%; height:100%;
+  object-fit:cover; object-position:center;
+}
+.services-page .page-hero-video-scrim{ position:absolute; inset:0; background:rgba(255,255,255,0.74); }
+@media (prefers-reduced-motion: reduce){
+  .services-page .page-hero-video{ display:none; }
+}
+.services-page .page-hero > *:not(.page-hero-video-wrap){ position:relative; z-index:1; }
 .services-page .page-hero .eyebrow{ margin-bottom:18px; }
-.services-page .page-hero h1{ font-family:'Fraunces',serif; font-weight:400; letter-spacing:-0.02em; font-size:var(--fs-display); line-height:1.02; margin:0; max-width:min(760px,44vw); }
-.services-page .page-hero h1 .script{ font-family:'Petit Formal Script',cursive; color:var(--indigo-2); }
-.services-page .page-hero p{ margin-top:34px; max-width:520px; font-size:var(--fs-body); line-height:1.7; color:var(--ink-soft); }
-.services-page .index-nav{ margin-top:50px; display:flex; flex-wrap:wrap; gap:10px 22px; border-top:1px solid var(--line); padding-top:26px; }
-.services-page .index-nav a{ font-family:'IBM Plex Mono',monospace; font-size:var(--fs-eyebrow); color:var(--muted); text-decoration:none; letter-spacing:.04em; }
+.services-page .page-hero h1{
+  font-family:'Aniyah',cursive; font-weight:400; letter-spacing:-0.02em; font-size:var(--fs-display); line-height:1.15; margin:0 auto; max-width:min(760px,44vw);
+}
+.services-page .page-hero h1 .script{ font-family:'Aniyah',cursive; color:var(--indigo-text); }
+/* "written on" load: each of the three lines is a hard-coded break (not
+   fluid wrap) so they can sweep in left-to-right one at a time, instead
+   of the whole block revealing in lockstep — true per-glyph stroke
+   tracing would need fixed-size SVG paths that can't reflow, so this
+   fakes the same "being written" feel with real, responsive text. */
+.services-page .write-line{
+  display:block;
+  clip-path:inset(-30% 100% -30% -30%);
+  animation:hero-write .9s cubic-bezier(.45,0,.25,1) both;
+}
+@keyframes hero-write{
+  /* only the right edge animates (the actual left-to-right reveal); top,
+     bottom and left stay pulled well outside the box throughout so
+     swash flourishes that overshoot the glyph's own box — like the
+     capital "E"'s loop — never get clipped, including once "fully
+     revealed" at 0% clip-path:inset(0 0 0 0) would otherwise still cut
+     exactly at the box edge. */
+  from{ clip-path:inset(-30% 100% -30% -30%); opacity:.85; }
+  to{ clip-path:inset(-30% -30% -30% -30%); opacity:1; }
+}
+@media (prefers-reduced-motion: reduce){
+  .services-page .write-line{ animation:none; clip-path:none; }
+}
+.services-page .page-hero p{ margin:34px auto 0; max-width:520px; font-size:var(--fs-body); line-height:1.7; color:var(--ink-soft); }
+.services-page .index-nav{ margin-top:50px; display:flex; flex-wrap:wrap; justify-content:center; gap:10px 22px; border-top:1px solid var(--line); padding-top:26px; width:100%; max-width:820px; }
+.services-page .index-nav a{ font-family:'Open Sauce Sans',sans-serif; font-size:var(--fs-eyebrow); color:var(--muted); text-decoration:none; letter-spacing:.04em; }
 .services-page .index-nav a:hover{ color:var(--ink); }
 @media (max-width:860px){ .services-page .page-hero h1{ max-width:100%; } }
 
 .services-page .category{ padding:110px 5vw; border-top:1px solid var(--line); display:grid; grid-template-columns:0.85fr 1.15fr; gap:50px; align-items:start; }
 .services-page .category:nth-child(even){ background:var(--paper-dim); }
 .services-page .cat-left{ position:sticky; top:120px; }
-.services-page .cat-num{ font-family:'IBM Plex Mono',monospace; font-size:var(--fs-eyebrow); color:var(--coral); letter-spacing:.1em; }
+.services-page .cat-num{ font-family:'Open Sauce Sans',sans-serif; font-size:var(--fs-eyebrow); color:var(--coral-text); letter-spacing:.1em; }
 .services-page .cat-icon{ width:44px; height:44px; margin-top:18px; color:var(--ink); }
 .services-page .cat-icon svg{ width:100%; height:100%; }
-.services-page .cat-title{ font-family:'Fraunces',serif; font-size:var(--fs-heading); font-weight:400; margin:18px 0 0; line-height:1.1; }
+.services-page .cat-title{ font-family:'Open Sauce Sans',sans-serif; font-size:var(--fs-heading); font-weight:400; margin:18px 0 0; line-height:1.1; }
 .services-page .cat-desc{ color:var(--ink-soft); line-height:1.7; margin-top:18px; max-width:400px; font-size:var(--fs-body); }
 
 .services-page .subgrid{ display:flex; flex-wrap:wrap; gap:14px; align-content:flex-start; }
+/* real glassmorphism — same recipe as the homepage metric cards: a
+   gray-tinted translucent base (plain white/blur alone barely reads),
+   genuine backdrop-filter, and a diagonal shine gradient + inset highlight
+   to sell the glass look regardless of what's behind it. */
 .services-page .sub-pill{
-  font-family:'IBM Plex Mono',monospace; font-size:var(--fs-eyebrow); letter-spacing:.02em; color:var(--ink);
-  border:1px solid var(--line); border-radius:999px; padding:14px 22px; transition:all .35s cubic-bezier(.2,.8,.2,1);
-  background:var(--paper); cursor:default;
+  position:relative; overflow:hidden;
+  font-family:'Open Sauce Sans',sans-serif; font-size:var(--fs-eyebrow); letter-spacing:.02em; color:var(--ink);
+  border:1px solid rgba(255,255,255,0.9); border-radius:999px; padding:14px 22px;
+  background:rgba(224,226,230,0.55);
+  backdrop-filter:blur(20px) saturate(180%);
+  box-shadow:0 6px 20px rgba(11,11,12,0.1), inset 0 1px 0 rgba(255,255,255,1);
+  transition:box-shadow .3s ease, transform .3s ease;
+  cursor:default;
 }
-.services-page .sub-pill:hover{ background:var(--ink); color:#fff; border-color:var(--ink); transform:translateY(-3px) rotate(-0.6deg); }
+.services-page .sub-pill::before{
+  content:''; position:absolute; inset:0; z-index:-1; pointer-events:none;
+  background:
+    linear-gradient(125deg, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.2) 30%, transparent 55%),
+    linear-gradient(305deg, rgba(11,11,12,0.07) 0%, transparent 40%);
+}
+.services-page .sub-pill:hover{
+  box-shadow:0 10px 28px rgba(11,11,12,0.16), inset 0 1px 0 rgba(255,255,255,1);
+  transform:translateY(-3px);
+}
 
 @media (max-width:860px){
   .services-page .category{ grid-template-columns:1fr; padding:70px 6vw; }
