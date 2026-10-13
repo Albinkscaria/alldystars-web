@@ -18,7 +18,7 @@
 .services-page .page-hero > *:not(.page-hero-video-wrap){ position:relative; z-index:1; }
 .services-page .page-hero .eyebrow{ margin-bottom:18px; }
 .services-page .page-hero h1{
-  font-family:'Aniyah',cursive; font-weight:400; letter-spacing:-0.02em; font-size:var(--fs-display); line-height:1.15; margin:0 auto; max-width:min(760px,44vw);
+  font-family:'Aniyah',cursive; font-weight:400; letter-spacing:-0.02em; font-size:var(--fs-display); line-height:1.15; margin:0 auto; max-width:min(980px,44vw);
 }
 .services-page .page-hero h1 .script{ font-family:'Aniyah',cursive; color:var(--indigo-text); }
 /* "written on" load: each of the three lines is a hard-coded break (not

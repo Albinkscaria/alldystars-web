@@ -3,6 +3,7 @@
 import { useEffect, useRef } from 'react';
 import Header from '@/components/Header/Header';
 import Footer from '@/components/Footer/Footer';
+import LoopingVideo from '@/components/LoopingVideo/LoopingVideo';
 import './Services.css';
 
 const icon = {
@@ -36,19 +37,6 @@ export default function ServicesPage() {
 	const labelRef = useRef(null);
 
 	useEffect(() => {
-		const video = document.querySelector('.page-hero-video');
-		if (video) {
-			if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-				video.pause();
-				video.removeAttribute('autoplay');
-			} else {
-				const p = video.play();
-				if (p && typeof p.catch === 'function') {
-					p.catch((err) => console.warn('services hero video autoplay was blocked:', err));
-				}
-			}
-		}
-
 		const io = new IntersectionObserver((entries) => {
 			entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
 		}, { threshold: 0.12 });
@@ -90,17 +78,11 @@ export default function ServicesPage() {
 
 			<section className="page-hero">
 				<div className="page-hero-video-wrap" aria-hidden="true">
-					<video
+					<LoopingVideo
+						src="/video/service_page.mp4"
 						className="page-hero-video"
-						autoPlay
-						muted
-						loop
-						playsInline
-						preload="auto"
 						onError={(e) => console.error('services hero video failed to load/decode:', e.currentTarget.error)}
-					>
-						<source src="/video/service_page.mp4" type="video/mp4" />
-					</video>
+					/>
 					<div className="page-hero-video-scrim" />
 				</div>
 
@@ -133,7 +115,7 @@ export default function ServicesPage() {
 			<div className="cta-block reveal">
 				<h2>Design with<br />ALLDYSTARS</h2>
 				<div className="quote">Ideas become impact when shaped with purpose.</div>
-				<a href="mailto:hello@alldystars.com" className="cta-btn">Start a Project →</a>
+				<a href="/contact" className="cta-btn">Start a Project →</a>
 			</div>
 
 			<Footer />

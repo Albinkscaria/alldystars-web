@@ -30,22 +30,30 @@
   /* ---- type scale — every font-size in the codebase pulls from one of these.
      Six steps, small to large. --fs-mega is the single named exception: one
      decorative watermark flourish (footer wordmark, founder initials), never
-     used for legible content. Nothing else gets a bespoke clamp(). ---- */
+     used for legible content. Nothing else gets a bespoke clamp().
+     Body/eyebrow-level sizes deliberately stay near-flat above ~700px —
+     paragraph and label text shouldn't keep growing with the viewport,
+     that hurts readability rather than helping it. Heading-level sizes
+     (heading-sm and up) previously capped out by ~1400px and sat
+     perfectly static on anything larger — a 1920 or 2560px monitor saw
+     the exact same headline size as a 1440px laptop. Re-tuned so they
+     keep scaling out to ~1900–2100px before leveling off. ---- */
   --fs-eyebrow:     clamp(11px, 0.6vw + 9.7px, 12px);
-  --fs-body:         clamp(16px, 0.2vw + 15.6px, 17px);
-  --fs-body-lg:      clamp(18px, 0.9vw + 15.6px, 22px);
-  --fs-heading-sm:   clamp(20px, 1.9vw + 15px, 28px);
-  --fs-heading:      clamp(28px, 3.2vw, 44px);
-  --fs-display:      clamp(40px, 6vw, 84px);
-  --fs-mega:         clamp(56px, 9vw, 128px);
+  --fs-body:         clamp(16px, 0.25vw + 15.5px, 18px);
+  --fs-body-lg:      clamp(18px, 0.5vw + 16.2px, 24px);
+  --fs-heading-sm:   clamp(20px, 0.83vw + 17px, 32px);
+  --fs-heading:      clamp(28px, 2.7vw, 52px);
+  --fs-display:      clamp(40px, 5.3vw, 100px);
+  --fs-mega:         clamp(56px, 7.6vw, 152px);
 
   /* ---- Home.css type scale — every font-size in Home.css pulls from
      these 5 steps (see acceptance criteria: no hardcoded font-size or
      --fs-* reference is allowed in that file anymore). Kept separate
-     from --fs-* above, which every other page still uses. ---- */
-  --text-hero:     clamp(40px, 5.6vw, 64px);
-  --text-h2:       clamp(28px, 3.2vw, 44px);
-  --text-h3:       clamp(20px, 2.2vw, 26px);
+     from --fs-* above, which every other page still uses. Same large-
+     screen re-tuning as above. ---- */
+  --text-hero:     clamp(40px, 3vw + 19px, 76px);
+  --text-h2:       clamp(28px, 2.7vw, 52px);
+  --text-h3:       clamp(20px, 1.76vw, 30px);
   --text-body:     16px;
   --text-caption:  11px;
 }

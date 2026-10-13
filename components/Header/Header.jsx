@@ -19,7 +19,7 @@ export default function Header({ active }) {
 		{ href: '/projects', label: 'Work' },
 		{ href: '/services', label: 'Services' },
 		{ href: '/about', label: 'About' },
-		{ href: '/#contact', label: 'Contact' },
+		{ href: '/contact', label: 'Contact' },
 	];
 
 	return (

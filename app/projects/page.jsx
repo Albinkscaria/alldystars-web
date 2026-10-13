@@ -69,7 +69,7 @@ export default function ProjectsPage() {
 			<div className="cta-block reveal">
 				<h2>Have a project<br />in mind?</h2>
 				<div className="quote">Ideas become impact when shaped with purpose.</div>
-				<a href="mailto:hello@alldystars.com" className="cta-btn">Start a Project →</a>
+				<a href="/contact" className="cta-btn">Start a Project →</a>
 			</div>
 
 			<Footer />

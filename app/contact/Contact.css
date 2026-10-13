@@ -1,0 +1,53 @@
+.contact-page .page-hero{
+  padding:180px 5vw 70px;
+  display:flex; flex-direction:column; align-items:center; text-align:center;
+}
+.contact-page .page-hero h1{
+  font-family:'Open Sauce Sans',sans-serif; font-weight:400; letter-spacing:-0.02em;
+  font-size:var(--fs-display); line-height:1.1; margin:14px 0 0; max-width:min(820px,60vw);
+}
+.contact-page .page-hero h1 .script{ font-family:'Aniyah',cursive; color:var(--indigo-text); }
+.contact-page .page-hero p{ margin-top:28px; max-width:560px; font-size:var(--fs-body); line-height:1.7; color:var(--ink-soft); }
+@media (max-width:860px){ .contact-page .page-hero h1{ max-width:100%; } }
+
+.contact-page .contact-methods{ padding:20px 5vw 90px; }
+.contact-page .contact-grid{
+  display:flex; flex-wrap:wrap; justify-content:center; gap:24px;
+  max-width:1000px; margin:0 auto;
+}
+/* same real glassmorphism recipe as the homepage metric cards and
+   services sub-pills — gray-tinted translucent base, genuine
+   backdrop-filter blur, diagonal shine + inset highlight */
+.contact-page .contact-card{
+  position:relative; overflow:hidden; z-index:1;
+  flex:1 1 260px; max-width:300px;
+  display:flex; flex-direction:column; align-items:center; text-align:center; gap:10px;
+  padding:36px 28px; border-radius:20px;
+  color:var(--ink); text-decoration:none;
+  border:1px solid rgba(255,255,255,0.9);
+  background:rgba(224,226,230,0.55);
+  backdrop-filter:blur(20px) saturate(180%);
+  box-shadow:0 10px 30px rgba(11,11,12,0.1), inset 0 1px 0 rgba(255,255,255,1);
+  transition:box-shadow .3s ease, transform .3s ease;
+}
+.contact-page .contact-card::before{
+  content:''; position:absolute; inset:0; z-index:-1; pointer-events:none;
+  background:
+    linear-gradient(125deg, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.2) 30%, transparent 55%),
+    linear-gradient(305deg, rgba(11,11,12,0.07) 0%, transparent 40%);
+}
+.contact-page .contact-card:hover{
+  box-shadow:0 16px 40px rgba(11,11,12,0.16), inset 0 1px 0 rgba(255,255,255,1);
+  transform:translateY(-5px);
+}
+.contact-page .contact-icon{ width:34px; height:34px; color:var(--coral-text); }
+.contact-page .contact-icon svg{ width:100%; height:100%; }
+.contact-page .contact-label{
+  font-family:'Open Sauce Sans',sans-serif; font-size:var(--fs-eyebrow); letter-spacing:.1em; text-transform:uppercase; color:var(--muted);
+  margin-top:4px;
+}
+.contact-page .contact-value{ font-family:'Open Sauce Sans',sans-serif; font-size:var(--fs-heading-sm); font-weight:400; }
+
+.contact-page .cta-block{ text-align:center; }
+.contact-page .cta-block h2{ max-width:none; }
+.contact-page .contact-social{ margin-top:44px; display:flex; justify-content:center; }

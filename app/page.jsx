@@ -5,6 +5,7 @@ import Link from 'next/link';
 import Header from '@/components/Header/Header';
 import Footer from '@/components/Footer/Footer';
 import Preloader from '@/components/Preloader/Preloader';
+import LoopingVideo from '@/components/LoopingVideo/LoopingVideo';
 import './Home.css';
 
 const icon = {
@@ -59,23 +60,6 @@ export default function HomePage() {
 	const labelRef = useRef(null);
 	const [activePanel, setActivePanel] = useState(null);
 	const [heroReady, setHeroReady] = useState(false);
-
-	useEffect(() => {
-		const video = document.querySelector('.hero-video');
-		if (!video) return;
-		if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-			video.pause();
-			video.removeAttribute('autoplay');
-			return;
-		}
-		// some browsers ignore the autoplay attribute on hydration —
-		// explicitly kick playback and surface autoplay-policy rejections
-		// instead of silently leaving the hero blank.
-		const p = video.play();
-		if (p && typeof p.catch === 'function') {
-			p.catch((err) => console.warn('hero video autoplay was blocked:', err));
-		}
-	}, []);
 
 	useEffect(() => {
 		if (!activePanel) return;
@@ -151,17 +135,11 @@ export default function HomePage() {
 
 			<section className="hero" id="home">
 				<div className="hero-video-wrap" aria-hidden="true">
-					<video
+					<LoopingVideo
+						src="/video/landing_page.mp4"
 						className="hero-video"
-						autoPlay
-						muted
-						loop
-						playsInline
-						preload="auto"
 						onError={(e) => console.error('hero video failed to load/decode:', e.currentTarget.error)}
-					>
-						<source src="/video/landing_page.mp4" type="video/mp4" />
-					</video>
+					/>
 					<div className="hero-video-scrim" />
 				</div>
 
@@ -190,7 +168,7 @@ export default function HomePage() {
 					</h1>
 					<p className="hero-subtext reveal">A creative studio that turns ambitious ideas into brands, sites, and campaigns people actually remember.</p>
 					<div className="hero-cta-row reveal">
-						<Link href="/#contact" className="hero-btn-primary">Start a project →</Link>
+						<Link href="/contact" className="hero-btn-primary">Start a project →</Link>
 						<Link href="/projects" className="hero-btn-secondary">View our work</Link>
 					</div>
 				</div>

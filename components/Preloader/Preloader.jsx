@@ -15,25 +15,60 @@ export default function Preloader({ onExitStart }) {
 	const startRef = useRef(null);
 
 	useEffect(() => {
-		if (sessionStorage.getItem('adly-preloaded')) {
+		const timers = [];
+		let hidden = false;
+		function hide() {
+			if (hidden) return;
+			hidden = true;
+			document.body.style.overflow = '';
 			setPhase('hidden');
+		}
+
+		// absolute belt-and-suspenders failsafe: no matter what goes wrong
+		// above (a throwing callback, a storage error, a timing edge case
+		// nobody anticipated), the preloader is never allowed to block the
+		// site for more than a few seconds.
+		timers.push(setTimeout(hide, 6000));
+
+		// sessionStorage access can throw (storage blocked by privacy
+		// settings, certain extensions, strict cookie policies, etc.) — if
+		// that happened unguarded here, the whole effect would abort before
+		// scheduling any timer, leaving the preloader stuck at its initial
+		// "typing" state forever. Treat a blocked/failing store as "not
+		// preloaded yet" and keep going.
+		let alreadyPreloaded = false;
+		try {
+			alreadyPreloaded = !!sessionStorage.getItem('adly-preloaded');
+		} catch (err) {
+			console.warn('Preloader: sessionStorage read failed, proceeding without it:', err);
+		}
+
+		if (alreadyPreloaded) {
+			hide();
 			onExitStart?.();
-			return;
+			return () => timers.forEach(clearTimeout);
 		}
 
 		const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 		document.body.style.overflow = 'hidden';
-		const timers = [];
 
 		function finish(delay) {
 			timers.push(setTimeout(() => {
-				sessionStorage.setItem('adly-preloaded', '1');
+				try {
+					sessionStorage.setItem('adly-preloaded', '1');
+				} catch (err) {
+					console.warn('Preloader: sessionStorage write failed:', err);
+				}
 				setPhase('exiting');
-				onExitStart?.();
-				timers.push(setTimeout(() => {
-					document.body.style.overflow = '';
-					setPhase('hidden');
-				}, reduced ? 300 : EXIT_MS));
+				// the hide timer is scheduled unconditionally, before calling
+				// out to the caller's callback — a throwing onExitStart must
+				// never prevent the preloader from clearing itself.
+				timers.push(setTimeout(hide, reduced ? 300 : EXIT_MS));
+				try {
+					onExitStart?.();
+				} catch (err) {
+					console.error('Preloader: onExitStart callback threw:', err);
+				}
 			}, delay));
 		}
 

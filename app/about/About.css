@@ -1,5 +1,5 @@
 .about-page .page-hero{ padding:180px 5vw 70px; }
-.about-page .page-hero h1{ font-family:'Open Sauce Sans',sans-serif; font-weight:400; letter-spacing:-0.02em; font-size:var(--fs-display); line-height:1.02; margin:14px 0 0; max-width:min(760px,44vw); }
+.about-page .page-hero h1{ font-family:'Open Sauce Sans',sans-serif; font-weight:400; letter-spacing:-0.02em; font-size:var(--fs-display); line-height:1.02; margin:14px 0 0; max-width:min(980px,44vw); }
 .about-page .page-hero h1 .script{ font-family:'Aniyah',cursive; color:var(--indigo-text); }
 @media (max-width:860px){ .about-page .page-hero h1{ max-width:100%; } }
 
@@ -61,14 +61,56 @@
 .about-page .vision-quote{ font-family:'Aniyah',cursive; font-size:var(--fs-heading-sm); color:var(--indigo-text); text-align:center; margin:0 auto; max-width:800px; padding:130px 6vw; }
 
 .about-page .founders{ padding:40px 5vw 80px; }
-.about-page .section-head{ margin-bottom:56px; }
+.about-page .section-head{ margin-bottom:56px; text-align:center; }
 .about-page .section-head h2{ font-family:'Open Sauce Sans',sans-serif; font-size:var(--fs-heading); font-weight:400; margin:10px 0 0; }
-.about-page .founder-grid{ display:grid; grid-template-columns:1fr 1fr; gap:50px; margin-top:44px; }
-.about-page .founder-portrait{ aspect-ratio:4/5; border-radius:4px; position:relative; overflow:hidden; display:flex; align-items:flex-end; }
-.about-page .founder-card:nth-child(1) .founder-portrait{ background:linear-gradient(150deg,var(--indigo-1),var(--indigo-3)); }
-.about-page .founder-card:nth-child(2) .founder-portrait{ background:linear-gradient(150deg,#1a1a1a,var(--coral)); }
-.about-page .founder-portrait .init{ font-family:'Open Sauce Sans',sans-serif; font-size:var(--fs-mega); color:rgba(255,255,255,.12); position:absolute; top:0; left:16px; line-height:1; }
-.about-page .founder-name{ font-family:'Open Sauce Sans',sans-serif; font-size:var(--fs-heading-sm); margin:20px 0 4px; }
-.about-page .founder-role{ font-family:'Open Sauce Sans',sans-serif; font-size:var(--fs-eyebrow); letter-spacing:.08em; text-transform:uppercase; color:var(--coral-text); }
+.about-page .founder-grid{ display:flex; flex-wrap:wrap; justify-content:center; gap:50px; margin-top:44px; }
+.about-page .founder-card{ flex:0 1 300px; max-width:300px; }
+/* glassmorphism, premium-lit — the photo sits inset inside a real frosted
+   glass FRAME (padding + translucent tint + backdrop-filter blur), not
+   glued edge-to-edge with it, so the glass itself is visible as a mat
+   around the picture rather than just a border line. Crisp bright rim,
+   a sharp diagonal glare streak, and the .founders::before glow above
+   give the blur something colorful to actually pick up. */
+.about-page .founder-portrait{
+  aspect-ratio:4/5; border-radius:24px; position:relative; padding:14px;
+  display:flex; align-items:flex-end;
+  border:1.5px solid rgba(255,255,255,0.55);
+  background:rgba(224,226,230,0.45);
+  backdrop-filter:blur(20px) saturate(180%);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,0.5);
+  transition:transform .4s cubic-bezier(.2,.8,.2,1);
+}
+.about-page .founder-portrait:hover{
+  transform:translateY(-6px);
+}
+.about-page .founder-card:nth-child(1) .founder-portrait{ background:rgba(60,60,90,0.35); }
+.about-page .founder-card:nth-child(2) .founder-portrait{ background:rgba(90,50,50,0.35); }
+.about-page .founder-photo{
+  position:relative; z-index:0; width:100%; height:100%; object-fit:cover; border-radius:14px; display:block;
+}
+/* the shine sits above the photo (z-index above .founder-photo's 0) so
+   the glass reflection still reads over a real image, not just the
+   gradient placeholder it was designed for */
+.about-page .founder-portrait::before{
+  content:''; position:absolute; inset:0; z-index:1; pointer-events:none;
+  background:
+    radial-gradient(circle at 22% 16%, rgba(255,255,255,0.4), transparent 45%),
+    linear-gradient(120deg, transparent 32%, rgba(255,255,255,0.4) 46%, rgba(255,255,255,0.06) 56%, transparent 68%),
+    linear-gradient(180deg, rgba(255,255,255,0.14) 0%, transparent 30%);
+}
+.about-page .founder-portrait .init{ font-family:'Open Sauce Sans',sans-serif; font-size:var(--fs-mega); color:rgba(255,255,255,.12); position:absolute; z-index:1; top:0; left:16px; line-height:1; }
+.about-page .founder-name{ font-family:'Open Sauce Sans',sans-serif; font-size:var(--fs-heading-sm); margin:20px 0 8px; }
+/* same light neumorphic pill recipe as the header nav links — soft
+   embossed dual shadow (light highlight + dark shadow) on a mid-light
+   base, pill-shaped */
+.about-page .founder-role{
+  display:inline-flex; align-items:center;
+  font-family:'Open Sauce Sans',sans-serif; font-size:var(--fs-eyebrow); letter-spacing:.08em; text-transform:uppercase;
+  color:var(--coral-text);
+  background-color:#ececec;
+  border:1.5px solid rgba(255,255,255,.7);
+  border-radius:999px; padding:8px 14px;
+  box-shadow:-2px -1px 8px 0 #ffffff, 2px 1px 8px 0 rgba(0,0,0,0.14);
+}
 .about-page .founder-bio{ color:var(--ink-soft); line-height:1.7; margin-top:12px; font-size:var(--fs-body); }
-@media (max-width:860px){ .about-page .founder-grid{ grid-template-columns:1fr; } }
+@media (max-width:640px){ .about-page .founder-card{ flex:1 1 100%; max-width:340px; } }

@@ -10,12 +10,14 @@ const founders = [
 		init: 'JS',
 		name: 'Joyal K Scaria',
 		role: 'Co-Founder & Creative Director',
+		img: '/images/author/joel.jpeg',
 		bio: 'An award-winning artist, graphic designer, and creative director with a passion for transforming ideas into meaningful visual experiences. With a background in Information Technology & Data Analysis and years of experience in Art & Design, Joyal combines technical knowledge with artistic thinking to create solutions that are both visually compelling and strategically effective.',
 	},
 	{
 		init: 'AS',
 		name: 'Albin K Scaria',
 		role: 'Co-Founder & Developer',
+		img: '/images/author/albin.jpeg',
 		bio: 'Leads the development side of the studio — building the technical foundation that turns AlldyStars’ creative work into fast, functional, production-ready digital experiences.',
 	},
 ];
@@ -93,7 +95,11 @@ export default function AboutContent() {
 				<div className="founder-grid">
 					{founders.map((f, i) => (
 						<div key={f.init} className={`founder-card reveal${i ? ' reveal-delay-1' : ''}`}>
-							<div className="founder-portrait"><span className="init">{f.init}</span></div>
+							<div className="founder-portrait">
+							{f.img
+								? <img src={f.img} alt={f.name} className="founder-photo" />
+								: <span className="init">{f.init}</span>}
+						</div>
 							<div className="founder-name">{f.name}</div>
 							<div className="founder-role">{f.role}</div>
 							<p className="founder-bio">{f.bio}</p>
@@ -105,7 +111,7 @@ export default function AboutContent() {
 			<div className="cta-block reveal">
 				<h2>Begin your ALLDYSTARS<br />Experience Now</h2>
 				<div className="quote">Ideas become impact when shaped with purpose.</div>
-				<a href="mailto:hello@alldystars.com" className="cta-btn">Email Us →</a>
+				<a href="/contact" className="cta-btn">Get In Touch →</a>
 			</div>
 
 			<Footer />

@@ -1,5 +1,5 @@
 .projects-page .page-hero{ padding:180px 5vw 70px; }
-.projects-page .page-hero h1{ font-family:'Open Sauce Sans',sans-serif; font-weight:400; letter-spacing:-0.02em; font-size:var(--fs-display); line-height:1.02; margin:14px 0 0; max-width:min(760px,44vw); }
+.projects-page .page-hero h1{ font-family:'Open Sauce Sans',sans-serif; font-weight:400; letter-spacing:-0.02em; font-size:var(--fs-display); line-height:1.02; margin:14px 0 0; max-width:min(980px,44vw); }
 .projects-page .page-hero p{ margin-top:34px; max-width:520px; font-size:var(--fs-body); line-height:1.7; color:var(--ink-soft); }
 @media (max-width:860px){ .projects-page .page-hero h1{ max-width:100%; } }
 

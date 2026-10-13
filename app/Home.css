@@ -36,7 +36,7 @@
 
 /* ---- centered content column ---- */
 .home-page .hero-content{
-  position:relative; z-index:2; width:100%; max-width:960px; margin:0 auto;
+  position:relative; z-index:2; width:100%; max-width:1300px; margin:0 auto;
   display:flex; flex-direction:column; align-items:center; text-align:center;
 }
 
@@ -50,7 +50,10 @@
 
 .home-page .hero-headline{
   font-family:'Open Sauce Sans',sans-serif; font-weight:400; letter-spacing:-0.02em;
-  font-size:clamp(48px,7.4vw,108px); line-height:1.0; max-width:920px;
+  /* was clamp(48px,7.4vw,108px) — flatlined at 108px above ~1460px, the
+     same size on a 1920 or 2560px monitor as on a 1500px laptop. Now
+     keeps scaling out to ~2100px. */
+  font-size:clamp(48px, 5.66vw + 11.2px, 130px); line-height:1.0; max-width:1180px;
   margin:26px 0 0;
 }
 .home-page .hero-script{
