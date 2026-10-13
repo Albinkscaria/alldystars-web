@@ -159,7 +159,7 @@ a{ color:inherit; }
 
 /* ==================== SHARED HEADER ==================== */
 .site-header{
-  position:fixed; top:0; left:0; right:0; z-index:100; padding:22px 5vw;
+  position:fixed; top:0; left:0; right:0; z-index:100; padding:12px 5vw;
   display:flex; align-items:center; justify-content:space-between;
   /* one single semi-transparent square (non-pill) panel behind the whole
      bar at all times — no separate transparent/solid states to swap
@@ -185,13 +185,13 @@ a{ color:inherit; }
    sitting in the header, no blur/translucency/shadow */
 .site-header .logo{
   display:flex; align-items:center; line-height:0; text-decoration:none;
-  padding:13px 26px;
+  padding:6px 18px;
   border-radius:999px;
 }
 /* height is the one thing worth tuning by eye once the real file is in place —
    the source image has a lot of empty space above the wordmark for the script
    flourish, so fitting purely by width can end up tiny/cramped */
-.site-header .logo img{ height:64px; width:auto; display:block; filter:grayscale(1); }
+.site-header .logo img{ height:58px; width:auto; display:block; filter:grayscale(1); }
 
 /* smaller neumorphic pill buttons nested inside one big pill of the same
    color/shadow recipe — design from Uiverse.io by barisdogansutcu, in a
@@ -211,7 +211,7 @@ a{ color:inherit; }
   text-transform:uppercase; letter-spacing:.05em;
   color:#333333; background-color:#ececec;
   border:1.5px solid rgba(255,255,255,.7);
-  border-radius:999px; padding:8px 14px;
+  border-radius:999px; padding:7px 13px;
   text-decoration:none;
   transition:.2s;
   box-shadow:-2px -1px 8px 0 #ffffff, 2px 1px 8px 0 rgba(0,0,0,0.14);
@@ -227,7 +227,7 @@ a{ color:inherit; }
 }
 .menu-btn{
   display:none; border:none; cursor:pointer;
-  padding:14px 16px;
+  padding:11px 14px;
   border-radius:999px;
 }
 .menu-btn span{ display:block; width:26px; height:1.5px; background:var(--ink); margin:6px 0; }

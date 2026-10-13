@@ -1,11 +1,24 @@
-.about-page .page-hero{ padding:180px 5vw 70px; }
-.about-page .page-hero h1{ font-family:'Open Sauce Sans',sans-serif; font-weight:400; letter-spacing:-0.02em; font-size:var(--fs-display); line-height:1.02; margin:14px 0 0; max-width:min(980px,44vw); }
-.about-page .page-hero h1 .script{ font-family:'Aniyah',cursive; color:var(--indigo-text); }
-@media (max-width:860px){ .about-page .page-hero h1{ max-width:100%; } }
+.about-page .page-hero{
+  padding:180px 5vw 70px;
+  display:flex; flex-direction:column; align-items:center; text-align:center;
+}
+.about-page .page-hero .eyebrow{ color:var(--coral-text); }
+.about-page .page-hero h1{
+  font-family:'Open Sauce Sans',sans-serif; font-weight:400; letter-spacing:-0.02em;
+  font-size:clamp(34px, 4.6vw, 76px); line-height:1.05; margin:4px 0 0; max-width:min(900px,90vw);
+}
+/* bigger than the "We are" line above it, so it needs its own breathing
+   room (display:inline-block + margin-top) — otherwise the taller
+   swash flourishes would crowd straight into the line above instead of
+   just making this line taller. */
+.about-page .page-hero h1 .script{
+  display:inline-block; font-family:'Aniyah',cursive; color:var(--indigo-text);
+  font-size:1.3em; margin-top:34px;
+}
 
-/* studio frame + info badges — glass only reads here because of the
-   indigo/coral glow sitting behind them */
-.about-page .studio-badge-row{ position:relative; display:flex; flex-wrap:wrap; align-items:center; gap:14px; margin-top:40px; }
+/* info badges — glass only reads here because of the glow sitting
+   behind them */
+.about-page .studio-badge-row{ position:relative; display:flex; justify-content:center; flex-wrap:wrap; gap:14px; margin-top:68px; }
 .about-page .studio-glow{
   position:absolute; z-index:0; pointer-events:none;
   inset:-70px -50px;
@@ -19,7 +32,6 @@
    backdrop-filter blur, and a diagonal shine gradient + inset highlight
    to sell the glass look rather than the plain .glass utility's flat
    blur+tint, which reads more like frosted plastic than glass. */
-.about-page .studio-frame,
 .about-page .info-badge{
   position:relative; z-index:1; overflow:hidden;
   font-family:'Open Sauce Sans',sans-serif; font-size:var(--fs-eyebrow); letter-spacing:.06em; text-transform:uppercase;
@@ -30,32 +42,34 @@
   box-shadow:0 6px 20px rgba(11,11,12,0.1), inset 0 1px 0 rgba(255,255,255,1);
   transition:box-shadow .3s ease, transform .3s ease;
 }
-.about-page .studio-frame{ letter-spacing:.08em; }
-.about-page .studio-frame::before,
 .about-page .info-badge::before{
   content:''; position:absolute; inset:0; z-index:-1; pointer-events:none;
   background:
     linear-gradient(125deg, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.2) 30%, transparent 55%),
     linear-gradient(305deg, rgba(11,11,12,0.07) 0%, transparent 40%);
 }
-.about-page .studio-frame:hover,
 .about-page .info-badge:hover{
   box-shadow:0 10px 28px rgba(11,11,12,0.16), inset 0 1px 0 rgba(255,255,255,1);
   transform:translateY(-3px);
 }
 .about-page .info-badges{ position:relative; z-index:1; display:flex; flex-wrap:wrap; gap:10px; }
 
-.about-page .statement{ padding:90px 5vw 60px; display:grid; grid-template-columns:0.55fr 1fr; gap:40px; align-items:start; border-top:1px solid var(--line); }
-.about-page .statement-head{ padding-top:60px; }
+/* single centered column, not a left-heading/right-copy split — the
+   bold lead sentences carry the main statement, the plain sentence
+   after it reads as the quieter follow-through, all in the middle. */
+.about-page .statement{
+  padding:90px 5vw 60px; border-top:1px solid var(--line);
+  display:flex; flex-direction:column; align-items:center; text-align:center;
+}
 .about-page .statement .big-num{ font-family:'Open Sauce Sans',sans-serif; font-size:var(--fs-eyebrow); color:var(--coral-text); letter-spacing:.1em; }
-.about-page .statement h2{ font-family:'Open Sauce Sans',sans-serif; font-size:var(--fs-heading); line-height:1.15; margin:14px 0 0; font-weight:400; max-width:360px; }
-.about-page .statement .copy{ padding-top:60px; }
-.about-page .statement p{ font-size:var(--fs-body); line-height:1.7; color:var(--ink-soft); margin:0 0 22px; max-width:560px; }
-.about-page .statement p:last-child{ margin-bottom:0; }
+.about-page .statement h2{ font-family:'Open Sauce Sans',sans-serif; font-size:var(--fs-heading); line-height:1.15; margin:14px 0 0; font-weight:400; max-width:620px; }
+.about-page .statement .copy{
+  font-size:var(--fs-body-lg); line-height:1.75; color:var(--ink-soft);
+  margin:36px 0 0; max-width:min(920px,86vw);
+}
+.about-page .statement .copy strong{ color:var(--ink); font-weight:600; }
 @media (max-width:860px){
-  .about-page .statement{ grid-template-columns:1fr; padding:60px 6vw 30px; }
-  .about-page .statement-head{ padding-top:0; }
-  .about-page .statement .copy{ padding-top:30px; }
+  .about-page .statement{ padding:60px 6vw 30px; }
 }
 
 .about-page .vision-quote{ font-family:'Aniyah',cursive; font-size:var(--fs-heading-sm); color:var(--indigo-text); text-align:center; margin:0 auto; max-width:800px; padding:130px 6vw; }

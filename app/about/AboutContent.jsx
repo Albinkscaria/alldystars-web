@@ -61,10 +61,9 @@ export default function AboutContent() {
 
 			<section className="page-hero">
 				<div className="eyebrow reveal">About Us</div>
-				<h1 className="reveal">We are <span className="script">alldystars</span></h1>
+				<h1 className="reveal">We are<br /><span className="script">alldystars</span></h1>
 				<div className="studio-badge-row reveal reveal-delay-1">
 					<div className="studio-glow" aria-hidden="true"></div>
-					<div className="studio-frame">Studio — Kottayam, Kerala</div>
 					<div className="info-badges">
 						<span className="info-badge">5+ Years</span>
 						<span className="info-badge">10+ Clients</span>
@@ -74,15 +73,12 @@ export default function AboutContent() {
 			</section>
 
 			<section className="statement">
-				<div className="statement-head">
-					<div className="big-num reveal">01 / Who We Are</div>
-					<h2 className="reveal">Passionate about turning ideas into meaningful work.</h2>
-				</div>
-				<div className="copy">
-					<p className="reveal">We are a team of passionate designers, creative thinkers, and problem-solvers dedicated to transforming ideas into meaningful visual experiences.</p>
-					<p className="reveal reveal-delay-1">Whether it&rsquo;s crafting a unique brand identity, designing a modern website, or creating impactful marketing materials, our goal is to deliver work that inspires confidence and drives results.</p>
-					<p className="reveal reveal-delay-2">Our vision extends beyond client projects — AlldyStars is evolving into a creative brand that introduces design products, templates and digital assets for businesses and creators worldwide.</p>
-				</div>
+				<div className="big-num reveal">01 / Who We Are</div>
+				<h2 className="reveal">Passionate about turning ideas into meaningful work.</h2>
+				<p className="copy reveal reveal-delay-1">
+					<strong>We are a team of passionate designers, creative thinkers, and problem-solvers dedicated to transforming ideas into meaningful visual experiences. Whether it&rsquo;s crafting a unique brand identity, designing a modern website, or creating impactful marketing materials, our goal is to deliver{' '}work that inspires confidence and drives results.</strong>
+					{' '}Our vision extends beyond client projects — AlldyStars is evolving into a creative brand that introduces design products, templates and digital assets for businesses and creators worldwide.
+				</p>
 			</section>
 
 			<div className="vision-quote reveal">We believe every great idea deserves exceptional design.</div>
