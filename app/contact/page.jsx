@@ -7,6 +7,46 @@ import ContactLetter from '@/components/ContactLetter';
 import { crimson, inter, mono, script } from '../fonts';
 import './Contact.css';
 
+/* EmailJS (emailjs.com) delivers the letters straight from the browser.
+   The three IDs are public by design; set them in Vercel → Settings →
+   Environment Variables (and redeploy). The template's variables are
+   {{name}} {{company}} {{email}} {{services}} {{idea}} {{postscript}}.
+   Without them (local development) letters go to /api/contact, which
+   prints them in the terminal. */
+const EMAILJS = {
+	service_id: process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID,
+	template_id: process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID,
+	user_id: process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY,
+};
+const USE_EMAILJS = Boolean(EMAILJS.service_id && EMAILJS.template_id && EMAILJS.user_id);
+
+async function sendLetter(form) {
+	if (!USE_EMAILJS) {
+		if (process.env.NODE_ENV === 'production') console.error('Contact form: the EmailJS environment variables are not set in Vercel.');
+		const res = await fetch('/api/contact', { method: 'POST', body: form });
+		return res.ok;
+	}
+	if (String(form.get('website') || '').trim()) return true; // spam-trap field filled: quietly drop it
+	const field = (k) => String(form.get(k) || '').trim();
+	const res = await fetch('https://api.emailjs.com/api/v1.0/email/send', {
+		method: 'POST',
+		headers: { 'Content-Type': 'application/json' },
+		body: JSON.stringify({
+			...EMAILJS,
+			template_params: {
+				name: field('name'),
+				company: field('company') || '—',
+				email: field('email'),
+				services: form.getAll('services').join(', ') || '—',
+				idea: field('idea'),
+				postscript: field('postscript') || '—',
+			},
+		}),
+	});
+	if (!res.ok) console.error(`Contact form: EmailJS answered ${res.status}: ${await res.text().catch(() => '')}`);
+	return res.ok;
+}
+
 export default function ContactPage() {
 	const dotRef = useRef(null);
 	const labelRef = useRef(null);
@@ -51,7 +91,7 @@ export default function ContactPage() {
 			<Header active="Contact" />
 
 			{/* "Write us a letter": holds the page's <h1> */}
-			<ContactLetter email="hello@alldystars.com"className={`${crimson.variable} ${inter.variable} ${mono.variable} ${script.variable}`} />
+			<ContactLetter onSubmit={sendLetter} attachments={!USE_EMAILJS} email="hello@alldystars.com" className={`${crimson.variable} ${inter.variable} ${mono.variable} ${script.variable}`} />
 
 			<Footer />
 		</div>

@@ -671,6 +671,7 @@
   color: #9a9a9a;
 }
 .cl-drop {
+  margin-left: auto; /* stays right even when there's no "Clip a brief" beside it */
   display: inline-flex;
   align-items: center;
   gap: 10px;

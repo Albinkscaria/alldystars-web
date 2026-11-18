@@ -59,6 +59,7 @@ async function defaultSend(endpoint, formData) {
  * @param {string[]} [props.services]   the "help with" options
  * @param {string}   [props.recipient]  who the letter is addressed to
  * @param {string}   [props.email]      plain email shown under the steps, for people who'd rather not use the form
+ * @param {boolean}  [props.attachments] show "Clip a brief" (off when the sender can't carry files)
  * @param {string}   [props.className]  extra classes on the section (e.g. next/font variables)
  */
 export default function ContactLetter({
@@ -67,6 +68,7 @@ export default function ContactLetter({
   services = SERVICES,
   recipient = "The AlldyStars desk",
   email,
+  attachments = true,
   className = "",
 }) {
   const uid = useId().replace(/[^a-zA-Z0-9_-]/g, "");
@@ -433,18 +435,20 @@ export default function ContactLetter({
             <input className="cl-hp" type="text" name="website" tabIndex={-1} autoComplete="off" aria-hidden="true" />
 
             <div className="cl-foot">
-              <div className="cl-clipwrap">
-                <input ref={fileRef} id={f("file")} className="cl-file" type="file" accept={ACCEPT} onChange={pickFile} aria-describedby={errors.file ? f("file-note") : undefined} />
-                <label htmlFor={f("file")} className="cl-clip">
-                  <Clip />
-                  {file ? "Clip a different brief" : "Clip a brief"} <em>optional</em>
-                </label>
-                {errors.file && (
-                  <span className="cl-pen cl-pen-file" id={f("file-note")}>
-                    {errors.file}
-                  </span>
-                )}
-              </div>
+              {attachments && (
+                <div className="cl-clipwrap">
+                  <input ref={fileRef} id={f("file")} className="cl-file" type="file" accept={ACCEPT} onChange={pickFile} aria-describedby={errors.file ? f("file-note") : undefined} />
+                  <label htmlFor={f("file")} className="cl-clip">
+                    <Clip />
+                    {file ? "Clip a different brief" : "Clip a brief"} <em>optional</em>
+                  </label>
+                  {errors.file && (
+                    <span className="cl-pen cl-pen-file" id={f("file-note")}>
+                      {errors.file}
+                    </span>
+                  )}
+                </div>
+              )}
               <button ref={dropRef} type="submit" className={`cl-drop${complete ? "" : " is-off"}`} disabled={phase !== "write"}>
                 Drop it in the slot
                 <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
