@@ -1,0 +1,251 @@
+/* ─────────────────────────────────────────────────────────────
+   Services — "Five disciplines. One studio."
+   Desktop: heading + list on the left, dot stage on the right,
+   pinned while you scroll through the disciplines.
+   Phones: heading, stage, then a swipeable row of disciplines.
+   ───────────────────────────────────────────────────────────── */
+
+.sd-section {
+  --sd-bg: #0c0c0c;
+  --sd-ink: #f3efe6;
+  --sd-accent: #e5483d;
+  --sd-dust: rgba(243, 239, 230, 0.1);
+  --sd-muted: #7d7a75;
+  --sd-dim: #55524e;
+  --sd-line: #262626;
+  --sd-display: var(--font-crimson, "Crimson Text"), Georgia, serif; /* used for "Aa" in the dots too */
+  --sd-sans: var(--font-inter-display, "Inter Display"), var(--font-inter, "Inter"), system-ui, sans-serif;
+  --sd-mono: var(--font-mono, "JetBrains Mono"), "DejaVu Sans Mono", ui-monospace, monospace;
+  /* height of the site's fixed header, measured by ServicesDots.jsx */
+  --sd-header: 0px;
+
+  position: relative;
+  background: var(--sd-bg);
+  color: var(--sd-ink);
+  font-family: var(--sd-sans);
+}
+
+.sd-pin {
+  position: relative;
+  height: 100vh;
+  height: 100svh;
+  min-height: 600px;
+  display: grid;
+  grid-template-columns: minmax(360px, 0.82fr) 1.18fr;
+  grid-template-rows: auto 1fr;
+  grid-template-areas:
+    "head  stage"
+    "panel stage";
+  column-gap: clamp(24px, 4vw, 72px);
+  /* top padding clears the fixed site header that sits over the pinned stage */
+  padding: calc(var(--sd-header) + clamp(24px, 5vh, 64px)) clamp(20px, 5.5vw, 110px) clamp(32px, 6vh, 72px);
+  overflow: hidden;
+}
+/* grid children may shrink below their content (the chip row on phones is wider than the screen) */
+.sd-pin > * { min-width: 0; }
+/* soft vignette that makes the dots glow */
+.sd-pin::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(ellipse at 68% 50%, transparent 40%, rgba(0, 0, 0, 0.5));
+}
+
+/* ── Heading ── */
+.sd-head { grid-area: head; position: relative; z-index: 1; }
+.sd-eyebrow {
+  margin: 0;
+  font: 400 12px/1 var(--sd-mono);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--sd-muted);
+}
+.sd-eyebrow span { color: var(--sd-accent); }
+.sd-title {
+  margin: 22px 0 0;
+  font-weight: 400;
+  font-size: clamp(44px, 5.2vw, 96px);
+  line-height: 0.92;
+  letter-spacing: -0.045em;
+}
+.sd-title em {
+  font-family: var(--sd-display);
+  color: var(--sd-accent);
+  letter-spacing: -0.02em;
+}
+
+/* ── Stage ── */
+.sd-stage {
+  grid-area: stage;
+  position: relative;
+  min-height: 0;
+  touch-action: pan-y; /* dots react to touch, vertical swipes still scroll */
+  cursor: crosshair;
+}
+.sd-canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.sd-count,
+.sd-hint {
+  position: absolute;
+  right: 0;
+  z-index: 2;
+  font: 400 12px/1 var(--sd-mono);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--sd-muted);
+  pointer-events: none;
+}
+.sd-count { top: 6px; font-variant-numeric: tabular-nums; }
+.sd-hint { bottom: 0; }
+@media (hover: none) { .sd-hint { display: none; } }
+
+/* ── List + detail ── */
+.sd-panel {
+  grid-area: panel;
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  padding-top: clamp(28px, 6vh, 70px);
+}
+.sd-list { position: relative; list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--sd-line); }
+.sd-list li { border-bottom: 1px solid var(--sd-line); }
+.sd-item {
+  position: relative;
+  display: flex;
+  align-items: baseline;
+  gap: 22px;
+  width: 100%;
+  padding: clamp(10px, 1.8vh, 16px) 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.sd-item::before {
+  /* red marker beside the active discipline */
+  content: "";
+  position: absolute;
+  left: -28px;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: var(--sd-accent);
+  transform: scaleY(0);
+  transform-origin: top;
+  transition: transform 0.45s cubic-bezier(0.65, 0, 0.35, 1);
+}
+.sd-num {
+  min-width: 24px;
+  font: 400 12px/1 var(--sd-mono);
+  letter-spacing: 0.14em;
+  color: #5c5a57;
+  transition: color 0.3s;
+}
+.sd-name {
+  font-size: clamp(22px, 2vw, 32px);
+  letter-spacing: -0.03em;
+  color: var(--sd-dim);
+  transition: color 0.3s, transform 0.45s cubic-bezier(0.65, 0, 0.35, 1);
+}
+.sd-item:hover .sd-name { color: #a39e96; }
+.sd-item[aria-current="true"] .sd-name { color: var(--sd-ink); transform: translateX(6px); }
+.sd-item[aria-current="true"] .sd-num { color: var(--sd-accent); }
+.sd-item[aria-current="true"]::before { transform: scaleY(1); }
+.sd-item:focus-visible { outline: 2px solid var(--sd-accent); outline-offset: 4px; }
+
+.sd-detail { min-height: 9.5em; margin-top: clamp(16px, 3vh, 32px); }
+.sd-detail-inner { animation: sd-in 0.5s cubic-bezier(0.22, 1, 0.36, 1) both; }
+@keyframes sd-in {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: none; }
+}
+.sd-desc { margin: 0; max-width: 34em; font-size: clamp(15px, 1.1vw, 18px); line-height: 1.6; color: #b9b4ab; }
+.sd-tags { display: flex; flex-wrap: wrap; gap: 8px; margin: 16px 0 0; padding: 0; list-style: none; }
+.sd-tags li { padding: 6px 12px; border: 1px solid #34322f; border-radius: 99px; font-size: 13px; color: #a39e96; }
+.sd-link {
+  display: inline-block;
+  margin-top: 18px;
+  padding-bottom: 2px;
+  border-bottom: 1px solid currentColor;
+  font-size: 15px;
+  color: var(--sd-ink);
+  text-decoration: none;
+}
+.sd-link:hover { color: var(--sd-accent); }
+.sd-link:focus-visible { outline: 2px solid var(--sd-accent); outline-offset: 4px; }
+
+/* ── Tablet & phone ── */
+@media (max-width: 899px) {
+  .sd-pin {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    grid-template-areas: "head" "stage" "panel";
+    padding: calc(var(--sd-header) + 20px) 20px 24px;
+    min-height: 560px;
+  }
+  .sd-pin::after { background: radial-gradient(ellipse at 50% 45%, transparent 40%, rgba(0, 0, 0, 0.45)); }
+  .sd-title { margin-top: 14px; font-size: clamp(36px, 10vw, 56px); }
+  .sd-panel { padding-top: 12px; }
+  /* swipeable row of disciplines */
+  .sd-list {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    border: 0;
+    margin: 0 -20px;
+    padding: 2px 20px;
+    scrollbar-width: none;
+  }
+  .sd-list::-webkit-scrollbar { display: none; }
+  .sd-list li { flex: none; border: 0; }
+  .sd-item {
+    gap: 8px;
+    padding: 9px 14px;
+    border: 1px solid #34322f;
+    border-radius: 99px;
+  }
+  .sd-item::before { display: none; }
+  .sd-name { font-size: 15px; letter-spacing: -0.01em; }
+  .sd-item[aria-current="true"] { background: var(--sd-ink); border-color: var(--sd-ink); }
+  .sd-item[aria-current="true"] .sd-name { color: var(--sd-bg); transform: none; }
+  .sd-detail { min-height: 7.4em; margin-top: 14px; }
+  .sd-desc { font-size: 15px; }
+  .sd-tags { display: none; }
+  .sd-link { margin-top: 10px; }
+  .sd-count { top: 4px; }
+}
+
+/* ── Desktop: fit the left column to the screen height ──
+   The pinned stage is exactly one screen tall and the site's fixed header
+   takes ~95px of it, so on desktop the heading, list and detail scale with
+   the viewport height as well as its width. The sub-service tags (the same
+   list the Services page shows) only appear on screens tall enough to hold
+   them; the reserved detail height shrinks to match so nothing jumps. */
+@media (min-width: 900px) {
+  .sd-pin { padding-bottom: clamp(24px, 4vh, 72px); }
+  .sd-title { margin-top: clamp(12px, 2.4vh, 22px); font-size: clamp(40px, min(5.2vw, 8.5vh), 96px); }
+  .sd-panel { padding-top: clamp(16px, 3.6vh, 70px); }
+  .sd-item { padding: clamp(6px, 1.3vh, 16px) 0; }
+  .sd-name { font-size: clamp(18px, min(2vw, 3.4vh), 32px); }
+  .sd-detail { margin-top: clamp(12px, 2.4vh, 32px); }
+}
+@media (min-width: 900px) and (max-height: 999px) {
+  .sd-tags { display: none; }
+  .sd-detail { min-height: 6.4em; }
+  .sd-link { margin-top: 12px; }
+}
+@media (min-width: 900px) and (max-height: 700px) {
+  .sd-title { font-size: clamp(36px, min(5.2vw, 7.5vh), 96px); }
+  .sd-item { padding: 6px 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sd-item::before,
+  .sd-name,
+  .sd-num { transition: none; }
+  .sd-detail-inner { animation: none; }
+}

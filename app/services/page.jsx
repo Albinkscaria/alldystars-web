@@ -4,32 +4,18 @@ import { useEffect, useRef } from 'react';
 import Header from '@/components/Header/Header';
 import Footer from '@/components/Footer/Footer';
 import LoopingVideo from '@/components/LoopingVideo/LoopingVideo';
+import ServicesCanvas from '@/components/ServicesCanvas';
+import { crimson, inter, mono } from '../fonts';
 import './Services.css';
 
-const icon = {
-	brand: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="2.6"/></svg>',
-	web: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3"><rect x="3" y="5" width="18" height="14" rx="1.5"/><path d="M3 9h18M6.5 7h.01M9.5 7h.01"/></svg>',
-	graphic: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M4 20l4-1 11-11-3-3L5 16l-1 4z"/></svg>',
-	data: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M3 20h18"/><path d="M7 20v-6M12 20V8M17 20v-10"/></svg>',
-	business: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 3v9h9"/></svg>',
-};
-
+// hero index; each id is a /services#<id> deep link into the canvas below
+// (see `id` in components/ServicesCanvas/services.js)
 const categories = [
-	{ id: 'brand', n: '01', t: 'Brand Identity & Design', icon: icon.brand,
-		d: 'Build a brand people remember. Everything your business needs to establish a distinctive and professional identity.',
-		subs: ['Logo Design', 'Brand Strategy', 'Visual Identity Design', 'Rebranding'] },
-	{ id: 'web', n: '02', t: 'Website Design', icon: icon.web,
-		d: 'Where clean interfaces meet exceptional user experience. Designing digital products that are intuitive, engaging, and built to perform.',
-		subs: ['Custom Website Design', 'Landing Page Design', 'E-commerce Design', 'Dashboard Design'] },
-	{ id: 'graphic', n: '03', t: 'Graphic Design', icon: icon.graphic,
-		d: 'Design that speaks before words do. Visual storytelling that strengthens marketing and communication.',
-		subs: ['Brochures & Flyers', 'Posters & Banners', 'Menus & Catalogs', 'Business Presentations', 'Marketing Materials', 'Event Branding'] },
-	{ id: 'data', n: '04', t: 'Data Analytics', icon: icon.data,
-		d: 'Turn raw numbers into direction. Dashboards and reporting that show you what’s working and what to fix next.',
-		subs: ['Data Dashboards', 'Reporting Automation', 'Performance Tracking', 'Data Visualization'] },
-	{ id: 'business', n: '05', t: 'Business Analytics', icon: icon.business,
-		d: 'Decisions backed by evidence, not guesswork. Market and performance insight that sharpens strategy before you spend.',
-		subs: ['Market Research', 'KPI Frameworks', 'Growth Strategy', 'Competitor Insights'] },
+	{ id: 'brand', n: '01', t: 'Brand Identity & Design' },
+	{ id: 'web', n: '02', t: 'Website Design' },
+	{ id: 'graphic', n: '03', t: 'Graphic Design' },
+	{ id: 'data', n: '04', t: 'Data Analytics' },
+	{ id: 'business', n: '05', t: 'Business Analytics' },
 ];
 
 export default function ServicesPage() {
@@ -54,7 +40,7 @@ export default function ServicesPage() {
 		}
 		loop();
 
-		const hoverTargets = document.querySelectorAll('.services-page .cta-block, .services-page .sub-pill');
+		const hoverTargets = document.querySelectorAll('.services-page .cta-block');
 		function onEnter(el) {
 			if (el.classList.contains('cta-block')) { label.textContent = 'SEND'; label.classList.add('show'); dot.style.opacity = 0; }
 			else { dot.style.width = '28px'; dot.style.height = '28px'; dot.style.background = 'var(--coral)'; }
@@ -94,23 +80,13 @@ export default function ServicesPage() {
 				</h1>
 				<p className="reveal">Five disciplines, each broken down into the exact deliverables you can brief us on. No package tiers, no guesswork — pick a category, see what&rsquo;s inside.</p>
 				<div className="index-nav reveal">
-					{categories.map(c => <a key={c.id} href={`#${c.id}`}>{c.n} {c.t}</a>)}
+					{categories.map(c => <a key={c.id} href={`#${c.id}`} onClick={() => { if (window.location.hash === `#${c.id}`) window.dispatchEvent(new HashChangeEvent('hashchange')); }}>{c.n} {c.t}</a>)}
 				</div>
 			</section>
 
-			{categories.map(cat => (
-				<section key={cat.id} id={cat.id} className="category">
-					<div className="cat-left reveal">
-						<div className="cat-num">{cat.n} / {String(categories.length).padStart(2, '0')}</div>
-						<div className="cat-icon" dangerouslySetInnerHTML={{ __html: cat.icon }} />
-						<h2 className="cat-title">{cat.t}</h2>
-						<p className="cat-desc">{cat.d}</p>
-					</div>
-					<div className="subgrid reveal">
-						{cat.subs.map(s => <span key={s} className="sub-pill">{s}</span>)}
-					</div>
-				</section>
-			))}
+			{/* the five disciplines as a live design canvas, pinned and scrubbed by scroll;
+			    the index links above (#brand, #web, …) jump to each artboard */}
+			<ServicesCanvas className={`${crimson.variable} ${inter.variable} ${mono.variable}`} />
 
 			<div className="cta-block reveal">
 				<h2>Design with<br />ALLDYSTARS</h2>

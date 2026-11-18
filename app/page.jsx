@@ -2,44 +2,25 @@
 
 import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Header from '@/components/Header/Header';
 import Footer from '@/components/Footer/Footer';
 import Preloader from '@/components/Preloader/Preloader';
 import LoopingVideo from '@/components/LoopingVideo/LoopingVideo';
+import ServicesDots from '@/components/ServicesDots';
+import { crimson, inter, mono } from './fonts';
 import './Home.css';
 
-const icon = {
-	brand: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="2.6"/></svg>',
-	web: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="3" y="5" width="18" height="14" rx="1.5"/><path d="M3 9h18M6.5 7h.01M9.5 7h.01"/></svg>',
-	graphic: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M4 20l4-1 11-11-3-3L5 16l-1 4z"/></svg>',
-	data: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 20h18"/><path d="M7 20v-6M12 20V8M17 20v-10"/></svg>',
-	business: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 3v9h9"/></svg>',
-};
-
-const bentoData = [
-	{ c: 'p1 ink',     n: '01', id: 'brand', t: 'Brand Identity & Design', d: 'Logo, brand strategy, visual identity systems and rebranding.', i: icon.brand,
-		img: '/images/services/brand_design.png',
-		subs: ['Logo Design', 'Brand Strategy', 'Visual Identity Design', 'Rebranding'] },
-	{ c: 'p2 coral',   n: '02', id: 'web', t: 'Web Design', d: 'Custom sites, landing pages, e-commerce and dashboard design.', i: icon.web,
-		img: '/images/services/website_design.png',
-		subs: ['Custom Website Design', 'Landing Page Design', 'E-commerce Design', 'Dashboard Design'] },
-	{ c: 'p3 paper',   n: '03', id: 'graphic', t: 'Graphic Design', d: 'Brochures, posters, menus, presentations, event branding.', i: icon.graphic,
-		img: '/images/services/graphic_design.png',
-		subs: ['Brochures & Flyers', 'Posters & Banners', 'Menus & Catalogs', 'Business Presentations', 'Marketing Materials', 'Event Branding'] },
-	{ c: 'p4 indigo',  n: '04', id: 'data', t: 'Data Analytics', d: 'Data pipelines, dashboards, reporting and performance tracking.', i: icon.data,
-		subs: ['Data Dashboards', 'Reporting Automation', 'Performance Tracking', 'Data Visualization'] },
-	{ c: 'p5 outline', n: '05', id: 'business', t: 'Business Analytics', d: 'Market research, KPI frameworks, and growth strategy insights.', i: icon.business,
-		subs: ['Market Research', 'KPI Frameworks', 'Growth Strategy', 'Competitor Insights'] },
-];
-
+// official full-colour marks (Devicon), served from /public/images/tech
 const techList = [
-	{ name: 'Python', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2c-1.5 0-3 .3-3 2v2.5h6V7H7.5C5.5 7 4 8.2 4 10.5v3C4 15.8 5.5 17 7.5 17H9v-2.3c0-2 1.7-3.7 3.7-3.7H17c1.8 0 3-1.2 3-3v-2C20 3.2 18.5 2 16.5 2H12z"/><path d="M12 22c1.5 0 3-.3 3-2v-2.5H9V17h4.5c2 0 3.5-1.2 3.5-3.5v-3c0-2.3-1.5-3.5-3.5-3.5H15v2.3c0 2-1.7 3.7-3.7 3.7H7c-1.8 0-3 1.2-3 3v2c0 1.8 1.5 3 3.5 3H12z"/><circle cx="8.5" cy="5" r=".6" fill="currentColor" stroke="none"/><circle cx="15.5" cy="19" r=".6" fill="currentColor" stroke="none"/></svg>' },
-	{ name: 'PHP', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="12" rx="9" ry="5.5"/><path d="M9 15V9h2.3c1.4 0 2.2.8 2.2 2s-.8 2-2.2 2H9"/></svg>' },
-	{ name: 'WordPress', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M4.6 10l3 8.5M8.7 9.3L12 18.5m3.3-9.2l-2.2 6.2M19.4 10l-3.4 8.7M6 9h2.2M14 9h2.4"/></svg>' },
-	{ name: 'Flutter', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"><path d="M14.5 3L5 12.5 8.5 16 19 5.5h-7L14.5 3z"/><path d="M8.5 16L12 19.5h7l-6-6-4.5 4.5z"/></svg>' },
-	{ name: 'Figma', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M9 3h3.5a2.5 2.5 0 010 5H9V3z"/><path d="M9 8h3.5a2.5 2.5 0 010 5H9V8z"/><path d="M9 13a2.5 2.5 0 100 5 2.5 2.5 0 000-5z"/><circle cx="14.5" cy="15.5" r="2.5"/></svg>' },
-	{ name: 'Photoshop', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="4"/><path d="M7 16V8h2.3c1.5 0 2.4.9 2.4 2.2S10.8 12.4 9.3 12.4H7"/><path d="M13.5 16c1 .5 3 .5 3-1s-3-1-3-2.5 2-1.5 3-1"/></svg>' },
-	{ name: 'Canva', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="12" cy="12" r="9"/><circle cx="15" cy="12" r="4"/></svg>' },
+	{ name: 'Python', logo: '/images/tech/python.svg' },
+	{ name: 'PHP', logo: '/images/tech/php.svg' },
+	{ name: 'WordPress', logo: '/images/tech/wordpress.svg' },
+	{ name: 'Flutter', logo: '/images/tech/flutter.svg' },
+	{ name: 'Figma', logo: '/images/tech/figma.svg' },
+	{ name: 'Photoshop', logo: '/images/tech/photoshop.svg' },
+	{ name: 'Canva', logo: '/images/tech/canva.svg' },
 ];
 const metrics = [ { v: 20, l: 'Projects' }, { v: 10, l: 'Clients' }, { v: 2700, l: 'Designs Delivered' }, { v: 5, l: 'Years' } ];
 const process = [
@@ -58,19 +39,7 @@ const process = [
 export default function HomePage() {
 	const dotRef = useRef(null);
 	const labelRef = useRef(null);
-	const [activePanel, setActivePanel] = useState(null);
 	const [heroReady, setHeroReady] = useState(false);
-
-	useEffect(() => {
-		if (!activePanel) return;
-		document.body.style.overflow = 'hidden';
-		const onKey = (e) => { if (e.key === 'Escape') setActivePanel(null); };
-		window.addEventListener('keydown', onKey);
-		return () => {
-			document.body.style.overflow = '';
-			window.removeEventListener('keydown', onKey);
-		};
-	}, [activePanel]);
 
 	useEffect(() => {
 		const io = new IntersectionObserver((entries) => {
@@ -91,11 +60,6 @@ export default function HomePage() {
 		}, { threshold: 0.5 });
 		document.querySelectorAll('.home-page .metric-num .digits').forEach(el => cio.observe(el));
 
-		const pio = new IntersectionObserver((entries) => {
-			entries.forEach(e => e.target.classList.toggle('active', e.isIntersecting));
-		}, { threshold: 0.5 });
-		document.querySelectorAll('.home-page .process-row').forEach(el => pio.observe(el));
-
 		const dot = dotRef.current, label = labelRef.current;
 		let mx = 0, my = 0, dx = 0, dy = 0, raf;
 		function onMove(e) { mx = e.clientX; my = e.clientY; }
@@ -108,16 +72,71 @@ export default function HomePage() {
 		}
 		loop();
 
-		const hoverTargets = document.querySelectorAll('.home-page .panel');
-		function onEnter(el) {
-			dot.style.width = '34px'; dot.style.height = '34px'; dot.style.background = 'var(--coral)';
-		}
-		function onLeave() { label.classList.remove('show'); dot.style.opacity = 1; dot.style.width = '10px'; dot.style.height = '10px'; dot.style.background = 'var(--ink)'; }
-		hoverTargets.forEach(el => { el.addEventListener('mouseenter', () => onEnter(el)); el.addEventListener('mouseleave', onLeave); });
-
 		return () => {
 			window.removeEventListener('mousemove', onMove);
 			cancelAnimationFrame(raf);
+		};
+	}, []);
+
+	// "Our Design Process": a red line grows down the timeline with the
+	// scroll, carrying a glowing dot from 01 to 05. Each step lights up as
+	// the dot reaches its badge and dims again when you scroll back past it.
+	// Without JS (or with reduced motion) the list simply shows every step.
+	useEffect(() => {
+		const list = document.querySelector('.home-page .process-list');
+		if (!list || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+		gsap.registerPlugin(ScrollTrigger);
+
+		const rows = [...list.querySelectorAll('.process-row')];
+		let centers = [];
+		// layout offsets, not getBoundingClientRect: the rows' .reveal
+		// slide-in transform must not skew where the badges are
+		const measure = () => {
+			centers = rows.map(row => {
+				const badge = row.querySelector('.process-badge');
+				return row.offsetTop + badge.offsetTop + badge.offsetHeight / 2;
+			});
+			list.style.setProperty('--line-top', `${centers[0]}px`);
+			list.style.setProperty('--line-len', `${centers[centers.length - 1] - centers[0]}px`);
+		};
+
+		const state = { p: 0 };
+		const apply = () => {
+			list.style.setProperty('--p', state.p.toFixed(4));
+			const y = centers[0] + (centers[centers.length - 1] - centers[0]) * state.p;
+			let current = -1;
+			rows.forEach((row, i) => {
+				const reached = y >= centers[i] - 1;
+				row.classList.toggle('reached', reached);
+				if (reached) current = i;
+			});
+			rows.forEach((row, i) => row.classList.toggle('current', i === current));
+		};
+
+		measure();
+		list.classList.add('is-animated');
+		const ctx = gsap.context(() => {
+			gsap.to(state, {
+				p: 1,
+				ease: 'none',
+				onUpdate: apply,
+				scrollTrigger: {
+					trigger: list,
+					// the dot sits on a "reading line" 65% down the screen
+					start: () => `top+=${centers[0]} 65%`,
+					end: () => `top+=${centers[centers.length - 1]} 65%`,
+					scrub: 0.6,
+					invalidateOnRefresh: true,
+					onRefreshInit: measure,
+				},
+			});
+		});
+		apply();
+
+		return () => {
+			ctx.revert();
+			list.classList.remove('is-animated');
+			rows.forEach(row => row.classList.remove('reached', 'current'));
 		};
 	}, []);
 
@@ -187,67 +206,14 @@ export default function HomePage() {
 				<div className="copy reveal reveal-delay-1"><p>We create brands, digital experiences, and visual communications that don&rsquo;t just look exceptional — they solve problems, build trust, and accelerate business growth. Every pixel, every interaction, and every detail is crafted with purpose, ensuring your brand stands out in an increasingly competitive world.</p></div>
 			</section>
 
-			<section className="wall" id="services">
-				<div className="section-head">
-					<div><div className="eyebrow reveal">What We Do</div><h2 className="reveal">Five disciplines. One studio.</h2></div>
-					<div className="wall-note reveal">This wall is arranged the way we&rsquo;d arrange a client&rsquo;s — hierarchy, contrast, and restraint doing the talking.</div>
-				</div>
-				<div className="bento">
-					{bentoData.map(item => {
-						const cls = item.c.split(' ');
-						return (
-							<div
-								key={item.n}
-								className={`panel ${cls[0]} ${cls[1]} reveal`}
-								role="button"
-								tabIndex={0}
-								aria-haspopup="dialog"
-								aria-label={item.t}
-								onClick={() => setActivePanel(item)}
-								onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setActivePanel(item); } }}
-							>
-								{item.img && <div className="panel-bg" style={{ backgroundImage: `url(${item.img})` }} />}
-								<div className="panel-scrim" aria-hidden="true" />
-								{!item.img && (
-									<div className="panel-solid-content" aria-hidden="true">
-										<div className="panel-solid-icon" dangerouslySetInnerHTML={{ __html: item.i }} />
-										<div className="panel-solid-title">{item.t}</div>
-									</div>
-								)}
-								<div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-									<div className="p-num">{item.n}</div>
-									<div className="p-icon" dangerouslySetInnerHTML={{ __html: item.i }} />
-								</div>
-								<span className="p-toggle" aria-hidden="true">+</span>
-							</div>
-						);
-					})}
-				</div>
-				<div className="reveal view-all"><Link href="/services">View full services index →</Link></div>
-			</section>
-
-			{activePanel && (
-				<div className="panel-modal" role="dialog" aria-modal="true" aria-labelledby="panel-modal-title" onClick={() => setActivePanel(null)}>
-					<div className="panel-modal-card" onClick={(e) => e.stopPropagation()}>
-						<button className="panel-modal-close" aria-label="Close" onClick={() => setActivePanel(null)}>×</button>
-						<div className="panel-modal-icon" dangerouslySetInnerHTML={{ __html: activePanel.i }} />
-						<div className="panel-modal-num">{activePanel.n} / 05</div>
-						<h3 id="panel-modal-title" className="panel-modal-title">{activePanel.t}</h3>
-						<p className="panel-modal-desc">{activePanel.d}</p>
-						<div className="panel-modal-subs">
-							{activePanel.subs.map(s => <span key={s} className="panel-modal-pill">{s}</span>)}
-						</div>
-						<Link href={`/services#${activePanel.id}`} className="panel-modal-link">View full service details →</Link>
-					</div>
-				</div>
-			)}
+			<ServicesDots className={`${crimson.variable} ${inter.variable} ${mono.variable}`} />
 
 			<section className="tech">
 				<div className="eyebrow reveal">Technology, Perfectly Executed</div>
 				<div className="tech-row">
 					{techList.map((t, i) => (
 						<div key={t.name} className="tech-pill" style={{ animationDelay: `${i * 0.15}s` }}>
-							<span className="tech-icon" dangerouslySetInnerHTML={{ __html: t.icon }} />
+							<img className="tech-icon" src={t.logo} alt="" width={36} height={36} />
 							<span className="tech-name">{t.name}</span>
 						</div>
 					))}
@@ -300,6 +266,9 @@ export default function HomePage() {
 								</span>
 							</div>
 						))}
+						{/* after the rows so .process-row:first-child still matches */}
+						<span className="process-fill" aria-hidden="true" />
+						<span className="process-traveller" aria-hidden="true" />
 					</div>
 				</div>
 			</section>
