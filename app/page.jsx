@@ -21,6 +21,8 @@ const techList = [
 	{ name: 'Figma', logo: '/images/tech/figma.svg' },
 	{ name: 'Photoshop', logo: '/images/tech/photoshop.svg' },
 	{ name: 'Canva', logo: '/images/tech/canva.svg' },
+	{ name: 'Tableau', logo: '/images/tech/tableau.svg' },
+	{ name: 'Power BI', logo: '/images/tech/powerbi.svg' },
 ];
 const metrics = [ { v: 20, l: 'Projects' }, { v: 10, l: 'Clients' }, { v: 2700, l: 'Designs Delivered' }, { v: 5, l: 'Years' } ];
 const process = [

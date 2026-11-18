@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+  <!-- Tableau mark: a large central cross ringed by smaller crosses in the brand colours -->
+  <g fill="#E97627">
+    <rect x="60" y="36" width="8" height="56"/>
+    <rect x="36" y="60" width="56" height="8"/>
+  </g>
+  <g fill="#C72037">
+    <rect x="61" y="6" width="6" height="30"/>
+    <rect x="49" y="18" width="30" height="6"/>
+  </g>
+  <g fill="#1F457E">
+    <rect x="61" y="92" width="6" height="30"/>
+    <rect x="49" y="104" width="30" height="6"/>
+  </g>
+  <g fill="#59879B">
+    <rect x="15" y="49" width="6" height="30"/>
+    <rect x="3" y="61" width="30" height="6"/>
+  </g>
+  <g fill="#5B6591">
+    <rect x="107" y="49" width="6" height="30"/>
+    <rect x="95" y="61" width="30" height="6"/>
+  </g>
+  <g fill="#7099A6">
+    <rect x="28.5" y="21" width="5" height="20"/>
+    <rect x="21" y="28.5" width="20" height="5"/>
+  </g>
+  <g fill="#EB912C">
+    <rect x="94.5" y="21" width="5" height="20"/>
+    <rect x="87" y="28.5" width="20" height="5"/>
+  </g>
+  <g fill="#EB912C">
+    <rect x="28.5" y="87" width="5" height="20"/>
+    <rect x="21" y="94.5" width="20" height="5"/>
+  </g>
+  <g fill="#1F457E">
+    <rect x="94.5" y="87" width="5" height="20"/>
+    <rect x="87" y="94.5" width="20" height="5"/>
+  </g>
+</svg>

@@ -199,13 +199,15 @@
 .home-page .tech{ padding:100px 5vw 30px; }
 /* the row always spans the full content width: --cols cards per row,
    each sized to share the width equally, and a short last row centered
-   rather than left-hanging (7 logos → 7 / 4+3 / 3+3+1). */
+   rather than left-hanging (9 logos → one row of 9 on laptops and up /
+   5+4 on tablets / 3+3+3 on phones). Nine across needs ~1000px before the
+   longest names ("Photoshop", "WordPress") stop fitting inside a card. */
 .home-page .tech-row{
-  --cols:7; --gap:clamp(10px, 1.2vw, 22px);
+  --cols:9; --gap:clamp(8px, 1vw, 20px);
   display:flex; flex-wrap:wrap; justify-content:center; gap:calc(var(--gap) + 8px) var(--gap);
   margin-top:32px; perspective:900px;
 }
-@media (max-width:1100px){ .home-page .tech-row{ --cols:4; } }
+@media (max-width:1000px){ .home-page .tech-row{ --cols:5; } }
 @media (max-width:640px){ .home-page .tech-row{ --cols:3; } }
 .home-page .tech-pill{
   position:relative;
@@ -216,7 +218,7 @@
   flex:0 0 calc((100% - (var(--cols) - 1) * var(--gap)) / var(--cols));
   aspect-ratio:128 / 162; min-width:0;
   font-family:'Open Sauce Sans',sans-serif; font-size:13px; letter-spacing:.04em; text-align:center;
-  padding:clamp(10px, 1.3vw, 24px); border:none; border-radius:clamp(18px, 2.2vw, 34px); color:#fff;
+  padding:clamp(8px, 0.9vw, 24px); border:none; border-radius:clamp(18px, 2.2vw, 34px); color:#fff;
   /* dark, near-black center dissolving out to a near-transparent edge — this
      IS the "glow": on the reference's dark page a light halo can bleed
      outward and read as glowing, but that same light glow would be
@@ -262,11 +264,11 @@
 }
 @media (prefers-reduced-motion: reduce){ .home-page .tech-pill{ animation:none; } }
 
-.home-page .tech-icon{ width:clamp(32px, 30cqi, 64px); height:auto; aspect-ratio:1; flex:0 0 auto; display:block; object-fit:contain; position:relative; z-index:1; }
+.home-page .tech-icon{ width:clamp(32px, 36cqi, 64px); height:auto; aspect-ratio:1; flex:0 0 auto; display:block; object-fit:contain; position:relative; z-index:1; }
 
 /* logo and name are both always visible — the logo keeps its original
    brand colours, the name sits underneath it in the card's white text */
-.home-page .tech-name{ position:relative; z-index:1; font-size:clamp(11px, 10.5cqi, 17px); max-width:100%; overflow-wrap:anywhere; }
+.home-page .tech-name{ position:relative; z-index:1; font-size:clamp(11px, 12.5cqi, 17px); max-width:100%; overflow-wrap:anywhere; }
 
 .home-page .metrics{ padding:40px 5vw 160px; position:relative; }
 .home-page .metrics-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-top:40px; }
