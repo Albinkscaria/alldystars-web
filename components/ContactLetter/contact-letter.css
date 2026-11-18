@@ -1,0 +1,1310 @@
+/* ==========================================================================
+   Contact — "Write us a letter"
+   All rules are scoped to .cl. Fonts come from next/font CSS variables
+   (app/fonts.js). Colours follow the
+   site palette: neutral greys, --ink black and the --coral-text accent.
+   ========================================================================== */
+
+.cl {
+  --cl-ink: #0a0a0a; /* site --ink */
+  --cl-text: #2a2a2a;
+  --cl-mute: #666666;
+  --cl-faint: #a3a3a3;
+  --cl-red: #ff4433; /* site --coral-text */
+  --cl-line: rgba(10, 10, 10, 0.12);
+  --cl-paper: #fbfbfa;
+  --cl-sans: var(--font-inter, "Inter"), system-ui, -apple-system, "Segoe UI", sans-serif;
+  --cl-serif: var(--font-crimson, "Crimson Text"), Georgia, "Times New Roman", serif;
+  --cl-script: var(--font-script, "Pinyon Script"), "Snell Roundhand", "Apple Chancery", cursive;
+  --cl-mono: var(--font-mono, "JetBrains Mono"), ui-monospace, SFMono-Regular, Menlo, monospace;
+  --cl-copy: 24px; /* letter text size */
+  --cl-lh: 46px; /* letter line height */
+
+  position: relative;
+  isolation: isolate;
+  box-sizing: border-box;
+  display: grid;
+  grid-template-columns: minmax(0, 0.82fr) minmax(0, 1.18fr);
+  gap: clamp(40px, 6vw, 96px);
+  align-items: start;
+  width: min(1320px, 100%);
+  margin: 0 auto;
+  padding: clamp(96px, 12vh, 140px) clamp(20px, 5.5vw, 80px) clamp(56px, 8vh, 96px);
+  color: var(--cl-ink);
+  font-family: var(--cl-sans);
+  -webkit-font-smoothing: antialiased;
+  overflow-anchor: none;
+  overflow-x: clip; /* nothing (postmark, tilted letter) may cause sideways scroll; keeps sticky working */
+}
+.cl *,
+.cl *::before,
+.cl *::after {
+  box-sizing: border-box;
+}
+.cl p,
+.cl h1,
+.cl h2,
+.cl ol,
+.cl fieldset,
+.cl legend {
+  margin: 0;
+  padding: 0;
+}
+
+/* soft studio light behind everything */
+.cl-amb {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+}
+.cl-amb i {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(110px);
+}
+.cl-amb i:nth-child(1) {
+  width: 760px;
+  height: 760px;
+  right: -40px;
+  top: -120px;
+  background: #fff;
+}
+.cl-amb i:nth-child(2) {
+  width: 420px;
+  height: 420px;
+  left: -140px;
+  bottom: -100px;
+  background: rgba(255, 68, 51, 0.1);
+}
+.cl-amb i:nth-child(3) {
+  width: 520px;
+  height: 520px;
+  left: 30%;
+  top: 30%;
+  background: #e4e4e4;
+}
+
+/* ---------- left column ---------- */
+.cl-intro {
+  position: sticky;
+  top: clamp(96px, 14vh, 140px);
+  padding-top: 64px;
+}
+.cl-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font: 500 11px/1 var(--cl-mono);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--cl-red);
+}
+.cl-eyebrow::before {
+  content: "";
+  width: 26px;
+  height: 1px;
+  background: currentColor;
+}
+.cl-title {
+  margin-top: 22px !important;
+  font-weight: 500;
+  font-size: clamp(52px, 5.7vw, 82px);
+  line-height: 0.94;
+  letter-spacing: -0.05em;
+}
+.cl-script {
+  display: block;
+  margin: 6px 0 0 -6px;
+  font-family: var(--cl-script);
+  font-weight: 400;
+  font-size: 1.27em;
+  line-height: 0.9;
+  letter-spacing: 0;
+  color: var(--cl-red);
+}
+.cl-lede {
+  margin-top: 30px !important;
+  max-width: 420px;
+  font-size: 16.5px;
+  line-height: 1.65;
+  color: #3d3d3d;
+}
+.cl-steps {
+  margin-top: 40px !important;
+  max-width: 420px;
+  list-style: none;
+  border-top: 1px solid var(--cl-line);
+}
+.cl-steps li {
+  display: grid;
+  grid-template-columns: 44px 1fr;
+  padding: 15px 0;
+  border-bottom: 1px solid var(--cl-line);
+  font-size: 14px;
+  color: #3d3d3d;
+}
+.cl-steps b {
+  font: 500 11px/1.6 var(--cl-mono);
+  letter-spacing: 0.1em;
+  color: var(--cl-red);
+}
+/* plain email, for people who'd rather not use the letter */
+.cl-email {
+  margin-top: 22px !important;
+  font-size: 14px;
+  color: var(--cl-mute);
+}
+.cl-email a {
+  color: var(--cl-ink);
+  text-decoration: none;
+  border-bottom: 1px solid currentColor;
+}
+.cl-email a:hover {
+  color: var(--cl-red);
+}
+
+/* ---------- the desk: letter + slot ---------- */
+.cl-desk {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  perspective: 1800px;
+  overflow-anchor: none; /* the moving letter must not drag the page scroll with it */
+}
+.cl-desk[data-locked] {
+  justify-content: flex-end;
+}
+/* while it goes through the slot, the envelope passes in front of the slot's top lip
+   and is cut off at the dark opening (letterMotion.js clips it there) */
+.cl-desk[data-posting] .cl-letter {
+  z-index: 4;
+}
+
+.cl-letter {
+  position: relative;
+  width: 100%;
+  max-width: 660px;
+  padding: 40px 50px 26px 66px;
+  border-radius: 6px;
+  background: var(--cl-paper) linear-gradient(180deg, rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0) 30%);
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.9) inset, 0 40px 70px -30px rgba(10, 10, 10, 0.35), 0 12px 24px -12px rgba(10, 10, 10, 0.18);
+  transform: rotate(-1.2deg); /* GSAP takes over after hydration */
+  will-change: transform;
+  backface-visibility: hidden;
+  touch-action: pan-y;
+}
+/* paper grain */
+.cl-letter::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0.35;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .48 0 0 0 0 .48 0 0 0 0 .48 0 0 0 .12 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+/* red margin rule */
+.cl-letter::before {
+  content: "";
+  position: absolute;
+  left: 40px;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: rgba(255, 68, 51, 0.3);
+  pointer-events: none;
+}
+.cl-letter.is-grabbed {
+  cursor: grabbing;
+}
+.cl-desk.is-write .cl-letter {
+  cursor: default;
+}
+.cl-sheen {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0;
+  mix-blend-mode: soft-light;
+  background: radial-gradient(600px circle at var(--sx, 50%) var(--sy, 30%), rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0) 60%);
+  transition: opacity 0.4s ease;
+}
+.cl-letter.is-lit .cl-sheen {
+  opacity: 0.55;
+}
+.cl-content {
+  position: relative;
+  z-index: 2;
+}
+
+/* header: addressee + stamp */
+.cl-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  min-height: 96px;
+}
+.cl-to {
+  font: 500 10.5px/1.8 var(--cl-mono);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--cl-mute);
+}
+.cl-to b {
+  font-weight: 500;
+  color: var(--cl-ink);
+}
+.cl-stampbox {
+  position: relative;
+  flex: none;
+  width: 76px;
+  height: 90px;
+}
+.cl-stamp-ph {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  border: 1.5px dashed rgba(10, 10, 10, 0.28);
+  border-radius: 3px;
+  text-align: center;
+  font: 600 8px/1.6 var(--cl-mono);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #9a9a9a;
+}
+.cl-stamp-w {
+  position: absolute;
+  inset: 0;
+  visibility: hidden;
+  filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.18));
+}
+.cl-stamp {
+  position: relative;
+  display: block;
+  width: 76px;
+  height: 90px;
+  padding: 7px;
+  background: #fff;
+  /* perforated edge */
+  -webkit-mask: radial-gradient(circle, #0000 2.6px, #000 3px) -4px -4px / 8px 8px, linear-gradient(#000 0 0) content-box;
+  mask: radial-gradient(circle, #0000 2.6px, #000 3px) -4px -4px / 8px 8px, linear-gradient(#000 0 0) content-box;
+}
+.cl-stamp::after {
+  content: "";
+  position: absolute;
+  inset: 4px;
+  z-index: -1;
+  background: #fff;
+}
+.cl-stamp-in {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  width: 100%;
+  height: 100%;
+  background: var(--cl-red);
+  color: #fff;
+}
+.cl-stamp-in svg {
+  width: 30px;
+  height: 30px;
+}
+.cl-stamp-in small {
+  font: 600 7.5px/1 var(--cl-mono);
+  letter-spacing: 0.14em;
+}
+
+/* ---------- the letter's words ---------- */
+.cl-copy {
+  font-family: var(--cl-serif);
+  font-size: var(--cl-copy);
+  line-height: var(--cl-lh);
+  color: var(--cl-text);
+}
+.cl-copy > p {
+  margin: 0;
+}
+
+/* a fill-in-the-blank field: the real input sits over an ink mirror */
+.cl-blank {
+  position: relative;
+  display: inline-grid;
+  vertical-align: baseline;
+  /* leaves room for the punctuation that follows it on the same line */
+  min-width: min(var(--min, 160px), calc(100% - 12px));
+  max-width: 100%;
+  border-bottom: 1.5px solid rgba(10, 10, 10, 0.35);
+  transition: border-color 0.25s ease;
+}
+.cl-blank:focus-within {
+  border-bottom-color: var(--cl-red);
+}
+.cl-blank.is-invalid {
+  border-bottom: 2.5px solid var(--cl-red);
+}
+.cl-mirror,
+.cl-blank > input,
+.cl-blank > textarea {
+  grid-area: 1 / 1;
+  margin: 0;
+  padding: 0 4px;
+  border: 0;
+  font-family: var(--cl-serif);
+  font-style: italic;
+  font-size: var(--cl-copy);
+  line-height: 30px;
+  letter-spacing: 0;
+  color: var(--cl-ink);
+}
+.cl-mirror {
+  white-space: pre;
+  overflow: hidden;
+  pointer-events: none;
+}
+.cl-blank > input,
+.cl-blank > textarea {
+  width: 100%;
+  min-width: 0;
+  background: transparent;
+  color: transparent;
+  caret-color: var(--cl-red);
+  outline: none;
+  appearance: none;
+  border-radius: 0;
+}
+.cl-blank > input::placeholder,
+.cl-blank > textarea::placeholder {
+  color: transparent;
+}
+.cl-blank ::selection {
+  background: rgba(255, 68, 51, 0.22);
+}
+/* very long single-line values: show the native text instead of the mirror */
+.cl-blank.is-overflow > input {
+  color: var(--cl-ink);
+}
+.cl-blank.is-overflow .cl-mirror {
+  visibility: hidden;
+}
+.cl-blank > input:-webkit-autofill {
+  -webkit-text-fill-color: var(--cl-ink);
+  transition: background-color 9999s;
+}
+.cl-ph {
+  color: var(--cl-faint);
+}
+/* the newest character is still wet */
+.cl-wet {
+  display: inline;
+  animation: cl-dry 0.7s ease-out both;
+}
+@keyframes cl-dry {
+  from {
+    opacity: 0.4;
+    filter: blur(0.6px);
+    color: #2b2d70;
+  }
+  to {
+    opacity: 1;
+    filter: none;
+    color: inherit;
+  }
+}
+
+/* multi-line blanks (the idea, the P.S.) */
+.cl-blank.is-multi {
+  display: grid;
+  width: 100%;
+  border-bottom: 0;
+}
+.cl-blank.is-multi .cl-mirror,
+.cl-blank.is-multi > textarea {
+  white-space: pre-wrap;
+  overflow-wrap: break-word;
+  word-break: break-word;
+  line-height: var(--cl-lh);
+  font-size: 22px;
+  padding: 0 2px;
+}
+.cl-blank.is-multi > textarea {
+  resize: none;
+  overflow: hidden;
+  height: 100%;
+}
+.cl-idea .cl-mirror {
+  min-height: calc(var(--cl-lh) * 2);
+}
+.cl-blank.is-multi.is-invalid {
+  border-bottom: 0;
+  box-shadow: inset 3px 0 0 rgba(255, 68, 51, 0.85);
+}
+
+/* red-pen notes */
+.cl-pen {
+  font-family: var(--cl-script);
+  font-style: normal;
+  font-size: 25px;
+  line-height: 30px;
+  color: var(--cl-red);
+  white-space: nowrap;
+  animation: cl-write 0.75s ease-out both;
+}
+.cl-blank.is-multi .cl-pen {
+  /* one box, so the write-on clip-path covers every line when the note wraps
+     (on a wrapped inline element it only clips to the first line's box) */
+  display: inline-block;
+  max-width: 100%;
+  white-space: normal;
+}
+.cl-pen-below {
+  position: absolute;
+  left: 4px;
+  top: 100%;
+  font-size: 21px;
+  line-height: 1.2;
+  pointer-events: none;
+}
+.cl-pen-file {
+  display: block;
+  font-size: 20px;
+  line-height: 1.1;
+  margin-top: 2px;
+}
+.cl-pen-send {
+  margin-top: 10px !important;
+  text-align: right;
+  white-space: normal;
+}
+@keyframes cl-write {
+  from {
+    clip-path: inset(0 100% 0 0);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+/* services */
+.cl-services {
+  border: 0;
+  min-width: 0;
+}
+.cl-services legend {
+  display: block;
+  float: left; /* lets the legend sit in the text flow */
+  width: 100%;
+  font-size: var(--cl-copy);
+  line-height: var(--cl-lh);
+}
+.cl-chips {
+  clear: both;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 2px 0 8px;
+  line-height: 1;
+}
+.cl-chip {
+  position: relative;
+  cursor: pointer;
+}
+.cl-chip input {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  margin: 0;
+  cursor: pointer;
+}
+.cl-chip span {
+  display: inline-block;
+  padding: 9px 14px;
+  border: 1px solid rgba(10, 10, 10, 0.18);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.6);
+  font: 500 13px/1 var(--cl-sans);
+  color: #3d3d3d;
+  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+.cl-chip:hover span {
+  border-color: rgba(10, 10, 10, 0.4);
+}
+.cl-chip input:checked + span {
+  background: var(--cl-ink);
+  border-color: var(--cl-ink);
+  color: #fff;
+}
+.cl-chip input:checked + span::before {
+  content: "✓ ";
+  color: #ff8a7e;
+}
+.cl-chip input:focus-visible + span {
+  outline: 2px solid var(--cl-red);
+  outline-offset: 2px;
+}
+
+.cl-lbl {
+  margin: 0;
+}
+/* a blank and the punctuation after it never split across lines */
+.cl-nobr {
+  white-space: nowrap;
+}
+
+/* signature */
+.cl-signrow {
+  margin-top: 4px !important;
+}
+.cl-sig {
+  display: inline-block;
+  margin-left: 12px;
+  min-height: 1px;
+  font-family: var(--cl-script);
+  font-size: 46px;
+  line-height: var(--cl-lh);
+  color: var(--cl-ink);
+  vertical-align: -6px;
+  max-width: 100%;
+  white-space: nowrap;
+  animation: cl-write 0.9s ease-in-out both;
+}
+
+/* P.S. — extra room to write, on faint ruled lines */
+.cl-ps {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0 12px;
+  align-items: start;
+  margin-top: 6px;
+}
+.cl-ps-lbl {
+  font-family: var(--cl-serif);
+  font-weight: 600;
+  font-size: var(--cl-copy);
+  line-height: var(--cl-lh);
+  color: var(--cl-red);
+}
+.cl-psfield .cl-mirror {
+  min-height: calc(var(--cl-lh) * 2);
+}
+.cl-psfield {
+  background-image: repeating-linear-gradient(180deg, transparent 0 calc(var(--cl-lh) - 9px), rgba(10, 10, 10, 0.1) calc(var(--cl-lh) - 9px) calc(var(--cl-lh) - 8px), transparent calc(var(--cl-lh) - 8px) var(--cl-lh));
+}
+
+/* honeypot */
+.cl-hp {
+  position: absolute !important;
+  left: -9999px !important;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+}
+
+/* footer: clip a brief + send */
+.cl-foot {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 22px;
+}
+.cl-clipwrap {
+  position: relative;
+  min-width: 0;
+}
+.cl-file {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  overflow: hidden;
+}
+.cl-clip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 4px 10px;
+  border-bottom: 1px dashed rgba(10, 10, 10, 0.3);
+  font: 500 13px var(--cl-sans);
+  color: #3d3d3d;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.cl-clip:hover {
+  color: var(--cl-ink);
+  border-bottom-color: var(--cl-ink);
+}
+.cl-file:focus-visible + .cl-clip {
+  outline: 2px solid var(--cl-red);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+.cl-clip svg {
+  width: 17px;
+  height: 17px;
+  color: var(--cl-red);
+}
+.cl-clip em {
+  margin-left: 2px;
+  font: 500 10px var(--cl-mono);
+  font-style: normal;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #9a9a9a;
+}
+.cl-drop {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  flex: none;
+  height: 50px;
+  padding: 0 24px;
+  border: 0;
+  border-radius: 999px;
+  background: linear-gradient(180deg, #1a1a1a, #050505);
+  color: #fff;
+  font: 600 13px var(--cl-sans);
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  box-shadow: 0 14px 30px -10px rgba(0, 0, 0, 0.45);
+  transition: background 0.35s ease, box-shadow 0.35s ease, transform 0.2s ease;
+}
+.cl-drop svg {
+  width: 16px;
+  height: 16px;
+}
+.cl-drop:active {
+  transform: scale(0.96);
+}
+.cl-drop.is-off {
+  background: linear-gradient(180deg, #c9c9c9, #bababa);
+  box-shadow: none;
+  color: #f7f7f7;
+}
+.cl-drop:focus-visible {
+  outline: 2px solid var(--cl-red);
+  outline-offset: 3px;
+}
+.cl-drop:disabled {
+  cursor: default;
+}
+
+/* clipped brief: hangs from the top edge of the letter */
+.cl-att {
+  position: absolute;
+  right: 112px;
+  top: -66px;
+  z-index: 4;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  max-width: 270px;
+  padding: 12px 34px 12px 14px;
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: 0 14px 30px -14px rgba(10, 10, 10, 0.45), 0 0 0 1px rgba(10, 10, 10, 0.06);
+  transform: rotate(-4deg);
+  transform-origin: 70% 0;
+  animation: cl-clip-in 0.65s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+@keyframes cl-clip-in {
+  from {
+    opacity: 0;
+    transform: translateY(-30px) rotate(-24deg);
+  }
+  to {
+    opacity: 1;
+    transform: rotate(-4deg);
+  }
+}
+.cl-att-clip {
+  position: absolute;
+  left: 50%;
+  top: -16px;
+  margin-left: -15px;
+  color: #8f8f8f;
+}
+.cl-att-clip svg {
+  width: 30px;
+  height: 30px;
+  transform: rotate(90deg);
+}
+.cl-att-ext {
+  flex: none;
+  width: 34px;
+  height: 42px;
+  border-radius: 4px;
+  background: #ffe9e6;
+  color: var(--cl-red);
+  font: 700 9px/42px var(--cl-mono);
+  letter-spacing: 0.06em;
+  text-align: center;
+}
+.cl-att-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  min-width: 0;
+}
+.cl-att-meta b {
+  overflow: hidden;
+  font: 600 13px var(--cl-sans);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.cl-att-meta i {
+  font: 500 10px var(--cl-mono);
+  font-style: normal;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--cl-mute);
+}
+.cl-att-x {
+  position: absolute;
+  right: 6px;
+  top: 6px;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--cl-mute);
+  font: 400 18px/24px var(--cl-sans);
+  cursor: pointer;
+}
+.cl-att-x:hover {
+  background: rgba(10, 10, 10, 0.06);
+  color: var(--cl-ink);
+}
+.cl-att-x:focus-visible {
+  outline: 2px solid var(--cl-red);
+}
+
+/* ---------- the envelope the letter folds into ---------- */
+.cl-env {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  visibility: hidden;
+  border-radius: 6px;
+  background: linear-gradient(160deg, #fdfdfc, #efefed);
+  box-shadow: 0 30px 50px -24px rgba(10, 10, 10, 0.45);
+  pointer-events: none;
+}
+.cl-env::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(to top right, transparent calc(50% - 1px), rgba(10, 10, 10, 0.07) 50%, transparent calc(50% + 1px)) left / 50% 100% no-repeat,
+    linear-gradient(to top left, transparent calc(50% - 1px), rgba(10, 10, 10, 0.07) 50%, transparent calc(50% + 1px)) right / 50% 100% no-repeat;
+}
+.cl-flap {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 58%;
+  clip-path: polygon(0 0, 100% 0, 50% 100%);
+  background: linear-gradient(180deg, #f6f6f4, #e8e8e6);
+  filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.08));
+}
+.cl-addr {
+  position: absolute;
+  left: 34px;
+  bottom: 28px;
+  font: 500 10px/1.8 var(--cl-mono);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--cl-mute);
+}
+.cl-addr b {
+  display: block;
+  margin-bottom: 8px;
+  font: 400 26px/1 var(--cl-script);
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--cl-ink);
+}
+.cl-stamp-sm {
+  position: absolute;
+  right: 20px;
+  top: 18px;
+  width: 54px;
+  height: 64px;
+  padding: 6px;
+  z-index: 2;
+}
+.cl-stamp-sm svg {
+  width: 20px;
+  height: 20px;
+}
+.cl-seal {
+  position: absolute;
+  left: 50%;
+  top: 58%;
+  width: 34px;
+  height: 34px;
+  margin: -17px 0 0 -17px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #ff7a6e, #e8382a 60%, #b5281d);
+  box-shadow: 0 3px 6px rgba(120, 20, 10, 0.35);
+  color: #fff;
+}
+.cl-seal svg {
+  width: 16px;
+  height: 16px;
+}
+.cl-postmark {
+  position: absolute;
+  right: -10px;
+  top: -14px;
+  z-index: 5;
+  width: 104px;
+  height: 104px;
+  display: grid;
+  place-items: center;
+  visibility: hidden;
+  border: 2px solid rgba(10, 10, 10, 0.72);
+  border-radius: 50%;
+  pointer-events: none;
+}
+.cl-postmark::before {
+  content: "";
+  position: absolute;
+  inset: 7px;
+  border: 1px solid rgba(10, 10, 10, 0.6);
+  border-radius: 50%;
+}
+.cl-postmark span {
+  font: 700 8.5px/1.35 var(--cl-mono);
+  letter-spacing: 0.1em;
+  text-align: center;
+  color: rgba(10, 10, 10, 0.78);
+}
+.cl-postmark i {
+  position: absolute;
+  left: -60px;
+  top: 44px;
+  width: 70px;
+  height: 16px;
+  background: repeating-linear-gradient(180deg, rgba(10, 10, 10, 0.7) 0 2px, transparent 2px 5px);
+}
+
+/* ---------- letterbox slot ---------- */
+.cl-box {
+  position: relative;
+  width: min(540px, 82%);
+  margin-top: 56px;
+}
+.cl-slot {
+  position: relative;
+  height: 30px;
+  border-radius: 12px;
+  background: linear-gradient(180deg, #dadada, #f7f7f7 40%, #cacaca);
+  box-shadow: 0 10px 24px -12px rgba(0, 0, 0, 0.4), inset 0 1px 0 #fff;
+}
+.cl-slot::before {
+  content: "";
+  position: absolute;
+  left: 14px;
+  right: 14px;
+  top: 9px;
+  height: 12px;
+  border-radius: 6px;
+  background: linear-gradient(180deg, #0c0c0c, #2a2a2a);
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.6);
+}
+.cl-glow {
+  position: absolute;
+  left: 14px;
+  right: 14px;
+  top: 9px;
+  height: 12px;
+  border-radius: 6px;
+  opacity: 0;
+  background: linear-gradient(90deg, transparent, rgba(255, 68, 51, 0.85), transparent);
+  transition: opacity 0.35s ease;
+}
+.cl-desk[data-hot] .cl-glow {
+  opacity: 0.6;
+}
+.cl-desk[data-swallowing] .cl-glow {
+  opacity: 1;
+}
+.cl-slot-lbl {
+  position: relative;
+  height: 12px;
+  margin-top: 12px !important;
+  text-align: center;
+  font: 500 10px/1 var(--cl-mono);
+  letter-spacing: 0.32em;
+}
+.cl-slot-name,
+.cl-slot-hint {
+  position: absolute;
+  left: 0;
+  right: 0;
+  transition: opacity 0.3s ease;
+}
+.cl-slot-name {
+  color: var(--cl-mute);
+}
+.cl-slot-hint {
+  opacity: 0;
+  font-weight: 600;
+  color: var(--cl-red);
+}
+.cl-desk[data-hot] .cl-slot-name {
+  opacity: 0;
+}
+.cl-desk[data-hot] .cl-slot-hint {
+  opacity: 1;
+}
+
+/* ---------- the next letter: sealed, waiting above the delivered message ----------
+   Larger screens only (hidden in the stacked layout). letterMotion.js places it
+   and plays the open; the inner wrapper carries the hover lift so GSAP's
+   transforms on the button itself never fight the CSS ones. */
+.cl-next {
+  position: absolute;
+  left: 50%;
+  z-index: 3;
+  width: min(320px, 62%);
+  margin: 0 0 0 calc(min(320px, 62%) / -2);
+  padding: 0;
+  border: 0;
+  background: none;
+  aspect-ratio: 1 / 0.6;
+  visibility: hidden;
+  cursor: pointer;
+  transform-origin: 50% 70%;
+}
+.cl-next-in {
+  position: absolute;
+  inset: 0;
+  display: block;
+  transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.cl-next:hover .cl-next-in,
+.cl-next:focus-visible .cl-next-in {
+  transform: translateY(-8px) rotate(1.5deg);
+}
+.cl-next:focus-visible {
+  outline: 2px solid var(--cl-red);
+  outline-offset: 10px;
+  border-radius: 8px;
+}
+/* the blank sheet inside: hidden behind the pocket until it slides out */
+.cl-next-sheet {
+  position: absolute;
+  left: 7%;
+  right: 7%;
+  top: 6%;
+  height: 86%;
+  z-index: 1;
+  border-radius: 4px;
+  background: var(--cl-paper) repeating-linear-gradient(180deg, transparent 0 17px, rgba(10, 10, 10, 0.07) 17px 18px);
+  background-position: 0 26px;
+  box-shadow: 0 -4px 12px -6px rgba(10, 10, 10, 0.2);
+}
+.cl-next-sheet::before {
+  /* red margin rule, like the letter */
+  content: "";
+  position: absolute;
+  left: 18px;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: rgba(255, 68, 51, 0.3);
+}
+/* the envelope pocket (front) */
+.cl-next-body {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  border-radius: 6px;
+  background: linear-gradient(160deg, #fdfdfc, #efefed);
+  box-shadow: 0 30px 50px -24px rgba(10, 10, 10, 0.45), 0 0 0 1px rgba(10, 10, 10, 0.04);
+  text-align: left;
+}
+.cl-next-body::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(to top right, transparent calc(50% - 1px), rgba(10, 10, 10, 0.07) 50%, transparent calc(50% + 1px)) left / 50% 100% no-repeat,
+    linear-gradient(to top left, transparent calc(50% - 1px), rgba(10, 10, 10, 0.07) 50%, transparent calc(50% + 1px)) right / 50% 100% no-repeat;
+}
+.cl-next-body .cl-addr {
+  left: 26px;
+  bottom: 20px;
+}
+.cl-next .cl-stamp-sm {
+  right: 16px;
+  top: 14px;
+  z-index: 4; /* above the flap */
+}
+/* the flap: hinged at the top; the seal rides on its tip */
+.cl-next-flap {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 58%;
+  z-index: 3;
+}
+.cl-next-tri {
+  position: absolute;
+  inset: 0;
+  clip-path: polygon(0 0, 100% 0, 50% 100%);
+  background: linear-gradient(180deg, #f6f6f4, #e8e8e6);
+  filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.08));
+}
+.cl-seal.cl-next-seal {
+  top: 100%;
+}
+
+/* ---------- delivered ---------- */
+.cl-done {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 18%;
+  z-index: 2;
+  visibility: hidden;
+  padding: 0 20px;
+  text-align: center;
+}
+.cl-done-seal {
+  display: grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  margin: 0 auto 22px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #ff7a6e, #e8382a 60%, #b5281d);
+  box-shadow: 0 8px 18px -6px rgba(181, 40, 29, 0.55);
+  color: #fff;
+}
+.cl-done-seal svg {
+  width: 22px;
+  height: 22px;
+}
+.cl-done-k {
+  font: 500 11px/1 var(--cl-mono);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--cl-red);
+}
+.cl-done-h {
+  margin-top: 18px !important;
+  font-weight: 500;
+  font-size: clamp(48px, 5.8vw, 84px);
+  line-height: 0.95;
+  letter-spacing: -0.05em;
+}
+.cl-done-h em {
+  font-family: var(--cl-script);
+  font-style: normal;
+  font-weight: 400;
+  font-size: 1.15em;
+  letter-spacing: 0;
+  color: var(--cl-red);
+}
+.cl-done-p {
+  max-width: 470px;
+  margin: 22px auto 0 !important;
+  font-size: 17px;
+  line-height: 1.65;
+  color: #3d3d3d;
+}
+.cl-done-p b {
+  font-weight: 600;
+  color: var(--cl-ink);
+  overflow-wrap: anywhere;
+}
+.cl-again {
+  margin-top: 30px;
+  padding: 6px 0;
+  border: 0;
+  border-bottom: 1px solid var(--cl-ink);
+  background: none;
+  font: 500 13px var(--cl-sans);
+  color: var(--cl-ink);
+  cursor: pointer;
+}
+.cl-again:focus-visible {
+  outline: 2px solid var(--cl-red);
+  outline-offset: 4px;
+}
+
+.cl-sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ---------- responsive ---------- */
+@media (max-width: 1100px) {
+  .cl {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr);
+    gap: 40px;
+  }
+  .cl-letter {
+    padding: 36px 36px 24px 58px;
+  }
+  .cl-letter::before {
+    left: 34px;
+  }
+}
+
+@media (max-width: 900px) {
+  /* the sealed next letter is a larger-screen touch */
+  .cl-next {
+    display: none;
+  }
+  .cl {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 48px;
+    padding-top: 96px;
+  }
+  .cl-intro {
+    position: static;
+    padding-top: 0;
+  }
+  .cl-title {
+    font-size: clamp(46px, 11vw, 72px);
+  }
+  .cl-steps {
+    display: none;
+  }
+}
+
+@media (max-width: 560px) {
+  .cl {
+    --cl-copy: 20px;
+    --cl-lh: 40px;
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+  .cl-letter {
+    padding: 28px 18px 20px 30px;
+    transform: rotate(-0.6deg);
+  }
+  .cl-letter::before {
+    left: 16px;
+  }
+  .cl-head {
+    min-height: 0;
+    margin-bottom: 16px;
+  }
+  .cl-stampbox {
+    width: 58px;
+    height: 70px;
+  }
+  .cl-stamp {
+    width: 58px;
+    height: 70px;
+    padding: 6px;
+  }
+  .cl-stamp-in svg {
+    width: 22px;
+    height: 22px;
+  }
+  .cl-stamp-in small {
+    display: none;
+  }
+  .cl-blank > input,
+  .cl-mirror {
+    font-size: var(--cl-copy);
+    line-height: 26px;
+  }
+  .cl-blank.is-multi .cl-mirror,
+  .cl-blank.is-multi > textarea {
+    font-size: 19px;
+  }
+  .cl-pen {
+    font-size: 21px;
+    line-height: 26px;
+  }
+  .cl-pen-below {
+    font-size: 18px;
+  }
+  .cl-sig {
+    font-size: 36px;
+    margin-left: 6px;
+  }
+  .cl-chip span {
+    padding: 8px 12px;
+    font-size: 12.5px;
+  }
+  .cl-foot {
+    flex-direction: column-reverse;
+    align-items: stretch;
+  }
+  .cl-drop {
+    justify-content: center;
+  }
+  .cl-clip {
+    padding-top: 6px;
+  }
+  /* the clipped brief sits in the flow on small screens */
+  .cl-att {
+    position: relative;
+    right: auto;
+    top: auto;
+    margin: 0 0 16px;
+    max-width: 100%;
+  }
+  .cl-postmark {
+    right: 2px;
+    width: 84px;
+    height: 84px;
+  }
+  .cl-postmark i {
+    display: none;
+  }
+}
+
+/* ---------- reduced motion ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .cl-letter {
+    transform: none;
+  }
+  .cl-wet,
+  .cl-pen,
+  .cl-sig,
+  .cl-att {
+    animation: none;
+  }
+  .cl-sheen {
+    display: none;
+  }
+  .cl-chip span,
+  .cl-drop,
+  .cl-glow,
+  .cl-blank,
+  .cl-next-in {
+    transition: none;
+  }
+}

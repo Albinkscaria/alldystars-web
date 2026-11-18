@@ -1,0 +1,425 @@
+/* ==========================================================================
+   Founders — "names as windows"
+   All rules are scoped to .fn. Fonts come from next/font CSS variables
+   (app/fonts.js); the fallbacks keep the section usable without them.
+   Colours follow the site palette: neutral greys, --ink black and the
+   --coral-text accent.
+   ========================================================================== */
+
+.fn {
+  --fn-bg: #f0f0f0; /* site --paper-dim */
+  --fn-ink: #0a0a0a; /* site --ink */
+  --fn-mute: #666666;
+  --fn-red: #ff4433; /* site --coral-text */
+  --fn-line: rgba(10, 10, 10, 0.12);
+  --fn-display: var(--font-anton, "Anton"), Impact, "Arial Narrow Bold", sans-serif;
+  --fn-sans: var(--font-inter, "Inter"), system-ui, -apple-system, "Segoe UI", sans-serif;
+  --fn-serif: var(--font-crimson, "Crimson Text"), Georgia, serif;
+  --fn-mono: var(--font-mono, "JetBrains Mono"), ui-monospace, SFMono-Regular, Menlo, monospace;
+  --fn-pad: clamp(20px, 4.4vw, 64px);
+
+  position: relative;
+  background: var(--fn-bg);
+  color: var(--fn-ink);
+  font-family: var(--fn-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+.fn *,
+.fn *::before,
+.fn *::after {
+  box-sizing: border-box;
+}
+
+.fn-stage {
+  position: relative;
+  height: calc(100vh - var(--fn-offset, 0px));
+  height: calc(100svh - var(--fn-offset, 0px));
+  min-height: 560px;
+  overflow: hidden;
+  isolation: isolate;
+  background: var(--fn-bg);
+}
+
+/* paper grain */
+.fn-stage::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  pointer-events: none;
+  opacity: 0.05;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* ---------- the names (SVG) ---------- */
+.fn-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  overflow: visible;
+  opacity: 0;
+  will-change: transform;
+}
+.fn.is-ready .fn-svg,
+.fn-stage.is-ready .fn-svg {
+  opacity: 1;
+}
+.fn-word {
+  font-family: var(--fn-display);
+  font-weight: 400;
+  letter-spacing: -0.006em;
+  text-rendering: geometricPrecision;
+}
+.fn-base {
+  fill: #1a1a1a;
+}
+
+/* ---------- heading row ---------- */
+.fn-head {
+  position: absolute;
+  left: var(--fn-pad);
+  top: clamp(24px, 5.6vh, 56px);
+  z-index: 3;
+}
+.fn-eyebrow {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font: 500 11px/1 var(--fn-mono);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--fn-red);
+}
+.fn-eyebrow::before {
+  content: "";
+  width: 26px;
+  height: 1px;
+  background: currentColor;
+}
+.fn-title {
+  margin: 14px 0 0;
+  font-weight: 500;
+  font-size: clamp(26px, 2.5vw, 36px);
+  line-height: 1.05;
+  letter-spacing: -0.035em;
+}
+.fn-title em {
+  font-family: var(--fn-serif);
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  color: var(--fn-red);
+}
+.fn-intro {
+  position: absolute;
+  right: var(--fn-pad);
+  top: clamp(30px, 6.4vh, 62px);
+  z-index: 3;
+  margin: 0;
+  max-width: 330px;
+  font-size: 14.5px;
+  line-height: 1.6;
+  color: #454545;
+}
+
+/* ---------- labels beside the names ---------- */
+.fn-meta {
+  position: absolute;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+}
+.fn-meta[hidden] {
+  display: none;
+}
+.fn-num {
+  font-family: var(--fn-serif);
+  font-style: italic;
+  font-size: clamp(44px, 4.4vw, 64px);
+  line-height: 0.8;
+  color: var(--fn-red);
+}
+.fn-meta-role {
+  margin-top: 16px;
+  display: flex;
+  flex-direction: column;
+  font: 500 11px/1.7 var(--fn-mono);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+.fn-meta-role span {
+  color: var(--fn-mute);
+}
+.fn-meta-text {
+  margin-top: 12px;
+  max-width: 250px;
+  font-size: 14px;
+  line-height: 1.55;
+  color: #454545;
+}
+
+/* ---------- open spread ---------- */
+.fn-chapter {
+  position: absolute;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  visibility: hidden;
+}
+.fn-ln {
+  display: block;
+  overflow: hidden;
+  /* room for descenders and italic overhang inside the reveal mask */
+  padding: 0.04em 0.08em 0.08em 0;
+  margin: -0.04em 0 -0.08em;
+}
+.fn-li {
+  display: block;
+  will-change: transform, opacity;
+}
+.fn-kicker {
+  font: 500 11px/1 var(--fn-mono);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--fn-red);
+}
+.fn-name {
+  margin-top: 16px;
+  font-weight: 500;
+  font-size: clamp(40px, 5vw, 72px);
+  line-height: 0.98;
+  letter-spacing: -0.045em;
+}
+.fn-role {
+  margin-top: 12px;
+  font: 500 11px/1.4 var(--fn-mono);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--fn-mute);
+}
+.fn-quote {
+  margin-top: 30px;
+  max-width: 470px;
+  font-family: var(--fn-serif);
+  font-style: italic;
+  font-size: clamp(24px, 2.35vw, 34px);
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+}
+.fn-quote::before {
+  content: "";
+  display: block;
+  width: 40px;
+  height: 2px;
+  margin-bottom: 20px;
+  background: var(--fn-red);
+}
+.fn-bio {
+  margin-top: 20px;
+  max-width: 460px;
+  font-size: clamp(14.5px, 1.15vw, 16.5px);
+  line-height: 1.7;
+  color: #3d3d3d;
+}
+.fn-skills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 18px;
+  margin-top: 26px;
+  padding-top: 14px;
+  max-width: 460px;
+  border-top: 1px solid var(--fn-line);
+}
+.fn-skills span {
+  font: 500 11px/1.2 var(--fn-mono);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.fn-skills span::before {
+  content: "✦ ";
+  color: var(--fn-red);
+}
+/* when a spread doesn't fit, drop the least important lines first */
+.fn-chapter.is-tight .fn-skills-ln,
+.fn-chapter.is-tighter .fn-bio-ln,
+.fn-chapter.is-tightest .fn-quote-ln {
+  display: none;
+}
+
+.fn-caption {
+  position: absolute;
+  z-index: 3;
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  font: 500 10.5px/1 var(--fn-mono);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--fn-mute);
+  white-space: nowrap;
+  visibility: hidden;
+}
+.fn-stage.is-stacked .fn-caption {
+  letter-spacing: 0.12em;
+}
+.fn-caption b {
+  font-weight: 500;
+  color: var(--fn-ink);
+}
+
+/* ---------- bottom bar: stats + founder buttons ---------- */
+.fn-foot {
+  position: absolute;
+  left: var(--fn-pad);
+  right: var(--fn-pad);
+  bottom: 0;
+  height: 74px;
+  z-index: 4;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+.fn-foot::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 1px;
+  background: var(--fn-line);
+}
+.fn-stats {
+  display: flex;
+  gap: 28px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font: 500 11px/1 var(--fn-mono);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--fn-mute);
+}
+.fn-stats b {
+  font-weight: 600;
+  color: var(--fn-ink);
+}
+.fn-stats i {
+  font-style: normal;
+  color: var(--fn-red);
+}
+.fn-pager {
+  display: flex;
+  gap: 6px;
+  margin-left: auto;
+}
+.fn-page {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+  padding: 0 12px;
+  border: 0;
+  border-radius: 999px;
+  background: none;
+  color: var(--fn-mute);
+  font: 500 11px/1 var(--fn-mono);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: color 0.25s ease, background-color 0.25s ease;
+}
+.fn-page i {
+  width: 18px;
+  height: 1px;
+  background: currentColor;
+  transition: width 0.35s cubic-bezier(0.22, 1, 0.36, 1), background-color 0.25s ease;
+}
+.fn-page:hover {
+  color: var(--fn-ink);
+}
+.fn-page[aria-current="true"] {
+  color: var(--fn-ink);
+}
+.fn-page[aria-current="true"] i {
+  width: 34px;
+  background: var(--fn-red);
+}
+.fn-page:focus-visible {
+  outline: 2px solid var(--fn-red);
+  outline-offset: 2px;
+}
+
+.fn-sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ---------- stacked layout: phones and portrait tablets ---------- */
+.fn-stage.is-stacked .fn-intro {
+  display: none;
+}
+.fn-stage.is-stacked .fn-chapter .fn-name {
+  margin-top: 10px;
+  font-size: clamp(30px, 8.4vw, 52px);
+}
+.fn-stage.is-stacked .fn-quote {
+  margin-top: 18px;
+  font-size: clamp(19px, 5vw, 26px);
+}
+.fn-stage.is-stacked .fn-quote::before {
+  margin-bottom: 12px;
+}
+.fn-stage.is-stacked .fn-bio {
+  margin-top: 12px;
+  font-size: 14px;
+  line-height: 1.6;
+}
+.fn-stage.is-stacked .fn-skills {
+  margin-top: 16px;
+}
+@media (min-width: 600px) {
+  .fn-stage.is-stacked .fn-intro {
+    display: block;
+    max-width: 280px;
+  }
+}
+@media (max-width: 599px) {
+  .fn-stats {
+    display: none;
+  }
+  .fn-pager {
+    margin-left: 0;
+    margin-right: auto;
+  }
+  .fn-page:first-child {
+    padding-left: 0;
+  }
+}
+@media (max-width: 899px) {
+  .fn-stats {
+    gap: 18px;
+    letter-spacing: 0.1em;
+  }
+}
+
+/* ---------- reduced motion: no transitions on the controls either ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .fn-page,
+  .fn-page i {
+    transition: none;
+  }
+}

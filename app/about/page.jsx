@@ -1,4 +1,4 @@
-import { crimson, lora, mono } from '../fonts';
+import { anton, crimson, inter, mono } from '../fonts';
 import AboutContent from './AboutContent';
 
 export const metadata = {
@@ -7,5 +7,5 @@ export const metadata = {
 };
 
 export default function AboutPage() {
-	return <AboutContent fontClassName={`${crimson.variable} ${lora.variable} ${mono.variable}`} />;
+	return <AboutContent fontClassName={`${anton.variable} ${crimson.variable} ${inter.variable} ${mono.variable}`} />;
 }

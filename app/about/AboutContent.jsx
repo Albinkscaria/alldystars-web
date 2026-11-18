@@ -3,7 +3,7 @@
 import { useEffect, useRef } from 'react';
 import Header from '@/components/Header/Header';
 import Footer from '@/components/Footer/Footer';
-import FoundersChronicle from './FoundersChronicle';
+import FoundersNames from '@/components/FoundersNames';
 import './About.css';
 
 export default function AboutContent({ fontClassName }) {
@@ -67,7 +67,7 @@ export default function AboutContent({ fontClassName }) {
 
 			<div className="vision-quote reveal">We believe every great idea deserves exceptional design.</div>
 
-			<FoundersChronicle className={fontClassName} />
+			<FoundersNames className={fontClassName} />
 
 			<div className="cta-block reveal">
 				<h2>Begin your ALLDYSTARS<br />Experience Now</h2>
