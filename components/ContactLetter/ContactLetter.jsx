@@ -17,7 +17,7 @@ const SERVICE_SLUGS = {
   "data-analytics": "Data analytics",
   "business-analytics": "Business analytics",
 };
-export const MAX_FILE_BYTES = 8 * 1024 * 1024;
+export const MAX_FILE_BYTES = 4 * 1024 * 1024; // Vercel's request limit is 4.5 MB
 const ACCEPT = ".pdf,.doc,.docx,.ppt,.pptx,.key,.txt,.md,.png,.jpg,.jpeg,.webp,.zip";
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
@@ -26,7 +26,7 @@ const NOTES = {
   email: "← we’ll need this to write back",
   emailBad: "← that doesn’t look like an email",
   idea: "a line or two is plenty — what are you making?",
-  file: "← that file is over 8 MB",
+  file: "← that file is over 4 MB",
   send: "It didn’t go through — please try again.",
 };
 const EMPTY = { name: "", company: "", email: "", idea: "", ps: "" };

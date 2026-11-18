@@ -2,7 +2,7 @@
  * POST /api/contact — receives a letter from the contact page and emails it.
  *
  * Email goes out through Resend's HTTP API (no SDK needed). Set these in .env.local
- * locally, and in Netlify under Site configuration → Environment variables:
+ * locally, and in Vercel under Project → Settings → Environment Variables:
  *   RESEND_API_KEY=re_...
  *   CONTACT_TO=hello@yourdomain.com          (where letters arrive; comma-separate for several)
  *   CONTACT_FROM="AlldyStars <letters@yourdomain.com>"   (a sender on a domain verified in Resend)
@@ -13,7 +13,8 @@
 
 export const runtime = "nodejs";
 
-const MAX_FILE_BYTES = 8 * 1024 * 1024;
+// Vercel functions reject request bodies over 4.5 MB, so attachments stop at 4 MB
+const MAX_FILE_BYTES = 4 * 1024 * 1024;
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 const LIMITS = { name: 120, company: 160, email: 200, idea: 6000, postscript: 4000 };
 // keep in sync with SERVICES in components/ContactLetter/ContactLetter.jsx
@@ -63,7 +64,7 @@ export async function POST(request) {
   let attachment = null;
   const file = form.get("attachment");
   if (file && typeof file === "object" && file.size > 0) {
-    if (file.size > MAX_FILE_BYTES) return json({ ok: false, error: "The attachment is over 8 MB." }, 413);
+    if (file.size > MAX_FILE_BYTES) return json({ ok: false, error: "The attachment is over 4 MB." }, 413);
     const buf = Buffer.from(await file.arrayBuffer());
     attachment = { filename: String(file.name || "brief").slice(0, 120), content: buf.toString("base64") };
   }

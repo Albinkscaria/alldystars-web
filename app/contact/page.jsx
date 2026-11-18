@@ -7,33 +7,6 @@ import ContactLetter from '@/components/ContactLetter';
 import { crimson, inter, mono, script } from '../fonts';
 import './Contact.css';
 
-/**
- * Letters go to Netlify Forms on the live site (registered by public/__forms.html;
- * they appear under Forms in the Netlify dashboard, and email notifications are
- * set up there). In development `next dev` can't receive Netlify forms, so the
- * letter goes to /api/contact, which prints it in the terminal.
- */
-async function sendLetter(formData) {
-	if (process.env.NODE_ENV !== 'production') {
-		const res = await fetch('/api/contact', { method: 'POST', body: formData });
-		return res.ok;
-	}
-	const body = new FormData();
-	body.set('form-name', 'contact');
-	for (const [key, value] of formData.entries()) {
-		if (key === 'services' || key === 'attachment') continue;
-		body.set(key, value);
-	}
-	// Netlify keeps one value per field: send the ticked services as one line
-	body.set('services', formData.getAll('services').join(', '));
-	const file = formData.get('attachment');
-	if (file && typeof file === 'object' && file.size > 0) body.set('attachment', file);
-	const res = await fetch('/__forms.html', { method: 'POST', body });
-	// shows up in the browser console on the live site if Netlify refuses the letter
-	if (!res.ok) console.error(`Contact form: Netlify Forms answered ${res.status}. Check that form detection is enabled under Forms in the Netlify dashboard and the site has been redeployed since.`);
-	return res.ok;
-}
-
 export default function ContactPage() {
 	const dotRef = useRef(null);
 	const labelRef = useRef(null);
@@ -78,7 +51,7 @@ export default function ContactPage() {
 			<Header active="Contact" />
 
 			{/* "Write us a letter": holds the page's <h1> */}
-			<ContactLetter onSubmit={sendLetter} email="hello@alldystars.com"className={`${crimson.variable} ${inter.variable} ${mono.variable} ${script.variable}`} />
+			<ContactLetter email="hello@alldystars.com"className={`${crimson.variable} ${inter.variable} ${mono.variable} ${script.variable}`} />
 
 			<Footer />
 		</div>
