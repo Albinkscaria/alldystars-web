@@ -177,6 +177,15 @@
 .cl-desk[data-locked] {
   justify-content: flex-end;
 }
+/* while folding and posting the letter changes size every frame: drop the
+   costly paper-grain blend layer and the hover sheen so it stays smooth */
+.cl-desk[data-locked] .cl-letter::after,
+.cl-desk[data-locked] .cl-sheen {
+  display: none;
+}
+.cl-desk[data-locked] .cl-letter {
+  box-shadow: 0 30px 50px -24px rgba(10, 10, 10, 0.4);
+}
 /* while it goes through the slot, the envelope passes in front of the slot's top lip
    and is cut off at the dark opening (letterMotion.js clips it there) */
 .cl-desk[data-posting] .cl-letter {

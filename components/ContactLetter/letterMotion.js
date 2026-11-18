@@ -172,9 +172,8 @@ export function createLetterMotion({ desk, letter, content, envelope, flap, seal
       .to(flap, { rotationX: 0, duration: 0.45, ease: "power2.inOut" }, 0.95)
       .fromTo(seal, { autoAlpha: 0, scale: 0 }, { autoAlpha: 1, scale: 1, duration: 0.3, ease: "back.out(2.2)" }, 1.3)
       .fromTo(postmark, { autoAlpha: 0, scale: 1.6, rotation: -14 }, { autoAlpha: 1, scale: 0.88, duration: 0.16, ease: "power2.in" }, 1.55)
-      // carry it over the slot with a little sway
-      .to(letter, { top: env.readyTop, duration: 0.7, ease: "power2.inOut" }, 1.9)
-      .to(letter, { keyframes: { rotation: [0, -2.5, 0] }, duration: 0.7, ease: "sine.inOut" }, 1.9);
+      // carry it straight over the slot (no sway: it read as shaking)
+      .to(letter, { top: env.readyTop, duration: 0.7, ease: "power2.inOut" }, 1.9);
     return { tl, env };
   }
 
@@ -193,6 +192,7 @@ export function createLetterMotion({ desk, letter, content, envelope, flap, seal
    */
   async function post(request) {
     busy = true;
+    gsap.killTweensOf(letter); // a hover tilt still settling must not fight the fold
     letter.classList.remove("is-lit");
     if (reduce()) {
       const ok = await request.catch(() => false);

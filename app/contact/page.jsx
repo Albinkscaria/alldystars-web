@@ -29,6 +29,8 @@ async function sendLetter(formData) {
 	const file = formData.get('attachment');
 	if (file && typeof file === 'object' && file.size > 0) body.set('attachment', file);
 	const res = await fetch('/__forms.html', { method: 'POST', body });
+	// shows up in the browser console on the live site if Netlify refuses the letter
+	if (!res.ok) console.error(`Contact form: Netlify Forms answered ${res.status}. Check that form detection is enabled under Forms in the Netlify dashboard and the site has been redeployed since.`);
 	return res.ok;
 }
 
