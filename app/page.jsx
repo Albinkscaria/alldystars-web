@@ -1,13 +1,13 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import Link from 'next/link';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Header from '@/components/Header/Header';
 import Footer from '@/components/Footer/Footer';
 import Preloader from '@/components/Preloader/Preloader';
-import LoopingVideo from '@/components/LoopingVideo/LoopingVideo';
+import HeroDotPrint from '@/components/HeroDotPrint';
 import ServicesDots from '@/components/ServicesDots';
 import { crimson, inter, mono } from './fonts';
 import './Home.css';
@@ -41,7 +41,6 @@ const process = [
 export default function HomePage() {
 	const dotRef = useRef(null);
 	const labelRef = useRef(null);
-	const [heroReady, setHeroReady] = useState(false);
 
 	useEffect(() => {
 		const io = new IntersectionObserver((entries) => {
@@ -144,7 +143,7 @@ export default function HomePage() {
 
 	return (
 		<div className="home-page">
-			<Preloader onExitStart={() => setHeroReady(true)} />
+			<Preloader />
 			<div className="cursor-dot" ref={dotRef}></div>
 			<div className="cursor-label" ref={labelRef}></div>
 			<svg className="grain" width="100%" height="100%">
@@ -154,46 +153,10 @@ export default function HomePage() {
 
 			<Header active="Home" />
 
-			<section className="hero" id="home">
-				<div className="hero-video-wrap" aria-hidden="true">
-					<LoopingVideo
-						src="/video/landing_page.mp4"
-						className="hero-video"
-						onError={(e) => console.error('hero video failed to load/decode:', e.currentTarget.error)}
-					/>
-					<div className="hero-video-scrim" />
-				</div>
-
-				<div className="hero-shapes" aria-hidden="true">
-					<div className="hero-shape hero-shape-triangle"></div>
-					<div className="hero-shape hero-shape-circle-outline"></div>
-					<div className="hero-shape hero-shape-ring"></div>
-					<div className="hero-shape hero-shape-circle-fill"></div>
-					<div className="hero-swatch swatch-coral"><span className="swatch-dot"></span>Coral</div>
-					<span className="hero-tag-pill tag-1">01 — Brand</span>
-
-					<div className="hero-shape hero-shape-plus">+</div>
-					<div className="hero-shape hero-shape-square-fill"></div>
-					<div className="hero-swatch swatch-indigo"><span className="swatch-dot"></span>Indigo</div>
-					<div className="hero-shape hero-shape-dash"></div>
-					<div className="hero-shape hero-shape-square-outline"></div>
-					<span className="hero-tag-pill tag-2">05 — Motion</span>
-				</div>
-
-				<div className="hero-content">
-					<div className="hero-eyebrow reveal"><span>Brand · Web · Print · Motion</span></div>
-					<h1 className={`hero-headline${heroReady ? ' hero-ready' : ''}`}>
-						<span className="write-line" style={{ animationDelay: '0s' }}>We turn ideas into</span>
-						<span className="write-line" style={{ animationDelay: '.55s' }}><span className="hero-script">visually stunning</span></span>
-						<span className="write-line" style={{ animationDelay: '1.1s' }}>designs.</span>
-					</h1>
-					<p className="hero-subtext reveal">A creative studio that turns ambitious ideas into brands, sites, and campaigns people actually remember.</p>
-					<div className="hero-cta-row reveal">
-						<Link href="/contact" className="hero-btn-primary">Start a project →</Link>
-						<Link href="/projects" className="hero-btn-secondary">View our work</Link>
-					</div>
-				</div>
-			</section>
+			{/* dot-matrix hero: the cursor prints a hidden artwork (replaces the background video) */}
+			<div id="home">
+				<HeroDotPrint className={mono.variable} />
+			</div>
 
 			<div className="marquee-wrap marquee-strip">
 				<div className="marquee">

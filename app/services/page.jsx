@@ -3,7 +3,7 @@
 import { useEffect, useRef } from 'react';
 import Header from '@/components/Header/Header';
 import Footer from '@/components/Footer/Footer';
-import LoopingVideo from '@/components/LoopingVideo/LoopingVideo';
+import HeroDotPrint from '@/components/HeroDotPrint';
 import ServicesCanvas from '@/components/ServicesCanvas';
 import { crimson, inter, mono } from '../fonts';
 import './Services.css';
@@ -62,27 +62,22 @@ export default function ServicesPage() {
 
 			<Header active="Services" />
 
-			<section className="page-hero">
-				<div className="page-hero-video-wrap" aria-hidden="true">
-					<LoopingVideo
-						src="/video/service_page.mp4"
-						className="page-hero-video"
-						onError={(e) => console.error('services hero video failed to load/decode:', e.currentTarget.error)}
-					/>
-					<div className="page-hero-video-scrim" />
-				</div>
-
-				<div className="eyebrow reveal">Services — Full Index</div>
-				<h1>
-					<span className="write-line" style={{ animationDelay: '0s' }}>Every way we turn</span>
-					<span className="write-line" style={{ animationDelay: '.55s' }}><span className="script">ideas</span> into work</span>
-					<span className="write-line" style={{ animationDelay: '1.1s' }}>you can ship.</span>
-				</h1>
-				<p className="reveal">Five disciplines, each broken down into the exact deliverables you can brief us on. No package tiers, no guesswork — pick a category, see what&rsquo;s inside.</p>
-				<div className="index-nav reveal">
+			{/* dot-matrix hero (replaced the background video); the index links jump to each artboard below */}
+			<HeroDotPrint
+				className={mono.variable}
+				eyebrow="Services — Full Index"
+				titleTop="Every way we turn"
+				titleScript="ideas into work"
+				scriptWidth={9.02}
+				titleBottom="you can ship."
+				lede="Five disciplines, each broken down into the exact deliverables you can brief us on. No package tiers, no guesswork — pick a category, see what’s inside."
+				primary={null}
+				secondary={null}
+			>
+				<nav className="index-nav" aria-label="Services">
 					{categories.map(c => <a key={c.id} href={`#${c.id}`} onClick={() => { if (window.location.hash === `#${c.id}`) window.dispatchEvent(new HashChangeEvent('hashchange')); }}>{c.n} {c.t}</a>)}
-				</div>
-			</section>
+				</nav>
+			</HeroDotPrint>
 
 			{/* the five disciplines as a live design canvas, pinned and scrubbed by scroll;
 			    the index links above (#brand, #web, …) jump to each artboard */}
