@@ -9,6 +9,7 @@ import Footer from '@/components/Footer/Footer';
 import Preloader from '@/components/Preloader/Preloader';
 import HeroDotPrint from '@/components/HeroDotPrint';
 import ServicesDots from '@/components/ServicesDots';
+import ManifestoCards from '@/components/ManifestoCards';
 import { crimson, inter, mono } from './fonts';
 import './Home.css';
 
@@ -158,18 +159,8 @@ export default function HomePage() {
 				<HeroDotPrint className={mono.variable} />
 			</div>
 
-			<div className="marquee-wrap marquee-strip">
-				<div className="marquee">
-					{Array(2).fill(0).map((_, i) => (
-						<span key={i}>Design<span className="x">—</span>Brand<span className="x">—</span>Creative<span className="x">—</span>Visual<span className="x">—</span>Strategy<span className="x">—</span>Graphic Design<span className="x">—</span></span>
-					))}
-				</div>
-			</div>
-
-			<section className="statement">
-				<div><div className="big-num reveal">01 / MANIFESTO</div><h2 className="reveal">Design Beyond Aesthetics. Business Beyond Expectations.</h2></div>
-				<div className="copy reveal reveal-delay-1"><p>We create brands, digital experiences, and visual communications that don&rsquo;t just look exceptional — they solve problems, build trust, and accelerate business growth. Every pixel, every interaction, and every detail is crafted with purpose, ensuring your brand stands out in an increasingly competitive world.</p></div>
-			</section>
+			{/* "Every card has two sides": front = aesthetics, back = business */}
+			<ManifestoCards className={mono.variable} />
 
 			<ServicesDots className={`${crimson.variable} ${inter.variable} ${mono.variable}`} />
 

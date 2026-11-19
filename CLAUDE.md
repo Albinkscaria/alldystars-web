@@ -29,9 +29,21 @@ Studio site for alldystars, built with Next.js 16 App Router, React 18, plain CS
   Copy the pattern in `components/ServicesCanvas/ServicesCanvas.jsx`.
 - **No transforms on page wrappers:** never put a `transform` on `.page-transition` or another ancestor of fixed or pinned elements.
 - **Sideways overflow:** use `overflow-x: clip` (not `hidden`) for sideways bleed, so sticky and pinned sections keep working.
-- **Scoped CSS:** each component scopes its CSS under one prefix (`.sc-`, `.sd-`, `.fn-`, `.cl-`, `.hdp-`). Keep new styles scoped the same way.
+- **Scoped CSS:** each component scopes its CSS under one prefix (`.sc-`, `.sd-`, `.fn-`, `.cl-`, `.hdp-`, `.mc-`, `.pa-`). Keep new styles scoped the same way.
 - **Responsive:** every visual change must work from 320 px phones to 2560 px screens, including phones held sideways. Check for sideways overflow and overlapping text.
+- **React 19 under Next 16:** `inert` and other boolean DOM props take `true`/`false`, not `""`.
+- **Outside code:** when the user supplies components, read them fully first. Adapt them to the site:
+  - **Routes:** the Work page is `/projects`, not `/work`.
+  - **Content:** use the site's own copy and its five disciplines (brand, web, graphic, data, business).
+  - **Fonts:** Open Sauce Sans and Aniyah, with the section fonts from `app/fonts.js`.
+  - **Layout:** clear the fixed header.
+  - **Links:** never leave a link pointing at a page that doesn't exist.
+- **Reduced motion:** every animated section turns off under `prefers-reduced-motion`, and many Windows PCs report it (Animation effects off). Ask before changing that policy.
 - **Read before using Next APIs:** check `node_modules/next/dist/docs/` before using any Next.js API (see AGENTS.md).
+
+## Work page content
+- **Where:** projects live in `components/ProjectsArchive/projects.js`.
+- **Live files:** each `live` file needs `href: "/projects/<id>"`; `app/projects/[slug]/page.jsx` builds its case-study page.
 
 ## Contact form
 - **Live sender:** EmailJS from the browser when the `NEXT_PUBLIC_EMAILJS_*` variables are set. Otherwise it uses `app/api/contact/route.js` (Resend), which prints letters to the terminal in development.

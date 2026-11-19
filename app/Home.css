@@ -2,32 +2,6 @@
    Its copy starts below the fixed site header (~95px at every width). ---- */
 .home-page .hdp{ --hdp-top:95px; }
 
-.home-page .statement{
-  padding:90px 5vw 70px; display:grid; grid-template-columns:0.55fr 1fr; gap:40px; align-items:center;
-  position:relative; overflow:hidden;
-  background-image:url('/images/services/page_two.png');
-  background-size:cover; background-position:center; background-repeat:no-repeat;
-}
-/* the source image clusters its black shapes in the corners — a plain
-   cover fit puts one of them directly behind the headline, killing
-   contrast. This scrim washes the text column back toward white while
-   tapering off before the paper's interesting details (sphere, glass
-   ridges) on the right, which sit clear of any text anyway. */
-.home-page .statement::before{
-  content:''; position:absolute; inset:0; z-index:0;
-  background:linear-gradient(90deg, rgba(255,255,255,0.92) 0%, rgba(255,255,255,0.88) 40%, rgba(255,255,255,0.35) 65%, rgba(255,255,255,0) 85%);
-}
-.home-page .statement > *{ position:relative; z-index:1; }
-.home-page .statement .big-num{ font-family:'Open Sauce Sans',sans-serif; font-size:var(--text-caption); color:var(--coral-text); letter-spacing:.1em; }
-.home-page .statement h2{ font-family:'Open Sauce Sans',sans-serif; font-size:var(--text-hero); line-height:1.05; letter-spacing:-0.01em; margin:14px 0 0; font-weight:400; }
-.home-page .statement p{ font-size:var(--text-body); line-height:1.7; color:var(--ink-soft); margin:0; max-width:480px; }
-@media (max-width:1100px){
-  /* the two columns are narrow here and the art's sphere/glass ridges land
-     under the copy: keep the wash strong across the text, fading only at the edge */
-  .home-page .statement::before{ background:linear-gradient(90deg, rgba(255,255,255,0.93) 0%, rgba(255,255,255,0.9) 70%, rgba(255,255,255,0.6) 100%); }
-}
-@media (max-width:860px){ .home-page .statement{ grid-template-columns:1fr; padding:90px 6vw 50px; } }
-
 .home-page .tech{ padding:100px 5vw 30px; }
 /* the row always spans the full content width: --cols cards per row,
    each sized to share the width equally, and a short last row centered

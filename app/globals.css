@@ -110,8 +110,8 @@ a{ color:inherit; }
    non-none transform on an ancestor turns it into the containing block
    for position:fixed descendants, unpinning the header from the viewport. */
 .page-transition{ animation:page-fade-in .5s ease both; }
-/* Decorative pieces deliberately bleed past the screen edge (the tilted
-   marquee strip, blurred glows). html/body overflow-x:hidden hides them on
+/* Decorative pieces deliberately bleed past the screen edge (blurred
+   glows, tilted cards). html/body overflow-x:hidden hides them on
    desktop, but iOS Safari still lets the page pan sideways. clip (unlike
    hidden) doesn't create a scroll container, so sticky/pinned sections
    keep working; browsers without clip just keep the old behaviour. */
@@ -340,13 +340,3 @@ a{ color:inherit; }
 .footer-bottom{ display:flex; justify-content:space-between; margin-top:40px; padding-top:24px; border-top:1px solid rgba(250,250,247,0.15); font-family:'Open Sauce Sans',sans-serif; font-size:var(--fs-eyebrow); color:rgba(250,250,247,0.55); flex-wrap:wrap; gap:10px; }
 .footer-bottom a{ color:rgba(250,250,247,0.55); }
 
-/* ==================== SHARED MARQUEE ==================== */
-.marquee-wrap{ overflow:hidden; padding:22px 0; }
-.marquee{ display:flex; width:max-content; animation:marquee 30s linear infinite; }
-.marquee.reverse{ animation-direction:reverse; animation-duration:40s; }
-.marquee-wrap:hover .marquee{ animation-play-state:paused; }
-.marquee span{ font-family:'Open Sauce Sans',sans-serif; font-size:var(--fs-heading); white-space:nowrap; padding:0 28px; font-weight:400; }
-.marquee span.x{ color:rgba(255,255,255,0.55); font-family:'Open Sauce Sans',sans-serif; }
-.marquee span.dash{ color:rgba(255,255,255,0.55); }
-@keyframes marquee{ from{ transform:translateX(0); } to{ transform:translateX(-50%); } }
-.marquee-strip{ background:var(--ink); color:var(--paper); transform:rotate(-1.2deg); margin:60px -3vw; box-shadow:0 20px 60px rgba(0,0,0,0.15); }

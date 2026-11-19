@@ -1,0 +1,482 @@
+/* ==========================================================================
+   Manifesto — "Every card has two sides"
+   The card stage is sized with container query units (cqi), so the
+   composition keeps its proportions at every width.
+   Site palette (neutral greys, --ink, --coral-text) and site fonts:
+   Open Sauce Sans, Aniyah for the script words, JetBrains Mono for labels.
+   ========================================================================== */
+
+.mc {
+  --mc-red: #ff4433; /* site --coral-text */
+  --mc-ink: #0a0a0a; /* site --ink */
+  --mc-paper: #fbfbfa;
+  --mc-bg: #ededed;
+  --mc-muted: #666666;
+  --mc-faint: #8a8a8a;
+
+  --mc-display: "Open Sauce Sans", -apple-system, "Segoe UI", sans-serif;
+  --mc-script: "Aniyah", "Snell Roundhand", cursive;
+  --mc-sans: "Open Sauce Sans", -apple-system, "Segoe UI", sans-serif;
+  --mc-mono: var(--font-mono, "JetBrains Mono"), ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  --mc-ease: cubic-bezier(0.22, 1, 0.36, 1);
+
+  position: relative;
+  box-sizing: border-box;
+  overflow-x: clip;
+  background:
+    radial-gradient(60% 70% at 72% 55%, rgba(255, 255, 255, 0.75), rgba(255, 255, 255, 0) 70%),
+    var(--mc-bg);
+  color: var(--mc-ink);
+  font-family: var(--mc-sans);
+  -webkit-font-smoothing: antialiased;
+  padding: clamp(72px, 10vw, 140px) 0;
+}
+.mc *,
+.mc *::before,
+.mc *::after {
+  box-sizing: border-box;
+}
+
+.mc__inner {
+  width: min(100% - 2 * clamp(20px, 6.6vw, 96px), 1440px);
+  margin-inline: auto;
+  display: grid;
+  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1fr);
+  align-items: center;
+  gap: clamp(24px, 3vw, 48px);
+}
+
+/* ---------- copy ---------- */
+.mc__copy {
+  /* the headline's script words are sized from this column's width */
+  container-type: inline-size;
+}
+.mc__kicker {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  font: 500 12px/1 var(--mc-mono);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--mc-red);
+}
+.mc__kicker::after {
+  content: "";
+  width: 60px;
+  height: 1px;
+  background: currentColor;
+  opacity: 0.5;
+}
+.mc__title {
+  margin: 30px 0 0;
+  font: 400 clamp(40px, 5vw, 80px) / 0.98 var(--mc-display);
+  /* "Business beyond" is ~7.6em wide: never wider than the copy column */
+  font-size: min(clamp(40px, 5vw, 80px), calc(100cqi / 7.9));
+  letter-spacing: -0.05em;
+}
+.mc__line {
+  display: block;
+  white-space: nowrap;
+  /* room for script ascenders/descenders while lines are masked */
+  overflow: hidden;
+  padding: 0.04em 0 0.06em;
+  margin: -0.04em 0 -0.06em;
+}
+.mc__line-in {
+  display: block;
+}
+/* Aniyah's swashes reach far above and below the letters: give the masked
+   line generous room vertically and a little sideways */
+.mc__line--script {
+  padding: 0.34em 0.3em 0.4em 0.1em;
+  margin: -0.3em -0.3em -0.28em -0.1em;
+}
+.mc__line--script .mc__line-in {
+  font-family: var(--mc-script);
+  font-style: normal;
+  font-weight: 400;
+  /* Aniyah runs ~0.62em per letter: never wider than the copy column */
+  font-size: min(1.18em, calc(100cqi / var(--mc-script-w, 8)));
+  line-height: 1;
+  letter-spacing: 0;
+  color: var(--mc-red);
+  padding-left: 0.02em;
+}
+.mc__body {
+  margin: 30px 0 0;
+  max-width: 470px;
+  font: 400 16px/1.7 var(--mc-sans);
+  color: #454545;
+}
+.mc__body strong {
+  color: var(--mc-ink);
+  font-weight: 600;
+}
+
+/* ---------- stage ---------- */
+.mc__stage {
+  position: relative;
+  margin: 0;
+  container-type: inline-size;
+  width: 100%;
+  aspect-ratio: 760 / 700;
+  perspective: 1600px;
+}
+
+.mc-card {
+  position: absolute;
+  left: var(--x);
+  top: var(--y);
+  width: var(--w);
+  height: var(--h);
+  transform: rotate(var(--rot));
+  transform-style: preserve-3d;
+}
+.mc-card--front {
+  --x: 2.6cqi;
+  --y: 4cqi;
+  --w: 68.4cqi;
+  --h: 39.5cqi;
+  --rot: -8deg;
+  z-index: 1;
+}
+.mc-card--back {
+  --x: 25cqi;
+  --y: 50cqi;
+  --w: 73.6cqi;
+  --h: 42cqi;
+  --rot: 5deg;
+  z-index: 2;
+}
+
+.mc-card__tilt {
+  width: 100%;
+  height: 100%;
+  transform: rotateX(var(--mc-rx, 0deg)) rotateY(var(--mc-ry, 0deg));
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+.mc-card__face {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: 1.6cqi;
+  overflow: hidden;
+}
+
+/* FRONT — matte black, painted red edge, moving sheen */
+.mc-front {
+  background: linear-gradient(135deg, #1c1c1c, #0a0a0a 60%);
+  color: #fff;
+  box-shadow:
+    0 0.3cqi 0 0.55cqi var(--mc-red),
+    0 6.5cqi 8cqi -3.2cqi rgba(0, 0, 0, 0.5);
+}
+.mc-front::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(115deg, transparent 32%, rgba(255, 255, 255, 0.09) 46%, transparent 60%);
+  background-size: 220% 220%;
+  background-position: var(--mc-gx, 50%) var(--mc-gy, 50%);
+  border-radius: inherit;
+}
+.mc-front__star {
+  position: absolute;
+  left: 6.4%;
+  top: 14%;
+  width: 11.5%;
+  aspect-ratio: 1;
+  background: var(--mc-red);
+  clip-path: polygon(50% 0, 62% 38%, 100% 50%, 62% 62%, 50% 100%, 38% 62%, 0 50%, 38% 38%);
+}
+.mc-front__script {
+  position: absolute;
+  right: 7.6%;
+  top: 13%;
+  font: 400 4.6cqi / 1 var(--mc-script);
+  color: var(--mc-red);
+  white-space: nowrap;
+}
+.mc-front__name {
+  position: absolute;
+  left: 6.4%;
+  bottom: 17%;
+  font: 700 7.1cqi / 1 var(--mc-sans);
+  letter-spacing: -0.06em;
+}
+.mc-front__line {
+  position: absolute;
+  left: 6.6%;
+  bottom: 9%;
+  font: 600 1.32cqi / 1 var(--mc-mono);
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--mc-faint);
+}
+
+/* BACK — paper stock, the results */
+.mc-back {
+  background: var(--mc-paper);
+  box-shadow:
+    0 6.5cqi 8cqi -3.2cqi rgba(0, 0, 0, 0.4),
+    0 0 0 1px rgba(0, 0, 0, 0.05);
+  padding: 4.5cqi 5.3cqi;
+  display: flex;
+  flex-direction: column;
+}
+.mc-back__head {
+  display: flex;
+  justify-content: space-between;
+  font: 600 1.32cqi / 1 var(--mc-mono);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--mc-faint);
+}
+.mc-back__rows {
+  list-style: none;
+  margin: 0.8cqi 0 0;
+  padding: 0;
+}
+.mc-row {
+  display: grid;
+  grid-template-columns: 19.7cqi 1fr 2.6cqi;
+  align-items: baseline;
+  padding: 1.6cqi 0;
+  border-bottom: 1px solid rgba(10, 10, 10, 0.1);
+}
+.mc-row__label {
+  font: 600 1.32cqi / 1 var(--mc-mono);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--mc-faint);
+}
+.mc-row__value {
+  font: 400 2.9cqi / 1 var(--mc-display);
+  letter-spacing: -0.03em;
+}
+.mc-row__mark {
+  justify-self: end;
+  align-self: center;
+  width: 2.2cqi;
+  height: 2.2cqi;
+  fill: none;
+  stroke: var(--mc-red);
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.mc-row__mark path {
+  stroke-dasharray: 24;
+  stroke-dashoffset: 0;
+}
+.mc-back__foot {
+  margin-top: auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 2cqi;
+}
+.mc-back__note {
+  font: 600 1.32cqi / 1.4 var(--mc-mono);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--mc-faint);
+}
+.mc-back__script {
+  font: 400 3.4cqi / 1 var(--mc-script);
+  color: var(--mc-red);
+  white-space: nowrap;
+  padding: 0 0.4cqi 0.6cqi 0.2cqi;
+}
+
+/* labels */
+.mc-label {
+  position: absolute;
+  margin: 0;
+  font: 400 clamp(17px, 3.2cqi, 24px) / 1.1 var(--mc-display);
+  letter-spacing: -0.03em;
+  color: var(--mc-ink);
+}
+.mc-label span {
+  display: block;
+  margin-bottom: 6px;
+  font: 600 10px/1.6 var(--mc-mono);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--mc-muted);
+}
+.mc-label::before {
+  content: "";
+  display: block;
+  width: 40px;
+  height: 1px;
+  background: var(--mc-ink);
+  margin-bottom: 10px;
+}
+.mc-label--front {
+  left: 86cqi;
+  top: 2.6cqi;
+}
+.mc-label--back {
+  left: 2.6cqi;
+  top: 64cqi;
+  color: var(--mc-red);
+}
+
+.mc-visually-hidden {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ==========================================================================
+   Entrance (runs once when the section enters the viewport)
+   ========================================================================== */
+@media (prefers-reduced-motion: no-preference) {
+  .mc .mc__kicker,
+  .mc .mc__body {
+    transition:
+      opacity 0.9s var(--mc-ease),
+      transform 0.9s var(--mc-ease);
+  }
+  .mc .mc__line-in {
+    transition: transform 1.1s var(--mc-ease);
+  }
+  .mc .mc-card {
+    transition:
+      opacity 1s var(--mc-ease),
+      transform 1.3s var(--mc-ease);
+  }
+  .mc .mc-label {
+    transition: opacity 0.8s var(--mc-ease);
+  }
+  .mc .mc-row {
+    transition: opacity 0.6s var(--mc-ease);
+  }
+  .mc .mc-row__mark path {
+    transition: stroke-dashoffset 0.6s var(--mc-ease);
+  }
+  .mc .mc-back__script {
+    transition: clip-path 1.1s var(--mc-ease);
+  }
+
+  .mc[data-inview="false"] .mc__kicker,
+  .mc[data-inview="false"] .mc__body {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  .mc[data-inview="false"] .mc__line-in {
+    transform: translateY(130%);
+  }
+  .mc[data-inview="false"] .mc-card--front {
+    opacity: 0;
+    transform: translate(-4cqi, 6cqi) rotate(-16deg);
+  }
+  .mc[data-inview="false"] .mc-card--back {
+    opacity: 0;
+    transform: translate(6cqi, 10cqi) rotate(12deg);
+  }
+  .mc[data-inview="false"] .mc-label,
+  .mc[data-inview="false"] .mc-row {
+    opacity: 0;
+  }
+  .mc[data-inview="false"] .mc-row__mark path {
+    stroke-dashoffset: 24;
+  }
+  .mc[data-inview="false"] .mc-back__script {
+    clip-path: inset(-40% 100% -40% 0);
+  }
+
+  /* stagger */
+  .mc[data-inview="true"] .mc__line:nth-child(2) .mc__line-in { transition-delay: 0.08s; }
+  .mc[data-inview="true"] .mc__line:nth-child(3) .mc__line-in { transition-delay: 0.16s; }
+  .mc[data-inview="true"] .mc__line:nth-child(4) .mc__line-in { transition-delay: 0.24s; }
+  .mc[data-inview="true"] .mc__body { transition-delay: 0.35s; }
+  .mc[data-inview="true"] .mc-card--front { transition-delay: 0.15s; }
+  .mc[data-inview="true"] .mc-card--back { transition-delay: 0.35s; }
+  .mc[data-inview="true"] .mc-label { transition-delay: 0.9s; }
+  .mc[data-inview="true"] .mc-row { transition-delay: calc(0.75s + var(--i) * 0.14s); }
+  .mc[data-inview="true"] .mc-row__mark path { transition-delay: calc(0.95s + var(--i) * 0.14s); }
+  .mc[data-inview="true"] .mc-back__script {
+    clip-path: inset(-40% -5% -40% -5%);
+    transition-delay: 1.3s;
+  }
+
+  /* hover lift (fine pointers) */
+  @media (hover: hover) and (pointer: fine) {
+    .mc .mc-card__face {
+      transition: translate 0.5s var(--mc-ease);
+    }
+    .mc .mc-card:hover .mc-card__face {
+      translate: 0 -0.8cqi;
+    }
+  }
+}
+
+/* ==========================================================================
+   Responsive
+   ========================================================================== */
+
+/* tablet: copy on top, cards below */
+@media (max-width: 1023px) {
+  .mc__inner {
+    grid-template-columns: 1fr;
+    gap: clamp(36px, 6vw, 56px);
+  }
+  .mc__title {
+    font-size: min(clamp(40px, 8.6vw, 76px), calc(100cqi / 7.9));
+  }
+  .mc__stage {
+    max-width: 760px;
+    justify-self: center;
+  }
+}
+
+/* phones: cards stack vertically with less rotation, labels sit between them */
+@media (max-width: 600px) {
+  .mc-card--front {
+    --x: 3cqi;
+    --y: 24cqi;
+    --w: 86cqi;
+    --h: 50cqi;
+    --rot: -5deg;
+  }
+  .mc-card--back {
+    --x: 8cqi;
+    --y: 98cqi;
+    --w: 88cqi;
+    --h: 56cqi;
+    --rot: 3deg;
+  }
+  .mc-front__script { font-size: 5.8cqi; }
+  .mc-front__name { font-size: 9cqi; }
+  .mc-front__line { font-size: 2.2cqi; letter-spacing: 0.18em; }
+  .mc-back { padding: 5.5cqi 6cqi; }
+  .mc-back__head,
+  .mc-row__label,
+  .mc-back__note { font-size: 2.2cqi; letter-spacing: 0.14em; }
+  .mc-row { grid-template-columns: 24cqi 1fr 3.6cqi; padding: 2.4cqi 0; }
+  .mc-row__value { font-size: 4.4cqi; }
+  .mc-row__mark { width: 3.4cqi; height: 3.4cqi; }
+  .mc-back__note { max-width: 30cqi; }
+  .mc-back__script { font-size: 4.6cqi; }
+  .mc-label--front { left: 3cqi; top: 0; }
+  .mc-label--back { left: auto; right: 3cqi; top: 80cqi; text-align: right; }
+  .mc-label--back::before { margin-left: auto; }
+  .mc__stage {
+    aspect-ratio: 100 / 162;
+  }
+  .mc__body {
+    font-size: 15px;
+  }
+}

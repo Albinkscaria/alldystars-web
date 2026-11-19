@@ -1,0 +1,97 @@
+/* Case study page. The hero repeats the archive's zoom end-state (the cover
+   full screen, discipline + title bottom-right) so the hand-off is seamless.
+   The cover's sample poster reads the --pa-* variables, so they're set here. */
+.case-page{
+  --pa-red:#ff4433;
+  --pa-ink:#0a0a0a;
+  --pa-script:"Aniyah", "Snell Roundhand", cursive;
+  --pa-mono:var(--font-mono, "JetBrains Mono"), ui-monospace, monospace;
+  --pa-condensed:var(--font-anton, "Anton"), Impact, "Arial Narrow", sans-serif;
+  --pa-display:"Open Sauce Sans", -apple-system, "Segoe UI", sans-serif;
+}
+
+.case-hero{
+  position:relative;
+  height:100vh; height:100svh; min-height:520px;
+  overflow:hidden;
+  container-type:size; /* the poster is sized in container units */
+  background:#0d0d0d;
+}
+/* a real cover is busy (a website screenshot has its own text): a dark fade
+   from the bottom keeps the title readable over any image */
+.case-hero::after{
+  content:''; position:absolute; inset:0; z-index:1; pointer-events:none;
+  background:linear-gradient(to top, rgba(10,10,10,.92) 0%, rgba(10,10,10,.72) 26%, rgba(10,10,10,0) 58%);
+}
+.case-hero__meta{
+  position:absolute;
+  z-index:2;
+  right:clamp(20px, 6.6vw, 96px);
+  bottom:clamp(40px, 10vh, 120px);
+  left:clamp(20px, 6.6vw, 96px);
+  text-align:right;
+  color:#fff;
+}
+.case-hero__meta p{
+  margin:0;
+  font:600 10.5px/1 var(--pa-mono);
+  letter-spacing:.2em; text-transform:uppercase;
+  color:#9a9a9a;
+}
+.case-hero__title{
+  margin:14px 0 0;
+  font:400 clamp(40px, 6.6vw, 96px)/.92 var(--pa-display);
+  letter-spacing:-.05em;
+}
+
+/* close (×): top-right of the cover, just under the fixed header */
+.case-close{
+  position:absolute; z-index:3;
+  top:calc(95px + clamp(16px, 3vh, 28px)); right:clamp(16px, 4vw, 56px);
+  display:inline-flex; align-items:center; gap:10px;
+  min-height:48px; padding:0 8px 0 18px;
+  border:1px solid rgba(255,255,255,.28); border-radius:999px;
+  background:rgba(10,10,10,.55);
+  -webkit-backdrop-filter:blur(14px) saturate(160%); backdrop-filter:blur(14px) saturate(160%);
+  color:#fff; cursor:pointer;
+  font:600 11px/1 var(--pa-mono); letter-spacing:.2em; text-transform:uppercase;
+  box-shadow:0 10px 30px -12px rgba(0,0,0,.5);
+  transition:background-color .25s ease, transform .3s ease;
+}
+.case-close__x{
+  display:grid; place-items:center; width:34px; height:34px; border-radius:50%;
+  background:var(--pa-red); font:400 22px/1 'Open Sauce Sans', sans-serif; letter-spacing:0;
+  transition:transform .35s ease;
+}
+.case-close:hover{ background:rgba(10,10,10,.75); }
+.case-close:hover .case-close__x{ transform:rotate(90deg); }
+.case-close:focus-visible{ outline:2px solid var(--pa-red); outline-offset:3px; }
+@media (max-width:560px){ .case-close__label{ display:none; } .case-close{ padding:0 6px; } }
+
+.case-body{
+  padding:clamp(72px, 10vw, 140px) clamp(20px, 6.6vw, 96px);
+  max-width:820px;
+}
+.case-body__kicker{
+  margin:0;
+  font:500 12px/1 var(--pa-mono);
+  letter-spacing:.18em; text-transform:uppercase;
+  color:var(--pa-red);
+}
+.case-body__lede{
+  margin:22px 0 0;
+  font-family:'Open Sauce Sans', sans-serif;
+  font-size:var(--fs-heading-sm); line-height:1.4;
+  color:var(--ink-soft);
+}
+.case-body__links{ margin-top:36px; display:flex; flex-wrap:wrap; gap:14px; }
+.case-btn{
+  display:inline-flex; align-items:center; min-height:48px; padding:0 24px;
+  border-radius:999px; background:var(--pa-ink); color:#fff;
+  font:600 13px/1 'Open Sauce Sans', sans-serif; text-decoration:none;
+  transition:transform .3s ease;
+}
+.case-btn:hover{ transform:translateY(-2px); }
+.case-btn--ghost{ background:transparent; color:var(--pa-ink); border:1px solid rgba(10,10,10,.25); }
+.case-btn:focus-visible{ outline:2px solid var(--pa-red); outline-offset:3px; }
+.case-page .site-footer{ margin-top:0; }
