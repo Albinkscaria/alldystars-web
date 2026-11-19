@@ -44,6 +44,10 @@ Studio site for alldystars, built with Next.js 16 App Router, React 18, plain CS
 ## Work page content
 - **Where:** projects live in `components/ProjectsArchive/projects.js`.
 - **Live files:** each `live` file needs `href: "/projects/<id>"`; `app/projects/[slug]/page.jsx` builds its case-study page.
+- **Covers:** when the user sends a project screenshot, save it as `public/work/<id>/cover.png` and set `cover.position` to keep the headline in view.
+- **Restart dev after editing `projects.js`:** with `dynamicParams = false`, new project pages 404 until `npm run dev` restarts.
+- **One drawer:** keep the drawer at 5 files. Replace a sealed placeholder rather than adding a 6th, and say so.
+- **Details to confirm:** take the name, category, discipline line and year from the screenshot, and ask the user to confirm them.
 
 ## Contact form
 - **Live sender:** EmailJS from the browser when the `NEXT_PUBLIC_EMAILJS_*` variables are set. Otherwise it uses `app/api/contact/route.js` (Resend), which prints letters to the terminal in development.

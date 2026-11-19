@@ -18,8 +18,8 @@ Studio website for **alldystars**, a design studio in Kottayam run by Joyal K Sc
 | Services | `/services` | Dot-matrix hero with a 5-link index → "design canvas" section (pinned, camera flies between 5 artboards) → CTA block → footer |
 | About | `/about` | Hero → statement → vision quote → "names as windows" founders section (pinned) → CTA → footer |
 | Contact | `/contact` | "Write us a letter" form (fill-in-the-blank letter that folds into an envelope and drops into a slot) → footer |
-| Work | `/projects` | "The archive.": projects as folders in a studio drawer (live files peek out and open with a cover zoom; sealed files are taped; the last red file links to Contact). Content is still sample placeholders. |
-| Case study | `/projects/<id>` | One page per **live** archive file: full-screen cover, then "case study coming soon". Other ids 404. |
+| Work | `/projects` | "The archive.": projects as folders in a studio drawer (live files peek out and open with a cover zoom; sealed files are taped; the last red file links to Contact). Live projects: **CBSE Maths World** and **Safeland International** (both Web); two sealed placeholders (Graphic, Data). |
+| Case study | `/projects/<id>` | One page per **live** archive file: full-screen cover with a **Close ×** button (also Esc), then "case study coming soon". Other ids 404. |
 | 404 | any unknown route | Custom not-found page |
 
 Everything is responsive and was checked in Chrome from 320 px phones to 2560 px monitors. It hasn't been checked in Safari or Firefox, or on real devices.
@@ -150,10 +150,17 @@ Specific behaviour:
 - **ProjectsArchive (Work page):**
   - **Content:** everything is in `components/ProjectsArchive/projects.js`. Status is `live` (needs `href: /projects/<id>` and an optional `cover.src`), `sealed`, or `cta` (keep one, last).
   - **Drawers:** 5 files per drawer; more projects add drawers automatically.
-  - **Filters:** All / Brand / Web / Graphic / Data. Filtered-out files are `inert`, so keyboards skip them.
+  - **Filters:** All / Brand / Web / Graphic / Data. A filter with no projects is hidden. Filtered-out files are `inert`, so keyboards skip them.
   - **Opening a live file:** it zooms its cover to full screen, then navigates. The case-study page starts with that same cover, so the hand-off is seamless.
   - **Cursor:** the archive has its own labelled cursor (Pull / Open / Sealed / Start), so the Work page doesn't use the site's follower dot.
   - **Phones (≤900 px):** the folders become a sticky stack under the header.
+  - **Closing a project:** the archive stores the opened id in `sessionStorage` (`pa-opened`). The case study's Close button then goes *back*, so the archive keeps its scroll position. Arriving from a shared link, Close opens `/projects` instead.
+  - **Adding a project from a screenshot:**
+    1. Save the image to `public/work/<id>/cover.png`.
+    2. Add a `live` entry to `projects.js` with `cover.src`, `alt` and an optional `position` (CSS object-position: which part shows when the cover crops it).
+    3. **Restart `npm run dev`.** With `dynamicParams = false`, the project pages are only listed at startup, so a new project 404s until the restart.
+    4. Keep one drawer of 5: replace a sealed placeholder rather than adding a 6th, or the red folder ends up alone in a second drawer.
+  - **Covers:** real covers get a dark fade behind the title, on the case-study hero and in the zoom, so the title reads over a busy screenshot.
 - **ContactLetter:**
   - `/contact?service=<slug>` pre-ticks a service; the Services page's "Start a … project" links use this.
   - On screens over 900 px, a sealed "fresh letter" envelope appears after delivery.
@@ -177,7 +184,7 @@ Specific behaviour:
 ## Known gaps and ideas
 
 - **Contact form:** needs EmailJS or Resend set up on Vercel; see the section above.
-- **Work page content:** the archive holds sample placeholders (one "Project name here" live file, three sealed). Add real projects in `projects.js`; each live one gets a case-study page that still says "coming soon".
+- **Work page content:** two real projects so far, each with a case-study page that still says "coming soon". Each needs a description and more images. Two sealed placeholders remain (Graphic, Data).
 - **Reduced motion:** decide whether scroll-driven animations should stay on for visitors whose PC reports reduced motion (only self-playing effects would switch off).
 - **Founder photos:** upscaled from 536 px originals. Original camera photos at 1200 px or wider would look sharper.
 - **Tableau and Power BI logos:** simplified drawings. Replace `public/images/tech/tableau.svg` and `powerbi.svg` with the official assets if needed.
@@ -192,7 +199,7 @@ Specific behaviour:
 
 | Commit | Change |
 |---|---|
-| *(not pushed yet)* | Work page "archive" + case-study route; home manifesto cards; scrolling marquee strip removed |
+| `9458f02` | Work page "archive" with CBSE Maths World + Safeland International, case-study pages with Close, home manifesto cards, marquee strip removed |
 | `7b17d77` | HANDOFF.md and CLAUDE.md |
 | `b75b3bb` | Dot-matrix hero replaces the background videos (videos deleted) |
 | `9eb7b6f` | Contact form sends through EmailJS |
