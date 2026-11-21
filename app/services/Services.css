@@ -1,6 +1,6 @@
 /* ---- hero: components/HeroDotPrint (dot-matrix print, replaced the video).
-   Its copy starts below the fixed site header (~95px at every width). ---- */
-.services-page .hdp{ --hdp-top:95px; }
+   Its copy starts below the fixed site header (--header-h, set by Header). ---- */
+.services-page .hdp{ --hdp-top:var(--header-h, 68px); }
 
 /* the five-service index under the hero paragraph */
 .services-page .index-nav{ margin-top:50px; display:flex; flex-wrap:wrap; justify-content:center; gap:10px 22px; border-top:1px solid var(--line); padding-top:26px; width:100%; max-width:820px; }

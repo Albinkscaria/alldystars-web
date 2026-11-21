@@ -1,12 +1,12 @@
 /* The page is the "Write us a letter" section (components/ContactLetter).
-   The site header is fixed and ~95px tall at every width, so the section
+   The site header is fixed and ~68px tall (--header-h) at every width, so the section
    starts below it, and the sticky intro column parks just under it. */
 .contact-page .cl{
-  padding-top:calc(95px + clamp(32px, 6vh, 72px));
+  padding-top:calc(var(--header-h, 68px) + clamp(32px, 6vh, 72px));
 }
 .contact-page .cl-intro{
-  top:calc(95px + 24px);
+  top:calc(var(--header-h, 68px) + 24px);
 }
 @media (max-width:900px){
-  .contact-page .cl{ padding-top:calc(95px + 36px); }
+  .contact-page .cl{ padding-top:calc(var(--header-h, 68px) + 36px); }
 }

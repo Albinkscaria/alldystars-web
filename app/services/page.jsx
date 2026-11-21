@@ -20,7 +20,6 @@ const categories = [
 
 export default function ServicesPage() {
 	const dotRef = useRef(null);
-	const labelRef = useRef(null);
 
 	useEffect(() => {
 		const io = new IntersectionObserver((entries) => {
@@ -28,25 +27,16 @@ export default function ServicesPage() {
 		}, { threshold: 0.12 });
 		document.querySelectorAll('.services-page .reveal').forEach(el => io.observe(el));
 
-		const dot = dotRef.current, label = labelRef.current;
+		const dot = dotRef.current;
 		let mx = 0, my = 0, dx = 0, dy = 0, raf;
 		function onMove(e) { mx = e.clientX; my = e.clientY; }
 		window.addEventListener('mousemove', onMove);
 		function loop() {
 			dx += (mx - dx) * 0.35; dy += (my - dy) * 0.35;
 			if (dot) { dot.style.left = dx + 'px'; dot.style.top = dy + 'px'; }
-			if (label) { label.style.left = mx + 'px'; label.style.top = my + 'px'; }
 			raf = requestAnimationFrame(loop);
 		}
 		loop();
-
-		const hoverTargets = document.querySelectorAll('.services-page .cta-block');
-		function onEnter(el) {
-			if (el.classList.contains('cta-block')) { label.textContent = 'SEND'; label.classList.add('show'); dot.style.opacity = 0; }
-			else { dot.style.width = '28px'; dot.style.height = '28px'; dot.style.background = 'var(--coral)'; }
-		}
-		function onLeave() { label.classList.remove('show'); dot.style.opacity = 1; dot.style.width = '10px'; dot.style.height = '10px'; dot.style.background = 'var(--ink)'; }
-		hoverTargets.forEach(el => { el.addEventListener('mouseenter', () => onEnter(el)); el.addEventListener('mouseleave', onLeave); });
 
 		return () => { window.removeEventListener('mousemove', onMove); cancelAnimationFrame(raf); };
 	}, []);
@@ -54,7 +44,6 @@ export default function ServicesPage() {
 	return (
 		<div className="services-page">
 			<div className="cursor-dot" ref={dotRef}></div>
-			<div className="cursor-label" ref={labelRef}></div>
 			<svg className="grain" width="100%" height="100%">
 				<filter id="noiseFilter2"><feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" stitchTiles="stitch" /></filter>
 				<rect width="100%" height="100%" filter="url(#noiseFilter2)" />
@@ -82,12 +71,6 @@ export default function ServicesPage() {
 			{/* the five disciplines as a live design canvas, pinned and scrubbed by scroll;
 			    the index links above (#brand, #web, …) jump to each artboard */}
 			<ServicesCanvas className={`${crimson.variable} ${inter.variable} ${mono.variable}`} />
-
-			<div className="cta-block reveal">
-				<h2>Design with<br />ALLDYSTARS</h2>
-				<div className="quote">Ideas become impact when shaped with purpose.</div>
-				<a href="/contact" className="cta-btn">Start a Project →</a>
-			</div>
 
 			<Footer />
 		</div>

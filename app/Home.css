@@ -1,6 +1,6 @@
 /* ---- hero: components/HeroDotPrint (dot-matrix print, replaced the video).
-   Its copy starts below the fixed site header (~95px at every width). ---- */
-.home-page .hdp{ --hdp-top:95px; }
+   Its copy starts below the fixed site header (--header-h, set by Header). ---- */
+.home-page .hdp{ --hdp-top:var(--header-h, 68px); }
 
 .home-page .tech{ padding:100px 5vw 30px; }
 /* the row always spans the full content width: --cols cards per row,

@@ -123,7 +123,7 @@ export default function ServicesCanvas({
             start: () => `top ${headerH}px`,
             end: () => `+=${window.innerHeight * scrollLength}`,
             pin: true,
-            scrub: 1.4,
+            scrub: 0.5, // little lag: the camera reacts straight away
             anticipatePin: 1,
             invalidateOnRefresh: true,
             onRefreshInit: syncHeader,
@@ -137,9 +137,11 @@ export default function ServicesCanvas({
             // it started; snap onward in the direction of travel instead.
             snap: {
               snapTo: [0, ...services.map((_, k) => tFinished(k) / duration)],
-              duration: { min: 0.9, max: 2.2 },
-              delay: 0.35,
-              ease: "power1.inOut",
+              // ~3 s per stop, fast at first (the flight) and easing out over
+              // the card, so the build inside it plays at a medium pace
+              duration: { min: 2.6, max: 3.4 },
+              delay: 0.2,
+              ease: "power2.out",
               directional: true,
               inertia: false,
             },

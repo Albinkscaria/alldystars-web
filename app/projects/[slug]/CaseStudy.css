@@ -47,7 +47,7 @@
 /* close (×): top-right of the cover, just under the fixed header */
 .case-close{
   position:absolute; z-index:3;
-  top:calc(95px + clamp(16px, 3vh, 28px)); right:clamp(16px, 4vw, 56px);
+  top:calc(var(--header-h, 68px) + clamp(16px, 3vh, 28px)); right:clamp(16px, 4vw, 56px);
   display:inline-flex; align-items:center; gap:10px;
   min-height:48px; padding:0 8px 0 18px;
   border:1px solid rgba(255,255,255,.28); border-radius:999px;

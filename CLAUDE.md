@@ -17,7 +17,7 @@ Studio site for alldystars, built with Next.js 16 App Router, React 18, plain CS
   - **Body text:** Open Sauce Sans.
   - **Script words:** Aniyah, which is very wide, so script lines must never wrap; size them in `em` and cap them with `vw`.
   - **Section fonts:** come from `app/fonts.js` as CSS variables, passed through a section's `className`.
-- **Fixed header:** about 95 px tall at every width. Heroes and pinned sections must clear it. Pinned sections measure `.site-header` rather than hard-coding 95.
+- **Fixed header:** 69 px tall, or 91 px at 600 px and below, where the nav pills sit under the logo (there is no hamburger menu). `Header.jsx` publishes the real height as `--header-h` on `<html>`. CSS clears it with `var(--header-h)`, and pinned sections measure `.site-header`. Never hard-code the height.
 - **Pinned and scroll-scrubbed sections** (GSAP ScrollTrigger) must:
   - set `scrollBehavior = 'auto'` on `<html>` while mounted, and restore it on unmount;
   - use a function `start` that includes the header height;

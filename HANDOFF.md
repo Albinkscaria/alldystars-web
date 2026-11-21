@@ -72,7 +72,7 @@ NEXT_PUBLIC_EMAILJS_PUBLIC_KEY
 ```
 app/
   layout.jsx            root layout: Open Sauce Sans (@fontsource) + globals.css
-  globals.css           design tokens, header, mobile menu, CTA block, footer
+  globals.css           design tokens, header (pill nav at every width), CTA block, footer
   fonts.js              next/font definitions shared by the sections (see Fonts)
   template.jsx          page fade-in wrapper (opacity only; see Gotchas)
   page.jsx + Home.css   home; also holds the tech list, metrics and process timeline
@@ -122,7 +122,7 @@ public/
 
   Aniyah's swashes are too wide to sit inside the letter's lines, which is why the letter uses Pinyon Script.
 
-**Header:** the site header is **fixed** and about **95 px tall at every width**. Every hero or pinned section has to clear it.
+**Header:** the site header is **fixed**. It is **69 px** tall, or **91 px** at 600 px and below, where the pills wrap under the logo. `Header.jsx` writes the measured height to `--header-h`. Every hero or pinned section clears it with `var(--header-h)` or by measuring `.site-header`.
 
 ---
 

@@ -1,9 +1,9 @@
 /* The page is "The Archive" (components/ProjectsArchive). The site header is
-   fixed and ~95px tall at every width: the archive starts below it, and on
+   fixed and ~68px tall (--header-h) at every width: the archive starts below it, and on
    phones its stacked folders stick just under it (--pa-sticky). */
 .projects-page .pa{
-  --pa-sticky:95px;
-  padding-top:calc(95px + clamp(40px, 4vw, 56px));
+  --pa-sticky:var(--header-h, 68px);
+  padding-top:calc(var(--header-h, 68px) + clamp(40px, 4vw, 56px));
 }
 /* the archive's last drawer meets the footer without a gap of page background */
 .projects-page .site-footer{ margin-top:0; }

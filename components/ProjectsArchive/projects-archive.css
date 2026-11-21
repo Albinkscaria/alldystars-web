@@ -13,7 +13,7 @@
   --pa-muted: #454545;
   --pa-faint: #8a8a8a;
   --pa-ease: cubic-bezier(0.22, 1, 0.36, 1);
-  --pa-sticky: 95px; /* height of the site's fixed header, for the mobile stack */
+  --pa-sticky: var(--header-h, 68px); /* height of the site's fixed header, for the mobile stack */
 
   --pa-display: "Open Sauce Sans", -apple-system, "Segoe UI", sans-serif;
   --pa-sans: "Open Sauce Sans", -apple-system, "Segoe UI", sans-serif;

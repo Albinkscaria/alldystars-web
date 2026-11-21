@@ -10,7 +10,10 @@
  */
 
 export const GAP = 700; // distance between artboards on the canvas (artboard = 600 × 600)
-export const T = { head: 1.2, intro: 2.2, move: 1.05, build: 3.2, after: 1.0, fill: 0.35 };
+// Short intro + flights, long builds: reaching a card is quick, and the work
+// on it then builds at a comfortable pace (the scroll snap glides fast at first
+// and slows over the build; see ServicesCanvas.jsx).
+export const T = { head: 0.3, intro: 1.1, move: 0.9, build: 4.4, after: 0.6, fill: 0.35 };
 const PER = T.move + T.build + T.after;
 
 /** Camera arrives on artboard k. */

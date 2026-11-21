@@ -164,9 +164,12 @@ a{ color:inherit; }
 }
 
 /* ==================== SHARED HEADER ==================== */
+/* first-paint height of the fixed header; Header.jsx then sets the measured value */
+:root{ --header-h:69px; }
+@media (max-width:600px){ :root{ --header-h:91px; } }
 .site-header{
-  position:fixed; top:0; left:0; right:0; z-index:100; padding:12px 5vw;
-  display:flex; align-items:center; justify-content:space-between;
+  position:fixed; top:0; left:0; right:0; z-index:100; padding:8px 5vw;
+  display:flex; align-items:center; justify-content:space-between; gap:12px;
   /* one single semi-transparent square (non-pill) panel behind the whole
      bar at all times — no separate transparent/solid states to swap
      between, no border-radius. */
@@ -191,13 +194,13 @@ a{ color:inherit; }
    sitting in the header, no blur/translucency/shadow */
 .site-header .logo{
   display:flex; align-items:center; line-height:0; text-decoration:none;
-  padding:6px 18px;
+  padding:4px 10px 4px 0;
   border-radius:999px;
 }
 /* height is the one thing worth tuning by eye once the real file is in place —
    the source image has a lot of empty space above the wordmark for the script
    flourish, so fitting purely by width can end up tiny/cramped */
-.site-header .logo img{ height:58px; width:auto; display:block; filter:grayscale(1); }
+.site-header .logo img{ height:44px; width:auto; display:block; filter:grayscale(1); }
 
 /* smaller neumorphic pill buttons nested inside one big pill of the same
    color/shadow recipe — design from Uiverse.io by barisdogansutcu, in a
@@ -208,7 +211,7 @@ a{ color:inherit; }
   display:flex; align-items:center; gap:4px;
   background-color:#ececec;
   border:2px solid rgba(255,255,255,.7);
-  border-radius:999px; padding:6px;
+  border-radius:999px; padding:4px;
   box-shadow:-4px -2px 16px 0 #ffffff, 4px 2px 16px 0 rgba(0,0,0,0.18);
 }
 .site-header nav.links a{
@@ -217,8 +220,8 @@ a{ color:inherit; }
   text-transform:uppercase; letter-spacing:.05em;
   color:#333333; background-color:#ececec;
   border:1.5px solid rgba(255,255,255,.7);
-  border-radius:999px; padding:7px 13px;
-  text-decoration:none;
+  border-radius:999px; padding:6px 12px;
+  text-decoration:none; white-space:nowrap;
   transition:.2s;
   box-shadow:-2px -1px 8px 0 #ffffff, 2px 1px 8px 0 rgba(0,0,0,0.14);
 }
@@ -237,7 +240,20 @@ a{ color:inherit; }
   border-radius:999px;
 }
 .menu-btn span{ display:block; width:26px; height:1.5px; background:var(--ink); margin:6px 0; }
-@media (max-width:860px){ .site-header nav.links{ display:none; } .menu-btn{ display:block; } }
+/* phones: the same pill buttons as on desktop (no hamburger). Under 600px
+   the logo gets its own row and the pills sit centred under it; Header.jsx
+   publishes the real height as --header-h so pages clear it. */
+@media (max-width:600px){
+  .site-header{ flex-direction:column; gap:4px; padding:6px 12px 8px; }
+  .site-header .logo{ padding:0; }
+  .site-header .logo img{ height:36px; }
+  .site-header nav.links{ gap:2px; padding:3px; max-width:100%; overflow-x:auto; scrollbar-width:none; }
+  .site-header nav.links::-webkit-scrollbar{ display:none; }
+  .site-header nav.links a{ font-size:9.5px; letter-spacing:.03em; padding:6px 9px; }
+}
+@media (max-width:340px){
+  .site-header nav.links a{ font-size:9px; letter-spacing:.02em; padding:6px 7px; }
+}
 
 .mobile-menu{
   position:fixed; inset:0; z-index:99; display:flex; flex-direction:column;
